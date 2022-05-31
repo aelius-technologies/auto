@@ -5,10 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Finance extends Model
-{
+class Finance extends Model{
     use HasFactory;
     protected $table = 'finance';
     
-    protected $fillable = ['name' , 'branch_id' ,'dsa_or_broker' ,'status'];
+    protected $fillable = [
+        'name',
+        'branch_id',
+        'dsa_or_broker',
+        'status',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+    ];
 }

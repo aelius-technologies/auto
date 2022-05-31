@@ -15,8 +15,8 @@ class CreateTransferTable extends Migration
     {
         Schema::create('transfer', function (Blueprint $table) {
             $table->id();
-            $table->string('to_branch')->nullable();
             $table->string('from_branch')->nullable();
+            $table->string('to_branch')->nullable();
             $table->string('product_id')->nullable();
             $table->string('inventory_id')->nullable();
             $table->string('transfer_fee')->nullable();

@@ -71,7 +71,6 @@ class UserController extends Controller{
                     })
 
                     ->editColumn('name', function ($data) {
-                      
                         return $data->first_name.' '.$data->last_name;
                     })
 

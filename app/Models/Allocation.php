@@ -5,10 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Allocation extends Model
-{
+class Allocation extends Model{
     use HasFactory;
     protected $table = 'allocation';
     
-    protected $fillable = ['customer_name', 'billing_date','obf_id','product_id','dsa_or_broker','disb_amount','payment_due','fatd','iatd','tentetive_delivery_date','reason','status'];
+    protected $fillable = [
+        'customer_name',
+        'billing_date',
+        'obf_id',
+        'product_id',
+        'dsa_or_broker',
+        'disb_amount',
+        'payment_due',
+        'fatd',
+        'iatd',
+        'tentetive_delivery_date',
+        'reason',
+        'status',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+    ];
 }

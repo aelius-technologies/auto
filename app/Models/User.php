@@ -15,7 +15,19 @@ class User extends Authenticatable{
         return "web";
     }
 
-    protected $fillable = ['first_name', 'last_name', 'branch' ,'contact_number', 'email', 'password', 'status'];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'branch',
+        'contact_number',
+        'email',
+        'password',
+        'status',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+    ];
 
     protected $hidden = ['password', 'remember_token'];
 

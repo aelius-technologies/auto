@@ -1,14 +1,17 @@
 <?php
 
-    namespace App\Models;
+namespace App\Models;
 
-    use Illuminate\Database\Eloquent\Factories\HasFactory;
-	use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-    class Role extends Model{
-        use HasFactory;
+class Role extends Model{
+    use HasFactory;
 
-    	public $table = 'roles';
+    public $table = 'roles';
 
-        protected $fillable = ['name', 'guard_name'];
-    }
+    protected $fillable = [
+        'name', 
+        'guard_name'
+    ];
+}

@@ -5,11 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Branch extends Model
-{
+class Branch extends Model{
     use HasFactory;
-
     protected $table = 'branches';
     
-    protected $fillable = ['name','city', 'address', 'email', 'contact_number','manager' ,'manager_contact_number' , 'gst' ,'status'];
+    protected $fillable = [
+        'name',
+        'city',
+        'address',
+        'email',
+        'contact_number',
+        'manager',
+        'manager_contact_number',
+        'gst',
+        'status',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+    ];
 }
