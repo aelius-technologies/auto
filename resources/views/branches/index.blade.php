@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-Fastag Master
+Branch Master
 @endsection
 
 @section('styles')
@@ -14,12 +14,12 @@ Fastag Master
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
-            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Fastag Master</h4>
+            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Branch Master</h4>
             <div class="d-flex align-items-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('fasttag') }}" class="text-muted">Fastag Master</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('branches') }}" class="text-muted">Branch Master</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">List</li>
                     </ol>
                 </nav>
@@ -27,8 +27,8 @@ Fastag Master
         </div>
         <div class="col-5 align-self-center">
         <div class="customize-input float-right">
-                @canany(['fasttag-create'])
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('fasttag.create') }}">Add New</a>
+                @canany(['branches-create'])
+                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('branches.create') }}">Add New</a>
                 @endcanany
             </div>
         </div>
@@ -43,8 +43,14 @@ Fastag Master
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tag ID</th>
-                                <th>Amount</th>
+                                <th>Branch Name</th>
+                                <th>City</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Contact No.</th>
+                                <th>Manager</th>
+                                <th>Manager Contact</th>
+                                <th>GST</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -85,7 +91,7 @@ Fastag Master
                                 // lengthChange: false,
 
                                 "ajax": {
-                                    "url": "{{ route('fasttag') }}",
+                                    "url": "{{ route('branches') }}",
                                     "type": "POST",
                                     "dataType": "json",
                                     "data": {
@@ -101,12 +107,36 @@ Fastag Master
                                         name: 'DT_RowIndex'
                                     },
                                     {
-                                        data: 'tag_id',
-                                        name: 'tag_id'
+                                        data: 'name',
+                                        name: 'name'
                                     },
                                     {
-                                        data: 'amount',
-                                        name: 'amount'
+                                        data: 'city',
+                                        name: 'city'
+                                    },
+                                    {
+                                        data: 'address',
+                                        name: 'address'
+                                    },
+                                    {
+                                        data: 'email',
+                                        name: 'email'
+                                    },
+                                    {
+                                        data: 'contact_number',
+                                        name: 'contact_number'
+                                    },
+                                    {
+                                        data: 'manager',
+                                        name: 'manager'
+                                    },
+                                    {
+                                        data: 'manager_contact_number',
+                                        name: 'manager_contact_number'
+                                    },
+                                    {
+                                        data: 'gst',
+                                        name: 'gst'
                                     },
                                     {
                                         data: 'status',
@@ -128,7 +158,7 @@ Fastag Master
 
                 if (confirm('Are you sure?')) {
                     $.ajax({
-                        "url": "{!! route('fasttag.change.status') !!}",
+                        "url": "{!! route('branches.change.status') !!}",
                         "dataType": "json",
                         "type": "POST",
                         "data": {

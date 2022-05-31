@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-    Fastag Creat
+    Fastag Create
 @endsection
 
 @section('styles')

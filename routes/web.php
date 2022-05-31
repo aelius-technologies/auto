@@ -196,5 +196,25 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
          Route::patch('lead/update', 'LeadController@update')->name('lead.update');
          Route::post('lead/change-status', 'LeadController@change_status')->name('lead.change.status');
          /** lead */
+
+         /** branch */
+         Route::any('branches', 'BranchController@index')->name('branches');
+         Route::get('branches/create', 'BranchController@create')->name('branches.create');
+         Route::post('branches/insert', 'BranchController@insert')->name('branches.insert');
+         Route::get('branches/view/{id?}', 'BranchController@view')->name('branches.view');
+         Route::get('branches/edit/{id?}', 'BranchController@edit')->name('branches.edit');
+         Route::patch('branches/update', 'BranchController@update')->name('branches.update');
+         Route::post('branches/change-status', 'BranchController@change_status')->name('branches.change.status');
+         /** branch */
+
+         /** department */
+         Route::any('department', 'DepartmentController@index')->name('department');
+         Route::get('department/create', 'DepartmentController@create')->name('department.create');
+         Route::post('department/insert', 'DepartmentController@insert')->name('department.insert');
+         Route::get('department/view/{id?}', 'DepartmentController@view')->name('department.view');
+         Route::get('department/edit/{id?}', 'DepartmentController@edit')->name('department.edit');
+         Route::patch('department/update', 'DepartmentController@update')->name('department.update');
+         Route::post('department/change-status', 'DepartmentController@change_status')->name('department.change.status');
+         /** department */
     });
 });

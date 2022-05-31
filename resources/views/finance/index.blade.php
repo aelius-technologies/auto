@@ -27,7 +27,7 @@ Finance Master
         </div>
         <div class="col-5 align-self-center">
         <div class="customize-input float-right">
-                @canany(['extand_warranties-create'])
+                @canany(['finance-create'])
                     <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('finance.create') }}">Add New</a>
                 @endcanany
             </div>
