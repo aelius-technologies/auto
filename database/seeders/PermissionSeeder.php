@@ -112,6 +112,18 @@ class PermissionSeeder extends Seeder
             'inventory-view',
             'inventory-edit',
             'inventory-delete',
+            'account_approval-delete',
+            'account_approval-view',
+            'account_approval-edit',
+            'account_approval-create',
+            'cash_receipt-delete',
+            'cash_receipt-view',
+            'cash_receipt-edit',
+            'cash_receipt-create',
+            'obf_approval-delete',
+            'obf_approval-view',
+            'obf_approval-edit',
+            'obf_approval-create'
         ];
 
         // Reset cached roles and permissions

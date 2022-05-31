@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Tax;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB, Validator;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class TaxesController extends Controller
-{
+class TaxesController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:taxes-create', ['only' => ['create']]);
@@ -18,9 +17,9 @@ class TaxesController extends Controller
             $this->middleware('permission:taxes-delete', ['only' => ['delete']]);
         }
     /** construct */
+
     /** index */
-        public function index(Request $request)
-        {
+        public function index(Request $request){
             if($request->ajax()){
                 $data = Tax::all();
                 
@@ -67,14 +66,14 @@ class TaxesController extends Controller
         }
     /** index */
 
-        public function create(Request $request)
-        {
+    /** create */
+        public function create(Request $request){
             return view('taxes.create');
         }
+    /** create */
 
     /** insert */
-        public function insert(Request $request)
-        {
+        public function insert(Request $request){
             if(auth()->user()->can('products-create')){
                 $rules = [
                     'category_id' => 'required',
@@ -120,26 +119,23 @@ class TaxesController extends Controller
     /** insert */
 
     /** view */
-        public function view(Request $request)
-        {
+        public function view(Request $request){
             $data = Tax::where(['id' => $request->id])->first();
 
             return view('taxes.view')->with(['data'=>$data]);
         }
     /** view */
 
-     /** edit */
-     public function edit(Request $request)
-     {
-        $data = Tax::where(['id' => $request->id])->first();
+    /** edit */
+        public function edit(Request $request){
+            $data = Tax::where(['id' => $request->id])->first();
 
-         return view('taxes.edit')->with(['data'=>$data]);
-     }
+            return view('taxes.edit')->with(['data'=>$data]);
+        }
     /** edit */
 
     /** update */
-        public function update(Request $request)
-        {
+        public function update(Request $request){
             if(auth()->user()->can('taxes-edit')){
                 $rules = [
                     'id' => 'required',
@@ -177,8 +173,7 @@ class TaxesController extends Controller
     /** update */
 
     /** change-status */
-        public function change_status(Request $request)
-        {
+        public function change_status(Request $request){
             if(auth()->user()->can('taxes-delete')){
                 $rules = [
                     'id' => 'required',

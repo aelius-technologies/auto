@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\OBF;
 use Illuminate\Http\Request;
-use DataTables ,DB;
-class CashReceiptController extends Controller
-{
+use Auth, DB, Mail, Validator, File, DataTables;
+
+class CashReceiptController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:cash_receipt-create', ['only' => ['create']]);
@@ -15,6 +15,7 @@ class CashReceiptController extends Controller
             $this->middleware('permission:cash_receipt-delete', ['only' => ['delete']]);
         }
     /** construct */
+    
     /** index */
         public function index(Request $request){
             if($request->ajax()){

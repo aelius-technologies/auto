@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Insurance;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB, Validator;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class InsuranceController extends Controller
-{
+class InsuranceController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:insurance-create', ['only' => ['create']]);
@@ -18,16 +17,15 @@ class InsuranceController extends Controller
             $this->middleware('permission:insurance-delete', ['only' => ['delete']]);
         }
     /** construct */
-     /** index */
-        public function index(Request $request)
-        {
+
+    /** index */
+        public function index(Request $request){
             return view('insurance.index');
         }
     /** index */
 
     /** insert */
-        public function insert(Request $request)
-        {
+        public function insert(Request $request){
             if(auth()->user()->can('insurance-create')){
                 $rules = [
                     'name' => 'required',
@@ -66,28 +64,26 @@ class InsuranceController extends Controller
         }
     /** insert */
 
-    public function create(Request $request)
-    {
-        return view('insurance.create');
-    }
+    /** create */
+        public function create(Request $request){
+            return view('insurance.create');
+        }
+    /** create */
 
     /** view */
-        public function view(Request $request)
-        {
+        public function view(Request $request){
             return view('insurance.view');
         }
     /** view */
 
     /** edit */
-    public function edit(Request $request)
-    {
-        return view('insurance.edit');
-    }
+        public function edit(Request $request){
+            return view('insurance.edit');
+        }
     /** edit */
 
     /** update */
-        public function update(Request $request)
-        {
+        public function update(Request $request){
                 $crud = [
                     'name' => ucfirst($request->name),
                     'type' => $request->type,
@@ -109,8 +105,7 @@ class InsuranceController extends Controller
     /** update */
 
     /** change-status */
-        public function change_status(Request $request)
-        {
+        public function change_status(Request $request){
             if(auth()->user()->can('insurance-delete')){
                 $rules = [
                     'id' => 'required',

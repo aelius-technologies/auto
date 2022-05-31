@@ -6,10 +6,9 @@ use App\Models\OBF;
 use App\Models\ObfApproval;
 use Illuminate\Http\Request;
 use App\Http\Requests\ObfApprovalRequest;
-use DataTables ,DB;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class ObfApprovalController extends Controller
-{
+class ObfApprovalController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:obf_approval-create', ['only' => ['create']]);

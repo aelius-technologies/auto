@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Lead;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Validator , DB;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class LeadController extends Controller
-{
+class LeadController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:lead-create', ['only' => ['create']]);
@@ -18,11 +17,11 @@ class LeadController extends Controller
             $this->middleware('permission:lead-delete', ['only' => ['delete']]);
         }
     /** construct */
+
     /** index */
-    public function index(Request $request)
-    {
-        return view('lead.index');
-    }
+        public function index(Request $request){
+            return view('lead.index');
+        }
     /** index */
 
     /** insert */
@@ -61,26 +60,23 @@ class LeadController extends Controller
         }
     /** insert */
 
-     /** create */
-     public function create(Request $request)
-     {
-         return view('lead.create');
-     }
-     /** create */
+    /** create */
+        public function create(Request $request){
+            return view('lead.create');
+        }
+    /** create */
 
-     /** view */
-     public function view(Request $request)
-     {
-         return view('lead.view');
-     }
-     /** view */
+    /** view */
+        public function view(Request $request){
+            return view('lead.view');
+        }
+    /** view */
 
-      /** edit */
-      public function edit(Request $request)
-      {
-          return view('lead.edit');
-      }
-      /** edit */
+    /** edit */
+        public function edit(Request $request){
+            return view('lead.edit');
+        }
+    /** edit */
 
     /** update */
         public function update(Request $request){

@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB, Validator;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:products-create', ['only' => ['create']]);
@@ -18,9 +17,9 @@ class ProductController extends Controller
             $this->middleware('permission:products-delete', ['only' => ['delete']]);
         }
     /** construct */
+
     /** index */
-        public function index(Request $request)
-        {
+        public function index(Request $request){
             if($request->ajax()){
                 $data = Product::select('product.id' ,'obf.customer_name' ,'obf.booking_date' ,'obf.status','products.name AS product')->leftjoin('products' ,'obf.product_id' ,'products.id')->where('obf.status' ,'pending')->get();
                 
@@ -80,14 +79,14 @@ class ProductController extends Controller
         }
     /** index */
 
-        public function create(Request $request)
-        {
+    /**create */
+        public function create(Request $request){
             return view('product.create');
         }
+    /**create */
 
     /** insert */
-        public function insert(Request $request)
-        {
+        public function insert(Request $request){
             if(auth()->user()->can('products-create')){
                 $rules = [
                     'category_id' => 'required',
@@ -133,26 +132,23 @@ class ProductController extends Controller
     /** insert */
 
     /** view */
-        public function view(Request $request)
-        {
+        public function view(Request $request){
             $data = Product::where(['id' => $request->id])->first();
 
             return view('product.view')->with(['data'=>$data]);
         }
     /** view */
 
-     /** edit */
-     public function edit(Request $request)
-     {
-        $data = Product::where(['id' => $request->id])->first();
+    /** edit */
+        public function edit(Request $request){
+            $data = Product::where(['id' => $request->id])->first();
 
-         return view('product.edit')->with(['data'=>$data]);
-     }
+            return view('product.edit')->with(['data'=>$data]);
+        }
     /** edit */
 
     /** update */
-        public function update(Request $request)
-        {
+        public function update(Request $request){
             if(auth()->user()->can('products-edit')){
                 $rules = [
                     'category_id' => 'required',
@@ -194,8 +190,7 @@ class ProductController extends Controller
     /** update */
 
     /** change-status */
-        public function change_status(Request $request)
-        {
+        public function change_status(Request $request){
             if(auth()->user()->can('products-delete')){
                 $rules = [
                     'id' => 'required',
