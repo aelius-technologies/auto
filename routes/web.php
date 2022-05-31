@@ -116,7 +116,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::any('cash_receipt', 'CashReceiptController@index')->name('cash_receipt');  
             Route::get('cash_receipt/view/{id?}', 'CashReceiptController@view')->name('cash_receipt.view');
             Route::post('cash_receipt/change-status', 'CashReceiptController@change_status')->name('cash_receipt.change.status');
-            Route::post('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
+            Route::get('cash_receipt/cash_receipt', 'CashReceiptController@cash_receipt')->name('cash_receipt.cash_receipt');
+            Route::get('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
         /** Cash Receipt */
 
         /** Account Approval */
@@ -185,7 +186,11 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::post('finance/change-status', 'FinanceController@change_status')->name('finance.change.status');
         /** finance */
 
+<<<<<<< Updated upstream
         /** lead */
+=======
+         /** lead */
+>>>>>>> Stashed changes
             Route::any('lead', 'LeadController@index')->name('lead');
             Route::get('lead/create', 'LeadController@create')->name('lead.create');
             Route::post('lead/insert', 'LeadController@insert')->name('lead.insert');
@@ -193,11 +198,15 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('lead/edit/{id?}', 'LeadController@edit')->name('lead.edit');
             Route::patch('lead/update', 'LeadController@update')->name('lead.update');
             Route::post('lead/change-status', 'LeadController@change_status')->name('lead.change.status');
+<<<<<<< Updated upstream
         /** lead */
 
         /** orders */
             Route::any('order', 'OrderController@index')->name('order');
             Route::get('order/view/{id?}', 'OrderController@view')->name('order.view');
         /** orders */
+=======
+         /** lead */
+>>>>>>> Stashed changes
     });
 });
