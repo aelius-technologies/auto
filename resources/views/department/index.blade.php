@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-Fastag Master
+Department Master
 @endsection
 
 @section('styles')
@@ -14,12 +14,12 @@ Fastag Master
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
-            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Fastag Master</h4>
+            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Department Master</h4>
             <div class="d-flex align-items-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('fasttag') }}" class="text-muted">Fastag Master</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('department') }}" class="text-muted">Department Master</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">List</li>
                     </ol>
                 </nav>
@@ -27,8 +27,8 @@ Fastag Master
         </div>
         <div class="col-5 align-self-center">
         <div class="customize-input float-right">
-                @canany(['fasttag-create'])
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('fasttag.create') }}">Add New</a>
+                @canany(['department-create'])
+                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('department.create') }}">Add New</a>
                 @endcanany
             </div>
         </div>
@@ -43,8 +43,11 @@ Fastag Master
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tag ID</th>
-                                <th>Amount</th>
+                                <th>Department Name</th>
+                                <th>Branch</th>
+                                <th>Email</th>
+                                <th>Contact No.</th>
+                                <th>Authorised Person</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -85,7 +88,7 @@ Fastag Master
                                 // lengthChange: false,
 
                                 "ajax": {
-                                    "url": "{{ route('fasttag') }}",
+                                    "url": "{{ route('department') }}",
                                     "type": "POST",
                                     "dataType": "json",
                                     "data": {
@@ -101,12 +104,24 @@ Fastag Master
                                         name: 'DT_RowIndex'
                                     },
                                     {
-                                        data: 'tag_id',
-                                        name: 'tag_id'
+                                        data: 'name',
+                                        name: 'name'
                                     },
                                     {
-                                        data: 'amount',
-                                        name: 'amount'
+                                        data: 'branch_id',
+                                        name: 'branch_id'
+                                    },
+                                    {
+                                        data: 'email',
+                                        name: 'email'
+                                    },
+                                    {
+                                        data: 'number',
+                                        name: 'number'
+                                    },
+                                    {
+                                        data: 'authorised_person',
+                                        name: 'authorised_person'
                                     },
                                     {
                                         data: 'status',
@@ -128,7 +143,7 @@ Fastag Master
 
                 if (confirm('Are you sure?')) {
                     $.ajax({
-                        "url": "{!! route('fasttag.change.status') !!}",
+                        "url": "{!! route('department.change.status') !!}",
                         "dataType": "json",
                         "type": "POST",
                         "data": {

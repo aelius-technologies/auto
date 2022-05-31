@@ -16,7 +16,7 @@ class CreateCashReceiptTable extends Migration
         Schema::create('cash_receipt', function (Blueprint $table) {
             $table->id();
             $table->string('obf_id')->nullable();
-            $table->string('cash')->nullable();
+            $table->string('amount')->nullable();
             $table->enum('spcial_case', ['yes', 'no'])->default('no');
             $table->enum('status', ['accepted', 'rejected','pending'])->default('pending');
             $table->timestamps();

@@ -116,7 +116,9 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::any('cash_receipt', 'CashReceiptController@index')->name('cash_receipt');  
             Route::get('cash_receipt/view/{id?}', 'CashReceiptController@view')->name('cash_receipt.view');
             Route::post('cash_receipt/change-status', 'CashReceiptController@change_status')->name('cash_receipt.change.status');
-            Route::post('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
+            Route::get('cash_receipt/create', 'CashReceiptController@create')->name('cash_receipt.create');
+            Route::post('cash_receipt/insert', 'CashReceiptController@insert')->name('cash_receipt.insert');
+            Route::get('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
         /** Cash Receipt */
 
         /** Account Approval */
@@ -184,6 +186,26 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::patch('finance/update', 'FinanceController@update')->name('finance.update');
             Route::post('finance/change-status', 'FinanceController@change_status')->name('finance.change.status');
         /** finance */
+
+         /** branch */
+         Route::any('branches', 'BranchController@index')->name('branches');
+         Route::get('branches/create', 'BranchController@create')->name('branches.create');
+         Route::post('branches/insert', 'BranchController@insert')->name('branches.insert');
+         Route::get('branches/view/{id?}', 'BranchController@view')->name('branches.view');
+         Route::get('branches/edit/{id?}', 'BranchController@edit')->name('branches.edit');
+         Route::patch('branches/update', 'BranchController@update')->name('branches.update');
+         Route::post('branches/change-status', 'BranchController@change_status')->name('branches.change.status');
+         /** branch */
+
+         /** department */
+         Route::any('department', 'DepartmentController@index')->name('department');
+         Route::get('department/create', 'DepartmentController@create')->name('department.create');
+         Route::post('department/insert', 'DepartmentController@insert')->name('department.insert');
+         Route::get('department/view/{id?}', 'DepartmentController@view')->name('department.view');
+         Route::get('department/edit/{id?}', 'DepartmentController@edit')->name('department.edit');
+         Route::patch('department/update', 'DepartmentController@update')->name('department.update');
+         Route::post('department/change-status', 'DepartmentController@change_status')->name('department.change.status');
+         /** department */
 
         /** lead */
             Route::any('lead', 'LeadController@index')->name('lead');

@@ -249,7 +249,7 @@ class ObfController extends Controller{
                             }
                             // Move Files to Folder
                             DB::commit();
-                        return redirect()->route('obf')->with('success', 'Record inserted successfully');
+                            return redirect()->route('obf')->with('success', 'Record inserted successfully');
                     } else {
                         DB::rollback();
                         return redirect()->back()->with('error', 'Failed to insert record')->withInput();
