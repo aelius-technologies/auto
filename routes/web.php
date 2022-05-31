@@ -116,7 +116,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::any('cash_receipt', 'CashReceiptController@index')->name('cash_receipt');  
             Route::get('cash_receipt/view/{id?}', 'CashReceiptController@view')->name('cash_receipt.view');
             Route::post('cash_receipt/change-status', 'CashReceiptController@change_status')->name('cash_receipt.change.status');
-            Route::get('cash_receipt/cash_receipt', 'CashReceiptController@cash_receipt')->name('cash_receipt.cash_receipt');
+            Route::get('cash_receipt/create', 'CashReceiptController@create')->name('cash_receipt.create');
+            Route::post('cash_receipt/insert', 'CashReceiptController@insert')->name('cash_receipt.insert');
             Route::get('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
         /** Cash Receipt */
 

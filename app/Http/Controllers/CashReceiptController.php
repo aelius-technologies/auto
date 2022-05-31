@@ -7,14 +7,19 @@ use App\Models\Allocation;
 use App\Models\Approval;
 use App\Models\Branch;
 use App\Models\CarExchange;
+use App\Models\CashReceipt;
 use App\Models\ExtandWarranty;
 use App\Models\Fasttag;
 use App\Models\Finance;
 use App\Models\Insurance;
 use App\Models\Lead;
+use App\Models\OBF;
+use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Tax;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use DataTables ,DB;
 class CashReceiptController extends Controller
 {
@@ -58,8 +63,13 @@ class CashReceiptController extends Controller
                                                 </ul>';
                             }
                             if (auth()->user()->can('cash_receipt-generate_gate_pass')) {
+                                $return .= '<a title="Add Cash" href="'.route('cash_receipt.create', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                <i class="fas fa-file-medical"></i>
+                                </a> &nbsp;';
+                            }
+                            if (auth()->user()->can('cash_receipt-generate_gate_pass') && $data->status == 'account_accepted' ) {
                                 $return .= '<a title="Generate Cash Receipt" href="'.route('cash_receipt.generate_cash_receipt', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                <i class="fas fa-file-pdf"></i> 
+                                <i class="fas fa-receipt"></i> 
                                 </a> &nbsp;';
                             }
 
@@ -226,21 +236,73 @@ class CashReceiptController extends Controller
         }
     /** change-status */
 
-    /** Cash-receipt */
-        public function cash_receipt(Request $request){
-
+    /** Create */
+        public function create(Request $request){
+            $id = base64_decode($request->id);
             $data = OBF::select('obf.id')
-                    ->where(['id' => $request->id])
+                    ->where(['id' => $id])
                     ->first();
             if($data){
                 
-                return view('cash_receipt.cash_receipt')->with(['data' => $data]);
+                return view('cash_receipt.create')->with(['data' => $data]);
             }else{
-                return response()->json(['status' => 404 ,'message' => 'No record found!']);
+                return view('cash_receipt.create')->with('error','No record found!');
             }
 
         }
-    /** Cash-receipt */
+    /** Create */
+  
+    /** Insert */
+        public function insert(Request $request){
+            $id = $request->id;
+
+            $data = OBF::select('obf.id')
+                    ->where(['id' => $id])
+                    ->first();
+            if($data){
+                if($request->amount < 25000){
+                    $crud = [
+                        'obf_id' => $id,
+                        'amount' => $request->amount,
+                        'spcial_case' => 'yes',
+                        'status' => 'pending',
+                    ];
+                    $obf_status = 'account_rejected';
+                }else{
+                    $crud = [
+                        'obf_id' => $id,
+                        'amount' => $request->amount,
+                        'spcial_case' => 'no',
+                        'status' => 'accepted',
+                    ];
+                    $obf_status = 'account_accepted';
+                }
+                DB::beginTransaction();
+                try {
+                    $last_id = CashReceipt::insertGetId($crud);
+                    if($last_id){
+                        $obf = OBF::where('id' ,$id)->update(['status' => $obf_status]);
+                        if($obf){
+                            DB::commit();
+                            return redirect()->route('cash_receipt')->with('success', 'Record inserted successfully');
+                        }else{
+                            DB::rollback();
+                            return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                        }
+                    }else{
+                        DB::rollback();
+                        return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                    }
+                }catch (\Throwable $th){
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
+                }
+            }else{
+                return view('cash_receipt.index')->with('error','No Record Found!');
+            }
+
+        }
+    /** Insert */
 
     /** Generate Cash-receipt */
         public function generate_cash_receipt(Request $request){

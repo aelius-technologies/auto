@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CashReceipt extends Model
 {
     use HasFactory;
-    protected $table = 'car_exchange_category';
+    protected $table = 'cash_receipt';
     
-    protected $fillable = ['obf_id','cash','spcial_case','status'];
+    protected $fillable = ['obf_id','amount','spcial_case','status'];
 }
