@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\OBF;
 
-class ObfSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class ObfSeeder extends Seeder{
+    public function run(){
         $tax = OBF::create([
             'temporary_id' => '0001',
             'booking_date' => '2023-05-14',

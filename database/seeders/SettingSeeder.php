@@ -125,5 +125,9 @@ class SettingSeeder extends Seeder{
         if(file_exists(public_path('/dummy/small_logo.png')) && !file_exists(public_path('/uploads/logo/small_logo.png')) ){
             File::copy(public_path('/dummy/small_logo.png'), public_path('/uploads/logo/small_logo.png'));
         }
+
+        if(file_exists(public_path('/dummy/default.jpg')) && !file_exists(public_path('/uploads/kyc/default.jpg')) ){
+            File::copy(public_path('/dummy/default.jpg'), public_path('/uploads/kyc/default.jpg'));
+        }
     }
 }

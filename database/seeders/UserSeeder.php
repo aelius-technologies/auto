@@ -9,7 +9,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
 class UserSeeder extends Seeder{
-
     public function run(){
         $data = [
             [
@@ -19,7 +18,6 @@ class UserSeeder extends Seeder{
                 'email' => 'admin@admin.com',
                 'role' => 'admin'
             ],
-            
             [
                 'first_name' => 'Gajjar',
                 'last_name' => 'Mitul',

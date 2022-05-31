@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Approval;
 
-class ApprovalSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class ApprovalSeeder extends Seeder{
+    public function run(){
         $accessory = Approval::create([
             'obf_id' => '1',
             'status' => 'pending',

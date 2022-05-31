@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Finance;
 
-class FinanceSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class FinanceSeeder extends Seeder{
+    public function run(){
         $finance = Finance::create([
             'name' => 'Bajaj Finance',
             'branch_id' => '1',

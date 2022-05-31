@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use App\Models\Fasttag;
 use Illuminate\Database\Seeder;
 
-class FasttagSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class FasttagSeeder extends Seeder{
+    public function run(){
         $tax = Fasttag::create([
             'tag_id' => 'FastTag_2022051301',
             'amount' => '500',
