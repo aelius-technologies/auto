@@ -26,7 +26,7 @@ class CreateInventoryTable extends Migration
             $table->string('ex_showroom_price')->nullable();
             $table->string('interior_color')->nullable();
             $table->string('exterior_color')->nullable();
-            $table->enum('status', ['active', 'inactive','deleted' ,'transfer' ,'sold'])->default('active');
+            $table->enum('status', ['active', 'inactive','deleted' ,'pdi_hold' ,'sold'])->default('active');
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

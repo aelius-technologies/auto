@@ -139,90 +139,90 @@
     });
 </script>
 <script>
-    $(document).ready(function(){
-        $('.dropify').dropify({
-            messages: {
-                'default': 'Drag and drop profile image here or click',
-                'remove':  'Remove',
-                'error':   'Ooops, something wrong happended.'
-            }
-        });
+    // $(document).ready(function(){
+    //     $('.dropify').dropify({
+    //         messages: {
+    //             'default': 'Drag and drop profile image here or click',
+    //             'remove':  'Remove',
+    //             'error':   'Ooops, something wrong happended.'
+    //         }
+    //     });
 
-        var drEvent = $('.dropify').dropify();
+    //     var drEvent = $('.dropify').dropify();
 
-        var dropifyElements = {};
-        $('.dropify').each(function () {
-            dropifyElements[this.id] = false;
-        });
+    //     var dropifyElements = {};
+    //     $('.dropify').each(function () {
+    //         dropifyElements[this.id] = false;
+    //     });
 
-        drEvent.on('dropify.beforeClear', function(event, element){
-            id = event.target.id;
-            if(!dropifyElements[id]){
-                var url = "{!! route('user.profile.remove') !!}";
-                <?php if(isset($data) && isset($data->id)){ ?>
-                    var id_encoded = "{{ base64_encode($data->id) }}";
+    //     drEvent.on('dropify.beforeClear', function(event, element){
+    //         id = event.target.id;
+    //         if(!dropifyElements[id]){
+    //             var url = "";
+    //             <?php if(isset($data) && isset($data->id)){ ?>
+    //                 var id_encoded = "{{ base64_encode($data->id) }}";
 
-                    Swal.fire({
-                        title: 'Are you sure want delete this image?',
-                        text: "",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes'
-                    }).then(function (result){
-                        if (result.value){
-                            $.ajax({
-                                url: url,
-                                type: "POST",
-                                data:{
-                                    id: id_encoded,
-                                    _token: "{{ csrf_token() }}"
-                                },
-                                dataType: "JSON",
-                                success: function (data){
-                                    if(data.code == 200){
-                                        Swal.fire('Deleted!', 'Deleted Successfully.', 'success');
-                                        dropifyElements[id] = true;
-                                        element.clearElement();
-                                    }else{
-                                        Swal.fire('', 'Failed to delete', 'error');
-                                    }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown){
-                                    Swal.fire('', 'Failed to delete', 'error');
-                                }
-                            });
-                        }
-                    });
+    //                 Swal.fire({
+    //                     title: 'Are you sure want delete this image?',
+    //                     text: "",
+    //                     type: 'warning',
+    //                     showCancelButton: true,
+    //                     confirmButtonColor: '#3085d6',
+    //                     cancelButtonColor: '#d33',
+    //                     confirmButtonText: 'Yes'
+    //                 }).then(function (result){
+    //                     if (result.value){
+    //                         $.ajax({
+    //                             url: url,
+    //                             type: "POST",
+    //                             data:{
+    //                                 id: id_encoded,
+    //                                 _token: "{{ csrf_token() }}"
+    //                             },
+    //                             dataType: "JSON",
+    //                             success: function (data){
+    //                                 if(data.code == 200){
+    //                                     Swal.fire('Deleted!', 'Deleted Successfully.', 'success');
+    //                                     dropifyElements[id] = true;
+    //                                     element.clearElement();
+    //                                 }else{
+    //                                     Swal.fire('', 'Failed to delete', 'error');
+    //                                 }
+    //                             },
+    //                             error: function (jqXHR, textStatus, errorThrown){
+    //                                 Swal.fire('', 'Failed to delete', 'error');
+    //                             }
+    //                         });
+    //                     }
+    //                 });
 
-                    return false;
-                <?php } else { ?>
-                    Swal.fire({
-                        title: 'Are you sure want delete this image?',
-                        text: "",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes'
-                    }).then(function (result){
-                        if (result.value){
-                            Swal.fire('Deleted!', 'Deleted Successfully.', 'success');
-                            dropifyElements[id] = true;
-                            element.clearElement();
-                        }else{
-                            Swal.fire('Cancelled', 'Discard Last Operation.', 'error');
-                        }
-                    });
-                    return false;
-                <?php } ?>
-            } else {
-                dropifyElements[id] = false;
-                return true;
-            }
-        });
-    });
+    //                 return false;
+    //             <?php } else { ?>
+    //                 Swal.fire({
+    //                     title: 'Are you sure want delete this image?',
+    //                     text: "",
+    //                     type: 'warning',
+    //                     showCancelButton: true,
+    //                     confirmButtonColor: '#3085d6',
+    //                     cancelButtonColor: '#d33',
+    //                     confirmButtonText: 'Yes'
+    //                 }).then(function (result){
+    //                     if (result.value){
+    //                         Swal.fire('Deleted!', 'Deleted Successfully.', 'success');
+    //                         dropifyElements[id] = true;
+    //                         element.clearElement();
+    //                     }else{
+    //                         Swal.fire('Cancelled', 'Discard Last Operation.', 'error');
+    //                     }
+    //                 });
+    //                 return false;
+    //             <?php } ?>
+    //         } else {
+    //             dropifyElements[id] = false;
+    //             return true;
+    //         }
+    //     });
+    // });
 </script>
 
 <script>

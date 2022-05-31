@@ -199,5 +199,15 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::any('order', 'OrderController@index')->name('order');
             Route::get('order/view/{id?}', 'OrderController@view')->name('order.view');
         /** orders */
+
+        /** transfer */
+            Route::any('transfer', 'TransferController@index')->name('transfer');
+            Route::get('transfer/create', 'TransferController@create')->name('transfer.create');
+            Route::post('transfer/insert', 'TransferController@insert')->name('transfer.insert');
+            Route::get('transfer/view/{id?}', 'TransferController@view')->name('transfer.view');
+            Route::get('transfer/edit/{id?}', 'TransferController@edit')->name('transfer.edit');
+            Route::patch('transfer/update', 'TransferController@update')->name('transfer.update');
+            Route::post('transfer/change-status', 'TransferController@change_status')->name('transfer.change.status');
+        /** transfer */
     });
 });

@@ -18,9 +18,10 @@ class CreateTransferTable extends Migration
             $table->string('to_branch')->nullable();
             $table->string('from_branch')->nullable();
             $table->string('product_id')->nullable();
+            $table->string('inventory_id')->nullable();
             $table->string('transfer_fee')->nullable();
             $table->string('reason')->nullable();
-            $table->enum('status', ['pending', 'accepted','rejected'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

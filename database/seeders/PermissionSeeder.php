@@ -9,11 +9,18 @@ use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder{
     public function run(){
-        $gm = [
+        $gm_permissions = [
             'user-create',
             'user-edit',
             'user-view',
             'user-delete'
+        ];
+
+        $branch_permissions = [
+            'transfer-create',
+            'transfer-view',
+            'transfer-edit',
+            'transfer-delete'
         ];
 
         $admin_permissions = [
@@ -116,20 +123,23 @@ class PermissionSeeder extends Seeder{
             'obf_approval-delete',
             'obf_approval-view',
             'obf_approval-edit',
-            'obf_approval-create'
+            'obf_approval-create',
         ];
 
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $permissions = array_merge($admin_permissions, $gm);
+        $permissions = array_merge($gm_permissions, $branch_permissions, $admin_permissions);
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission, 'guard_name' => 'web']);
         }
 
         $gm = Role::findByName('gm');
-        $gm->givePermissionTo($gm);
+        $gm->givePermissionTo($gm_permissions);
+
+        $branch = Role::findByName('branch');
+        $branch->givePermissionTo($branch_permissions);
 
         $admin = Role::findByName('admin');
         $admin->givePermissionTo($permissions);

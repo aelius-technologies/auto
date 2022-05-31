@@ -13,10 +13,10 @@
         </a>
     </li>
     <hr class="sidebar-divider">
-    <div class="sidebar-heading">
-        Access Control
-    </div>
     @canany(['role-create', 'role-edit', 'role-view', 'role-delete', 'permission-create', 'permission-edit', 'permission-view', 'permission-delete', 'access-edit', 'access-view'])
+        <!-- <div class="sidebar-heading">
+            Access Control
+        </div> -->
         <li class="nav-item {{ (Request::is('role*') || Request::is('permission*') || Request::is('access*')) ? 'active' : '' }}">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="false" aria-controls="collapseTwo">
@@ -77,13 +77,23 @@
     @endcanany
 <!-- OBF -->
 <!-- Orders -->
-@canany(['orders-create','orders-edit','orders-view','orders-delete'])
-    <li class="nav-item {{ Request::is('order*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('order') }}">
-            <i class="fa fa-shopping-bag"></i>
-            <span>Orders</span>
-        </a>
-    </li>
+    @canany(['orders-create','orders-edit','orders-view','orders-delete'])
+        <li class="nav-item {{ Request::is('order*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('order') }}">
+                <i class="fa fa-shopping-bag"></i>
+                <span>Orders</span>
+            </a>
+        </li>
     @endcanany
 <!-- Orders -->
+<!-- Transfer -->
+    @canany(['transfer-create','transfer-edit','transfer-view','transfer-delete'])
+        <li class="nav-item {{ Request::is('transfer*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('transfer') }}">
+                <i class="fa fa-shopping-bag"></i>
+                <span>Transfers</span>
+            </a>
+        </li>
+    @endcanany
+<!-- Transfer -->
 </ul>

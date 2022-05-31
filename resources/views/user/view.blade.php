@@ -95,9 +95,9 @@
 <script src="{{ asset('assets/js/dropify.min.js') }}"></script>
 
 <script>
-    $(document).ready(function(){
-        var drEvent = $('.dropify').dropify();
-    });
+    // $(document).ready(function(){
+    //     var drEvent = $('.dropify').dropify();
+    // });
 </script>
 @endsection
 
