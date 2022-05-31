@@ -1,14 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\OBF;
 use Illuminate\Http\Request;
-<<<<<<< Updated upstream
-use Auth, DB, Mail, Validator, File, DataTables;
-
-class CashReceiptController extends Controller{
-=======
 use App\Models\Accessory;
 use App\Models\Allocation;
 use App\Models\Approval;
@@ -25,7 +18,7 @@ use App\Models\Tax;
 use DataTables ,DB;
 class CashReceiptController extends Controller
 {
->>>>>>> Stashed changes
+
     /** construct */
         public function __construct(){
             $this->middleware('permission:cash_receipt-create', ['only' => ['create']]);
