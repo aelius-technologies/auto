@@ -41,7 +41,7 @@ class AccountApprovalController extends Controller
                                                 </a> &nbsp;
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="account_accepted" data-id="' . base64_encode($data->id) . '">Accept</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="rejected" data-id="' . base64_encode($data->id) . '">Reject</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status_reject(this);" data-status="rejected" data-id="' . base64_encode($data->id) . '">Reject</a></li>
                                                 </ul>';
                             }
 
