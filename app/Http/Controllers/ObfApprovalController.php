@@ -6,10 +6,9 @@ use App\Models\OBF;
 use App\Models\ObfApproval;
 use Illuminate\Http\Request;
 use App\Http\Requests\ObfApprovalRequest;
-use DataTables ,DB;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class ObfApprovalController extends Controller
-{
+class ObfApprovalController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:obf_approval-create', ['only' => ['create']]);
@@ -41,7 +40,7 @@ class ObfApprovalController extends Controller
                                                 </a> &nbsp;
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_accepted" data-id="' . base64_encode($data->id) . '">Obf Accepted</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_rejected" data-id="' . base64_encode($data->id) . '">Obf Rejected</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status_reject(this);" data-status="obf_rejected" data-id="' . base64_encode($data->id) . '">Obf Rejected</a></li>
                                                 </ul>';
                             }
 

@@ -106,20 +106,19 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::post('obf/profile-remove', 'ObfController@obf_profile_remove')->name('obf.profile.remove');
         /** Order Booking Fourm (OBF) */
         
-        
         /** OBF Approval */
             Route::any('obf_approval', 'ObfApprovalController@index')->name('obf_approval');
             Route::get('obf_approval/view/{id?}', 'ObfApprovalController@view')->name('obf_approval.view');
             Route::post('obf_approval/change-status', 'ObfApprovalController@change_status')->name('obf_approval.change.status');
         /** OBF Approval */
 
-         /** Cash Receipt */
+        /** Cash Receipt */
             Route::any('cash_receipt', 'CashReceiptController@index')->name('cash_receipt');  
             Route::get('cash_receipt/view/{id?}', 'CashReceiptController@view')->name('cash_receipt.view');
             Route::post('cash_receipt/change-status', 'CashReceiptController@change_status')->name('cash_receipt.change.status');
-            Route::post('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
+            Route::get('cash_receipt/cash_receipt', 'CashReceiptController@cash_receipt')->name('cash_receipt.cash_receipt');
+            Route::get('cash_receipt/generate_cash_receipt', 'CashReceiptController@generate_cash_receipt')->name('cash_receipt.generate_cash_receipt');
         /** Cash Receipt */
-
 
         /** Account Approval */
             Route::any('account_approval', 'AccountApprovalController@index')->name('account_approval');
@@ -138,64 +137,54 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
         /** product */
 
         /** taxes */
-        Route::any('tax', 'TaxesController@index')->name('tax');
-        Route::get('tax/create', 'TaxesController@create')->name('tax.create');
-        Route::post('tax/insert', 'TaxesController@insert')->name('tax.insert');
-        Route::get('tax/view/{id?}', 'TaxesController@view')->name('tax.view');
-        Route::get('tax/edit/{id?}', 'TaxesController@edit')->name('tax.edit');
-        Route::patch('tax/update', 'TaxesController@update')->name('tax.update');
-        Route::post('tax/change-status', 'TaxesController@change_status')->name('tax.change.status');
+            Route::any('tax', 'TaxesController@index')->name('tax');
+            Route::get('tax/create', 'TaxesController@create')->name('tax.create');
+            Route::post('tax/insert', 'TaxesController@insert')->name('tax.insert');
+            Route::get('tax/view/{id?}', 'TaxesController@view')->name('tax.view');
+            Route::get('tax/edit/{id?}', 'TaxesController@edit')->name('tax.edit');
+            Route::patch('tax/update', 'TaxesController@update')->name('tax.update');
+            Route::post('tax/change-status', 'TaxesController@change_status')->name('tax.change.status');
         /** taxes */
 
         /** insurance */
-        Route::any('insurance', 'InsuranceController@index')->name('insurance');
-        Route::get('insurance/create', 'InsuranceController@create')->name('insurance.create');
-        Route::post('insurance/insert', 'InsuranceController@insert')->name('insurance.insert');
-        Route::get('insurance/view/{id?}', 'InsuranceController@view')->name('insurance.view');
-        Route::get('insurance/edit/{id?}', 'InsuranceController@edit')->name('insurance.edit');
-        Route::patch('insurance/update', 'InsuranceController@update')->name('insurance.update');
-        Route::post('insurance/change-status', 'InsuranceController@change_status')->name('insurance.change.status');
+            Route::any('insurance', 'InsuranceController@index')->name('insurance');
+            Route::get('insurance/create', 'InsuranceController@create')->name('insurance.create');
+            Route::post('insurance/insert', 'InsuranceController@insert')->name('insurance.insert');
+            Route::get('insurance/view/{id?}', 'InsuranceController@view')->name('insurance.view');
+            Route::get('insurance/edit/{id?}', 'InsuranceController@edit')->name('insurance.edit');
+            Route::patch('insurance/update', 'InsuranceController@update')->name('insurance.update');
+            Route::post('insurance/change-status', 'InsuranceController@change_status')->name('insurance.change.status');
         /** insurance */
 
         /** extand_warranty */
-        Route::any('extand_warranties', 'ExtandWarrantyController@index')->name('extand_warranties');
-        Route::get('extand_warranties/create', 'ExtandWarrantyController@create')->name('extand_warranties.create');
-        Route::post('extand_warranties/insert', 'ExtandWarrantyController@insert')->name('extand_warranties.insert');
-        Route::get('extand_warranties/view/{id?}', 'ExtandWarrantyController@view')->name('extand_warranties.view');
-        Route::get('extand_warranties/edit/{id?}', 'ExtandWarrantyController@edit')->name('extand_warranties.edit');
-        Route::patch('extand_warranties/update', 'ExtandWarrantyController@update')->name('extand_warranties.update');
-        Route::post('extand_warranties/change-status', 'ExtandWarrantyController@change_status')->name('extand_warranties.change.status');
+            Route::any('extand_warranties', 'ExtandWarrantyController@index')->name('extand_warranties');
+            Route::get('extand_warranties/create', 'ExtandWarrantyController@create')->name('extand_warranties.create');
+            Route::post('extand_warranties/insert', 'ExtandWarrantyController@insert')->name('extand_warranties.insert');
+            Route::get('extand_warranties/view/{id?}', 'ExtandWarrantyController@view')->name('extand_warranties.view');
+            Route::get('extand_warranties/edit/{id?}', 'ExtandWarrantyController@edit')->name('extand_warranties.edit');
+            Route::patch('extand_warranties/update', 'ExtandWarrantyController@update')->name('extand_warranties.update');
+            Route::post('extand_warranties/change-status', 'ExtandWarrantyController@change_status')->name('extand_warranties.change.status');
         /** extand_warranty */
 
         /** fasttag */
-        Route::any('fasttag', 'FasttagController@index')->name('fasttag');
-        Route::get('fasttag/create', 'FasttagController@create')->name('fasttag.create');
-        Route::post('fasttag/insert', 'FasttagController@insert')->name('fasttag.insert');
-        Route::get('fasttag/view/{id?}', 'FasttagController@view')->name('fasttag.view');
-        Route::get('fasttag/edit/{id?}', 'FasttagController@edit')->name('fasttag.edit');
-        Route::patch('fasttag/update', 'FasttagController@update')->name('fasttag.update');
-        Route::post('fasttag/change-status', 'FasttagController@change_status')->name('fasttag.change.status');
+            Route::any('fasttag', 'FasttagController@index')->name('fasttag');
+            Route::get('fasttag/create', 'FasttagController@create')->name('fasttag.create');
+            Route::post('fasttag/insert', 'FasttagController@insert')->name('fasttag.insert');
+            Route::get('fasttag/view/{id?}', 'FasttagController@view')->name('fasttag.view');
+            Route::get('fasttag/edit/{id?}', 'FasttagController@edit')->name('fasttag.edit');
+            Route::patch('fasttag/update', 'FasttagController@update')->name('fasttag.update');
+            Route::post('fasttag/change-status', 'FasttagController@change_status')->name('fasttag.change.status');
         /** fasttag */
 
         /** finance */
-        Route::any('finance', 'FinanceController@index')->name('finance');
-        Route::get('finance/create', 'FinanceController@create')->name('finance.create');
-        Route::post('finance/insert', 'FinanceController@insert')->name('finance.insert');
-        Route::get('finance/view/{id?}', 'FinanceController@view')->name('finance.view');
-        Route::get('finance/edit/{id?}', 'FinanceController@edit')->name('finance.edit');
-        Route::patch('finance/update', 'FinanceController@update')->name('finance.update');
-        Route::post('finance/change-status', 'FinanceController@change_status')->name('finance.change.status');
+            Route::any('finance', 'FinanceController@index')->name('finance');
+            Route::get('finance/create', 'FinanceController@create')->name('finance.create');
+            Route::post('finance/insert', 'FinanceController@insert')->name('finance.insert');
+            Route::get('finance/view/{id?}', 'FinanceController@view')->name('finance.view');
+            Route::get('finance/edit/{id?}', 'FinanceController@edit')->name('finance.edit');
+            Route::patch('finance/update', 'FinanceController@update')->name('finance.update');
+            Route::post('finance/change-status', 'FinanceController@change_status')->name('finance.change.status');
         /** finance */
-
-         /** lead */
-         Route::any('lead', 'LeadController@index')->name('lead');
-         Route::get('lead/create', 'LeadController@create')->name('lead.create');
-         Route::post('lead/insert', 'LeadController@insert')->name('lead.insert');
-         Route::get('lead/view/{id?}', 'LeadController@view')->name('lead.view');
-         Route::get('lead/edit/{id?}', 'LeadController@edit')->name('lead.edit');
-         Route::patch('lead/update', 'LeadController@update')->name('lead.update');
-         Route::post('lead/change-status', 'LeadController@change_status')->name('lead.change.status');
-         /** lead */
 
          /** branch */
          Route::any('branches', 'BranchController@index')->name('branches');
@@ -216,5 +205,20 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
          Route::patch('department/update', 'DepartmentController@update')->name('department.update');
          Route::post('department/change-status', 'DepartmentController@change_status')->name('department.change.status');
          /** department */
+
+        /** lead */
+            Route::any('lead', 'LeadController@index')->name('lead');
+            Route::get('lead/create', 'LeadController@create')->name('lead.create');
+            Route::post('lead/insert', 'LeadController@insert')->name('lead.insert');
+            Route::get('lead/view/{id?}', 'LeadController@view')->name('lead.view');
+            Route::get('lead/edit/{id?}', 'LeadController@edit')->name('lead.edit');
+            Route::patch('lead/update', 'LeadController@update')->name('lead.update');
+            Route::post('lead/change-status', 'LeadController@change_status')->name('lead.change.status');
+        /** lead */
+
+        /** orders */
+            Route::any('order', 'OrderController@index')->name('order');
+            Route::get('order/view/{id?}', 'OrderController@view')->name('order.view');
+        /** orders */
     });
 });

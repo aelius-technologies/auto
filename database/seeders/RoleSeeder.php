@@ -6,7 +6,6 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder{
-
     public function run(){
         $roles = ['admin', 'branch', 'hr', 'sales', 'gm'];
 

@@ -6,11 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\ExtandWarranty;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB, Validator;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-
-class ExtandWarrantyController extends Controller
-{
+class ExtandWarrantyController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:extand_warranties-create', ['only' => ['create']]);
@@ -19,23 +17,21 @@ class ExtandWarrantyController extends Controller
             $this->middleware('permission:extand_warranties-delete', ['only' => ['delete']]);
         }
     /** construct */
+
     /** index */
-    public function index(Request $request)
-    {
-        return view('extand_warranties.index');
-    }
+        public function index(Request $request){
+            return view('extand_warranties.index');
+        }
     /** index */
 
     /** create */
-    public function create(Request $request)
-    {
-        return view('extand_warranties.create');
-    }
+        public function create(Request $request){
+            return view('extand_warranties.create');
+        }
     /** create */
 
     /** insert */
-        public function insert(Request $request)
-        {
+        public function insert(Request $request){
             if(auth()->user()->can('extand_warranties-create')){
                 $rules = [
                     'years' => 'required',
@@ -71,22 +67,19 @@ class ExtandWarrantyController extends Controller
     /** insert */
 
     /** view */
-        public function view(Request $request)
-        {
+        public function view(Request $request){
             return view('extand_warranties.view');
         }
     /** view */
 
-     /** edit */
-     public function edit(Request $request)
-     {
-         return view('extand_warranties.edit');
-     }
+    /** edit */
+        public function edit(Request $request){
+            return view('extand_warranties.edit');
+        }
     /** edit */
 
     /** update */
-        public function update(Request $request)
-        {
+        public function update(Request $request){
             if(auth()->user()->can('extand_warranties-edit')){
                 $rules = [
                     'id' => 'required',
@@ -119,8 +112,7 @@ class ExtandWarrantyController extends Controller
     /** update */
 
     /** change-status */
-        public function change_status(Request $request)
-        {
+        public function change_status(Request $request){
             if(auth()->user()->can('extand_warranties-delete')){
                 $rules = [
                     'id' => 'required',

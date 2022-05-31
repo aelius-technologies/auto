@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use App\Models\ExtandWarranty;
 use Illuminate\Database\Seeder;
 
-class ExtandWarrantySeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class ExtandWarrantySeeder extends Seeder{
+    public function run(){
         $extandwarranty = ExtandWarranty::create([
             'years' => '1 year',
             'amount' => '10000',

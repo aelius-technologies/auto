@@ -5,31 +5,14 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Tax;
 
-class TaxesSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class TaxesSeeder extends Seeder{
+    public function run(){
         $data = [
-            [
-                'name' => 'registration_tax',
-                'percentage' => '1%',
-            ],
-            
-            [
-                'name' => 'tcs_tax',
-                'percentage' => '10%',
-            ],
-            
-            [
-                'name' => 'municipal_tax',
-                'percentage' => '15%',
-            ],
+            ['name' => 'registration_tax', 'percentage' => '1%'],
+            ['name' => 'tcs_tax', 'percentage' => '10%'],
+            ['name' => 'municipal_tax', 'percentage' => '15%']
         ];
+
         foreach($data as $row){
             $tax = Tax::create([
                 'name' =>  $row['name'],

@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\SpecialRegistrationNumber;
 
-class SpecialRegistrationNumberSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class SpecialRegistrationNumberSeeder extends Seeder{
+    public function run(){
         $tax = SpecialRegistrationNumber::create([
             'number' => '1',
             'amount' => '10000',

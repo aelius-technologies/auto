@@ -7,15 +7,8 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class PermissionSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class PermissionSeeder extends Seeder{
+    public function run(){
         $gm = [
             'user-create',
             'user-edit',
@@ -112,6 +105,18 @@ class PermissionSeeder extends Seeder
             'inventory-view',
             'inventory-edit',
             'inventory-delete',
+            'account_approval-delete',
+            'account_approval-view',
+            'account_approval-edit',
+            'account_approval-create',
+            'cash_receipt-delete',
+            'cash_receipt-view',
+            'cash_receipt-edit',
+            'cash_receipt-create',
+            'obf_approval-delete',
+            'obf_approval-view',
+            'obf_approval-edit',
+            'obf_approval-create'
         ];
 
         // Reset cached roles and permissions

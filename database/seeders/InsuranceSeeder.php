@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Insurance;
 
-class InsuranceSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class InsuranceSeeder extends Seeder{
+    public function run(){
         $insurance = Insurance::create([
             'name' => 'LIC',
             'type' => '3rd Party',

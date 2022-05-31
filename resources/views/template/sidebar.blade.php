@@ -76,4 +76,14 @@
         </li>
     @endcanany
 <!-- OBF -->
+<!-- Orders -->
+@canany(['orders-create','orders-edit','orders-view','orders-delete'])
+    <li class="nav-item {{ Request::is('order*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('order') }}">
+            <i class="fa fa-shopping-bag"></i>
+            <span>Orders</span>
+        </a>
+    </li>
+    @endcanany
+<!-- Orders -->
 </ul>

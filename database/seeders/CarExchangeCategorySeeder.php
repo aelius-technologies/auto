@@ -6,15 +6,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\CarExchangeCategory;
 
-class CarExchangeCategorySeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class CarExchangeCategorySeeder extends Seeder{
+    public function run(){
         $branch = CarExchangeCategory::create([
             'name' => 'Honda',
             'status' => 'active',

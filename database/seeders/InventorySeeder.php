@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Inventory;
 
-class InventorySeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class InventorySeeder extends Seeder{
+    public function run(){
         $inventory = Inventory::create([
             'category_id' => 1,
             'name' => 'City',

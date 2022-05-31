@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Fasttag;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB, Validator;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class FasttagController extends Controller
-{
+class FasttagController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:fasttags-create', ['only' => ['create']]);
@@ -20,15 +19,13 @@ class FasttagController extends Controller
     /** construct */
     
     /** index */
-    public function index(Request $request)
-    {
-        return view('fasttag.index');
-    }
+        public function index(Request $request){
+            return view('fasttag.index');
+        }
     /** index */
  
     /** insert */
-        public function insert(Request $request)
-        {
+        public function insert(Request $request){
             if(auth()->user()->can('fasttags-create')){
                 $rules = [
                     'tag_id' => 'required',
@@ -64,29 +61,25 @@ class FasttagController extends Controller
     /** insert */
 
     /** create */
-    public function create(Request $request)
-    {
-        return view('fasttag.create');
-    }
+        public function create(Request $request){
+            return view('fasttag.create');
+        }
     /** create */
 
     /** view */
-    public function view(Request $request)
-    {
-        return view('fasttag.view');
-    }
+        public function view(Request $request){
+            return view('fasttag.view');
+        }
     /** view */
 
-     /** edit */
-     public function edit(Request $request)
-     {
-         return view('fasttag.edit');
-     }
-     /** edit */ 
+    /** edit */
+        public function edit(Request $request){
+            return view('fasttag.edit');
+        }
+    /** edit */ 
 
     /** update */
-        public function update(Request $request)
-        {
+        public function update(Request $request){
             if(auth()->user()->can('fasttags-edit')){
                 $rules = [
                     'id' => 'required',
@@ -119,8 +112,7 @@ class FasttagController extends Controller
     /** update */
 
     /** change-status */
-        public function change_status(Request $request)
-        {
+        public function change_status(Request $request){
             if(auth()->user()->can('fasttags-delete')){
                 $rules = [
                     'id' => 'required',

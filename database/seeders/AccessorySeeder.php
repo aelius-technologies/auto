@@ -5,15 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Accessory;
 
-class AccessorySeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+class AccessorySeeder extends Seeder{
+    public function run(){
         $accessory = Accessory::create([
             'name' => 'sound system',
             'type' => 'sound',

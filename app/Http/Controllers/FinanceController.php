@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Finance;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Validator , DB;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class FinanceController extends Controller
-{
+class FinanceController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:finance-create', ['only' => ['create']]);
@@ -20,10 +19,9 @@ class FinanceController extends Controller
     /** construct */
 
     /** index */
-    public function index(Request $request)
-    {
-        return view('finance.index');
-    }
+        public function index(Request $request){
+            return view('finance.index');
+        }
     /** index */
 
     /** insert */
@@ -65,26 +63,23 @@ class FinanceController extends Controller
         }
     /** insert */
 
-     /** create */
-     public function create(Request $request)
-     {
-         return view('finance.create');
-     }
-     /** create */
+    /** create */
+        public function create(Request $request){
+            return view('finance.create');
+        }
+    /** create */
 
     /** view */
-    public function view(Request $request)
-    {
-        return view('finance.view');
-    }
+        public function view(Request $request){
+            return view('finance.view');
+        }
     /** view */
 
-     /** edit */
-     public function edit(Request $request)
-     {
-         return view('finance.edit');
-     }
-     /** edit */
+    /** edit */
+        public function edit(Request $request){
+            return view('finance.edit');
+        }
+    /** edit */
 
     /** update */
         public function update(Request $request){

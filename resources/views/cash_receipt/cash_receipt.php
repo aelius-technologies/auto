@@ -37,59 +37,13 @@
                     <form action="{{ route('user.insert') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
-
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="first_name">First Name</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control" placeholder="Plese enter first name" value="{{ @old('first_name') }}">
-                                <span class="kt-form__help error first_name"></span>
+                                <label for="amount">Amount</label>
+                                <input type="text" name="amount" id="amount" class="form-control" placeholder="Plese enter first name" value="{{ @old('amount') }}">
+                                <span class="kt-form__help error amount"></span>
                             </div>
-                            <div class="form-group col-sm-6">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Plese enter last name" value="{{ @old('last_name') }}">
-                                <span class="kt-form__help error last_name"></span>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="contact_number">Contact Number</label>
-                                <input type="text" name="contact_number" id="contact_number" class="form-control" placeholder="Plese enter contact number" value="{{ @old('contact_number') }}">
-                                <span class="kt-form__help error contact_number"></span>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Plese enter email" value="{{ @old('email') }}">
-                                <span class="kt-form__help error email"></span>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" placeholder="Plese enter password">
-                                <span class="text-danger">* Leave blank for default password</span>
-                                <span class="kt-form__help error password"></span>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="branch">Branch</label>
-                                <select class="form-control" name="branch" id="branch">
-                                    <option value="">Select Branch</option>
-                                    @if(isset($branch) && $branch->isNotEmpty())
-                                        @foreach($branch AS $row)
-                                            <option value="{{ $row->id }}"> {{ $row->name }} </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span class="kt-form__help error branch"></span>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="role" name="role" placeholder="Plese select role">Role</label>
-                                <select class="form-control" name="role" id="role">
-                                    <option value="">Select role</option>
-                                    @if(isset($roles) && $roles->isNotEmpty())
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->id }}">{{ ucfirst(str_replace('_', ' ', $role->name)) }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <span class="kt-form__help error role"></span>
-                            </div>
-                           
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
@@ -110,7 +64,7 @@
 
 <script>
     $(document).ready(function(){
-        $("#contact_number").keypress(function(e){
+        $("#amount").keypress(function(e){
             var keyCode = e.keyCode || e.which;
             var $this = $(this);
             //Regex for Valid Characters i.e. Numbers.

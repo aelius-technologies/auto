@@ -19,10 +19,9 @@ use App\Models\Product;
 use App\Models\Tax;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB, Validator ,DataTables;
+use Auth, DB, Mail, Validator, File, DataTables;
 
-class ObfController extends Controller
-{
+class ObfController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:obf-create', ['only' => ['create']]);
@@ -122,8 +121,7 @@ class ObfController extends Controller
     /** Create */
     
     /** insert */
-        public function insert(Request $request)
-        {
+        public function insert(Request $request){
             if(request()->ajax()){
                 return true;
             } 
@@ -265,8 +263,7 @@ class ObfController extends Controller
     /** insert */
 
     /** view */
-        public function view(Request $request)
-        {
+        public function view(Request $request){
             if(auth()->user()->can('obf-view')){
                 $id = base64_decode($request->id);
                 $path = URL('/uploads/kyc').'/';
@@ -284,45 +281,44 @@ class ObfController extends Controller
                 $finance = Finance::select('finance.id' ,'finance.name' ,'branches.name AS branch_name' ,'branches.id AS branch_id')->leftjoin('branches' ,'finance.branch_id' ,'branches.id')->where(['finance.status' => 'active'])->get();
                 $lead = Lead::select('id' ,'name')->where(['status' => 'active'])->get();
                 $car_exchange = CarExchange::select('car_exchange.id' ,'car_exchange.price','cep.name AS product_name')->leftjoin('car_exchange_product AS cep' ,'car_exchange.product_id' ,'cep.id')->get();
+                
                 $data = OBF::select('obf.id','obf.sales_person_id',
-                DB::raw("CONCAT(users.first_name,' ',users.last_name) AS sales_person_name"),'obf.temporary_id' ,'obf.booking_date' ,'obf.customer_name' ,'obf.customer_type' ,'branches.name AS branch_name' ,'branches.id AS branch_id' ,'obf.company_name' ,'obf.gst' ,'obf.address' ,'obf.registration' ,'obf.email' ,'obf.pan_number','obf.adhar_number' ,'obf.licance_number','obf.contact_number' ,'obf.dob' ,'obf.nominee_name','obf.nominee_reletion' ,'obf.nominee_age' ,'obf.occupation','products.name AS product_name','obf.product_id' ,'products.veriant','products.is_applicable_for_mcp' ,'obf.exterior_color' ,'obf.interior_color' ,'obf.ex_showroom_price' ,'registration_tax.percentage AS registration_tax' ,'insurance.name AS insurance' ,'obf.insurance_id' ,'municipal_tax.percentage AS municipal_tax' ,'tcs_tax.percentage AS tcs_tax' ,'accessories.name AS accessory_name' ,'obf.accessory_id','obf.extanded_warranty_id' ,'extand_warranties.years AS extand_warranties_years' ,'extand_warranties.amount AS extand_warranties_amount' ,'fasttags.tag_id AS tag_id' ,'fasttags.amount AS fasttag_amount' ,'fasttags.id AS fasttag_id','obf.trad_in_value' ,'obf.on_road_price' ,'obf.on_road_price_word' ,'obf.on_road_price_word','obf.finance_id' ,'finance.name AS finance_name' ,'finance_branch.name AS finance_branch_name' ,'lead.name AS lead_name','obf.lead_id' ,'obf.booking_amount' ,'obf.mode_of_payment' ,'obf.status' ,'obf.created_by' ,'obf.updated_by','obf.created_at' ,'obf.updated_at',
-                DB::Raw("CASE
-                            WHEN ".'pan_image'." != '' THEN CONCAT("."'".$path."'".", ".'pan_image'.")
-                            ELSE CONCAT("."'".$path."'".", 'default.jpg')
-                        END as pan_image"),
-                DB::Raw("CASE
-                            WHEN ".'adhar_image'." != '' THEN CONCAT("."'".$path."'".", ".'adhar_image'.")
-                            ELSE CONCAT("."'".$path."'".", 'default.jpg')
-                        END as adhar_image"),
-                DB::Raw("CASE
-                            WHEN ".'licance_image'." != '' THEN CONCAT("."'".$path."'".", ".'licance_image'.")
-                            ELSE CONCAT("."'".$path."'".", 'default.jpg')
-                        END as licance_image"),
-                )
-                        ->leftjoin('users' ,'obf.sales_person_id' ,'users.id')
-                        ->leftjoin('branches' ,'obf.branch_id' ,'branches.id')
-                        ->leftjoin('products' ,'obf.product_id' ,'products.id')
-                        ->leftjoin('taxes AS registration_tax' ,'obf.registration_tax_id' ,'registration_tax.id')
-                        ->leftjoin('taxes AS municipal_tax' ,'obf.municipal_tax_id' ,'municipal_tax.id')
-                        ->leftjoin('taxes AS tcs_tax' ,'obf.tcs_tax_id' ,'tcs_tax.id')
-                        ->leftjoin('insurance' ,'obf.insurance_id' ,'insurance.id')
-                        ->leftjoin('accessories' ,'obf.accessory_id' ,'accessories.id')
-                        ->leftjoin('extand_warranties' ,'obf.extanded_warranty_id' ,'extand_warranties.id')
-                        ->leftjoin('fasttags' ,'obf.fasttag_id' ,'fasttags.id')
-                        ->leftjoin('finance' ,'obf.finance_id' ,'finance.id')
-                        ->leftjoin('branches AS finance_branch' ,'obf.finance_branch_id' ,'finance_branch.id')
-                        ->leftjoin('lead' ,'obf.lead_id' ,'lead.id')
-                        ->where(['obf.id' => $id])
-                        ->first();      
+                                DB::raw("CONCAT(users.first_name,' ',users.last_name) AS sales_person_name"),'obf.temporary_id' ,'obf.booking_date' ,'obf.customer_name' ,'obf.customer_type' ,'branches.name AS branch_name' ,'branches.id AS branch_id' ,'obf.company_name' ,'obf.gst' ,'obf.address' ,'obf.registration' ,'obf.email' ,'obf.pan_number','obf.adhar_number' ,'obf.licance_number','obf.contact_number' ,'obf.dob' ,'obf.nominee_name','obf.nominee_reletion' ,'obf.nominee_age' ,'obf.occupation','products.name AS product_name','obf.product_id' ,'products.veriant','products.is_applicable_for_mcp' ,'obf.exterior_color' ,'obf.interior_color' ,'obf.ex_showroom_price' ,'registration_tax.percentage AS registration_tax' ,'insurance.name AS insurance' ,'obf.insurance_id' ,'municipal_tax.percentage AS municipal_tax' ,'tcs_tax.percentage AS tcs_tax' ,'accessories.name AS accessory_name' ,'obf.accessory_id','obf.extanded_warranty_id' ,'extand_warranties.years AS extand_warranties_years' ,'extand_warranties.amount AS extand_warranties_amount' ,'fasttags.tag_id AS tag_id' ,'fasttags.amount AS fasttag_amount' ,'fasttags.id AS fasttag_id','obf.trad_in_value' ,'obf.on_road_price' ,'obf.on_road_price_word' ,'obf.on_road_price_word','obf.finance_id' ,'finance.name AS finance_name' ,'finance_branch.name AS finance_branch_name' ,'lead.name AS lead_name','obf.lead_id' ,'obf.booking_amount' ,'obf.mode_of_payment' ,'obf.status' ,'obf.created_by' ,'obf.updated_by','obf.created_at' ,'obf.updated_at',
+                                DB::Raw("CASE
+                                            WHEN ".'pan_image'." != '' THEN CONCAT("."'".$path."'".", ".'pan_image'.")
+                                            ELSE CONCAT("."'".$path."'".", 'default.jpg')
+                                        END as pan_image"),
+                                DB::Raw("CASE
+                                            WHEN ".'adhar_image'." != '' THEN CONCAT("."'".$path."'".", ".'adhar_image'.")
+                                            ELSE CONCAT("."'".$path."'".", 'default.jpg')
+                                        END as adhar_image"),
+                                DB::Raw("CASE
+                                            WHEN ".'licance_image'." != '' THEN CONCAT("."'".$path."'".", ".'licance_image'.")
+                                            ELSE CONCAT("."'".$path."'".", 'default.jpg')
+                                        END as licance_image"),
+                                )
+                            ->leftjoin('users' ,'obf.sales_person_id' ,'users.id')
+                            ->leftjoin('branches' ,'obf.branch_id' ,'branches.id')
+                            ->leftjoin('products' ,'obf.product_id' ,'products.id')
+                            ->leftjoin('taxes AS registration_tax' ,'obf.registration_tax_id' ,'registration_tax.id')
+                            ->leftjoin('taxes AS municipal_tax' ,'obf.municipal_tax_id' ,'municipal_tax.id')
+                            ->leftjoin('taxes AS tcs_tax' ,'obf.tcs_tax_id' ,'tcs_tax.id')
+                            ->leftjoin('insurance' ,'obf.insurance_id' ,'insurance.id')
+                            ->leftjoin('accessories' ,'obf.accessory_id' ,'accessories.id')
+                            ->leftjoin('extand_warranties' ,'obf.extanded_warranty_id' ,'extand_warranties.id')
+                            ->leftjoin('fasttags' ,'obf.fasttag_id' ,'fasttags.id')
+                            ->leftjoin('finance' ,'obf.finance_id' ,'finance.id')
+                            ->leftjoin('branches AS finance_branch' ,'obf.finance_branch_id' ,'finance_branch.id')
+                            ->leftjoin('lead' ,'obf.lead_id' ,'lead.id')
+                            ->where(['obf.id' => $id])
+                            ->first();      
             }
             return view('obf.view')->with(['data' =>$data,'sales' => $sales ,'product' => $product ,'taxOne' => $tax_1,'taxTwo' => $tax_2 ,'taxThree' => $tax_3,'accessory' => $accessory ,'extanded_warranty' => $extanded_warranty ,'fasttag' => $fasttag ,'branch' => $branch ,'insurance' => $insurance ,'car_exchange' => $car_exchange ,'finance' => $finance ,'lead' => $lead]);
         }
     /** view */
 
     /** Edit */
-        public function edit(Request $request)
-        {
-            
+        public function edit(Request $request){
                 $id = base64_decode($request->id);
                 $path = URL('/uploads/kyc').'/';
 
@@ -375,11 +371,11 @@ class ObfController extends Controller
     /** Edit */
 
     /** update */
-        public function update(Request $request)
-        {
+        public function update(Request $request){
             if($request->ajax()){ 
                 return true;
             }
+
             if(isset($request->id)){
                 $ext_record = OBF::find($request->id);
             }
@@ -518,8 +514,7 @@ class ObfController extends Controller
     /** update */
 
     /** change-status */
-        public function change_status(Request $request)
-        {
+        public function change_status(Request $request){
             if (!$request->ajax()) { exit('No direct script access allowed'); }
             $id = base64_decode($request->id);
             $data = OBF::where(['id' => $id])->first();
