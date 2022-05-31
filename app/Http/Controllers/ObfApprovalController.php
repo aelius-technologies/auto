@@ -40,7 +40,7 @@ class ObfApprovalController extends Controller{
                                                 </a> &nbsp;
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_accepted" data-id="' . base64_encode($data->id) . '">Obf Accepted</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_rejected" data-id="' . base64_encode($data->id) . '">Obf Rejected</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status_reject(this);" data-status="obf_rejected" data-id="' . base64_encode($data->id) . '">Obf Rejected</a></li>
                                                 </ul>';
                             }
 

@@ -22,6 +22,7 @@ class CashReceiptController extends Controller{
                 $data = OBF::select('obf.id','obf.booking_date' ,'obf.customer_name' ,'products.name AS product_name' ,'obf.status')
                         ->leftjoin('products' ,'obf.product_id' ,'products.id')
                         ->where(['obf.status' => 'obf_accepted'])
+                        ->orWhere(['obf.status' => 'account_accepted'])
                         ->get();
             
                         return Datatables::of($data)
@@ -43,6 +44,11 @@ class CashReceiptController extends Controller{
                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="account_accepted" data-id="' . base64_encode($data->id) . '">Account Accepted</a></li>
                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status_reject(this);" data-status="account_rejected" data-id="' . base64_encode($data->id) . '">Account Rejected</a></li>
                                                 </ul>';
+                            }
+                            if (auth()->user()->can('cash_receipt-generate_gate_pass')) {
+                                $return .= '<a title="Generate Cash Receipt" href="'.route('cash_receipt.generate_cash_receipt', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                <i class="fas fa-file-pdf"></i> 
+                                </a> &nbsp;';
                             }
 
                             $return .= '</div>';

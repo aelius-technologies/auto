@@ -68,7 +68,7 @@ Cash Receipt
                                 <input type="hidden" name="id" id="id" value="">
                                 <input type="hidden" name="status" id="status" value="">
                                 <label for="">Enter Your Reason</label>
-                                <textarea class="form-control" name="reason" id="reason" cols="30" rows="10"></textarea>
+                                <textarea placeholder="Please Enter Your Reason" class="form-control" name="reason" id="reason" cols="30" rows="10"></textarea>
                             
 
                         </div>
