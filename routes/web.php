@@ -128,13 +128,13 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
         /** Account Approval */
 
         /** product */
-            Route::any('product', 'ProductController@index')->name('product');
-            Route::get('product/create', 'ProductController@create')->name('product.create');
-            Route::post('product/insert', 'ProductController@insert')->name('product.insert');
-            Route::get('product/view/{id?}', 'ProductController@view')->name('product.view');
-            Route::get('product/edit/{id?}', 'ProductController@edit')->name('product.edit');
-            Route::patch('product/update', 'ProductController@update')->name('product.update');
-            Route::post('product/change-status', 'ProductController@change_status')->name('product.change.status');
+            Route::any('products', 'ProductController@index')->name('products');
+            Route::get('products/create', 'ProductController@create')->name('products.create');
+            Route::post('products/insert', 'ProductController@insert')->name('products.insert');
+            Route::get('products/view/{id?}', 'ProductController@view')->name('products.view');
+            Route::get('products/edit/{id?}', 'ProductController@edit')->name('products.edit');
+            Route::patch('products/update', 'ProductController@update')->name('products.update');
+            Route::post('products/change-status', 'ProductController@change_status')->name('products.change.status');
         /** product */
 
         /** taxes */
@@ -188,23 +188,23 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
         /** finance */
 
          /** branch */
-         Route::any('branches', 'BranchController@index')->name('branches');
-         Route::get('branches/create', 'BranchController@create')->name('branches.create');
-         Route::post('branches/insert', 'BranchController@insert')->name('branches.insert');
-         Route::get('branches/view/{id?}', 'BranchController@view')->name('branches.view');
-         Route::get('branches/edit/{id?}', 'BranchController@edit')->name('branches.edit');
-         Route::patch('branches/update', 'BranchController@update')->name('branches.update');
-         Route::post('branches/change-status', 'BranchController@change_status')->name('branches.change.status');
+            Route::any('branches', 'BranchController@index')->name('branches');
+            Route::get('branches/create', 'BranchController@create')->name('branches.create');
+            Route::post('branches/insert', 'BranchController@insert')->name('branches.insert');
+            Route::get('branches/view/{id?}', 'BranchController@view')->name('branches.view');
+            Route::get('branches/edit/{id?}', 'BranchController@edit')->name('branches.edit');
+            Route::patch('branches/update', 'BranchController@update')->name('branches.update');
+            Route::post('branches/change-status', 'BranchController@change_status')->name('branches.change.status');
          /** branch */
 
          /** department */
-         Route::any('department', 'DepartmentController@index')->name('department');
-         Route::get('department/create', 'DepartmentController@create')->name('department.create');
-         Route::post('department/insert', 'DepartmentController@insert')->name('department.insert');
-         Route::get('department/view/{id?}', 'DepartmentController@view')->name('department.view');
-         Route::get('department/edit/{id?}', 'DepartmentController@edit')->name('department.edit');
-         Route::patch('department/update', 'DepartmentController@update')->name('department.update');
-         Route::post('department/change-status', 'DepartmentController@change_status')->name('department.change.status');
+            Route::any('department', 'DepartmentController@index')->name('department');
+            Route::get('department/create', 'DepartmentController@create')->name('department.create');
+            Route::post('department/insert', 'DepartmentController@insert')->name('department.insert');
+            Route::get('department/view/{id?}', 'DepartmentController@view')->name('department.view');
+            Route::get('department/edit/{id?}', 'DepartmentController@edit')->name('department.edit');
+            Route::patch('department/update', 'DepartmentController@update')->name('department.update');
+            Route::post('department/change-status', 'DepartmentController@change_status')->name('department.change.status');
          /** department */
 
         /** lead */

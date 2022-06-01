@@ -23,7 +23,7 @@
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Access Control</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseTwo" class="collapse {{ (Request::is('role*') || Request::is('permission*') || Request::is('access*')) ? 'show' : '' }}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     @canany(['role-create', 'role-edit', 'role-view', 'role-delete'])
                         <a class="collapse-item {{ Request::is('role*') ? 'active' : '' }}" href="{{ route('role') }}">Roles</a>
@@ -57,7 +57,7 @@
                 <i class="fa fa-file" aria-hidden="true"></i>
                 <span>OBF</span>
             </a>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+            <div id="collapseOne" class="collapse {{ (Request::is('obf*') || Request::is('obf_approval*') || Request::is('cash_receipt*')) ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     @canany(['obf-create', 'obf-edit', 'obf-view', 'obf-delete'])
                         <a class="collapse-item {{ Request::is('obf*') ? 'active' : '' }}" href="{{ route('obf') }}">OBF</a>
@@ -90,10 +90,20 @@
     @canany(['transfer-create','transfer-edit','transfer-view','transfer-delete'])
         <li class="nav-item {{ Request::is('transfer*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('transfer') }}">
-                <i class="fa fa-shopping-bag"></i>
+                <i class="fa-solid fa-truck-moving"></i>
                 <span>Transfers</span>
             </a>
         </li>
     @endcanany
 <!-- Transfer -->
+<!-- Product -->
+    @canany(['products-create','products-edit','products-view','products-delete'])
+        <li class="nav-item {{ Request::is('products*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('products') }}">
+                <i class="fa fa-car"></i>
+                <span>Car Master</span>
+            </a>
+        </li>
+    @endcanany
+<!-- Product -->
 </ul>

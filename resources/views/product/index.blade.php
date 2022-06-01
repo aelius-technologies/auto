@@ -19,7 +19,7 @@ Car Master
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('product') }}" class="text-muted">Car Master</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('products') }}" class="text-muted">Car Master</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">List</li>
                     </ol>
                 </nav>
@@ -28,7 +28,7 @@ Car Master
         <div class="col-5 align-self-center">
         <div class="customize-input float-right">
                 @canany(['products-create'])
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('product.create') }}">Add New</a>
+                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('products.create') }}">Add New</a>
                 @endcanany
             </div>
         </div>
@@ -88,7 +88,7 @@ Car Master
                                 // lengthChange: false,
 
                                 "ajax": {
-                                    "url": "{{ route('product') }}",
+                                    "url": "{{ route('products') }}",
                                     "type": "POST",
                                     "dataType": "json",
                                     "data": {
@@ -143,7 +143,7 @@ Car Master
 
                 if (confirm('Are you sure?')) {
                     $.ajax({
-                        "url": "{!! route('product.change.status') !!}",
+                        "url": "{!! route('products.change.status') !!}",
                         "dataType": "json",
                         "type": "POST",
                         "data": {

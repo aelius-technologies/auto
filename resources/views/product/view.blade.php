@@ -16,7 +16,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('product') }}" class="text-muted">Car Master</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('products') }}" class="text-muted">Car Master</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">View</li>
                     </ol>
                 </nav>
@@ -31,6 +31,7 @@
                 <div class="card-body">
                     <form action="" name="form" id="form" method="post" enctype="multipart/form-data">
                         <div class="row">
+                            
                         <div class="form-group col-sm-6">
                                 <label for="name">Car Model</label>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="Enter Car Model" value="{{ $data->name ??'' }}" disabled>
@@ -54,7 +55,7 @@
                             <div class="form-group col-sm-6">
                                 <label for="category_id">Car Type</label>
                                 <select class="form-control" name="category_id" id="category_id" disabled>
-                                    <option value="">{{ $data->category_id ??'' }}</option>
+                                    <option value="">{{ $data->category_name ??'' }}</option>
                                 </select>
                                 <span class="kt-form__help error category_id"></span>
                             </div>
@@ -72,7 +73,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <a href="{{ route('user') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
+                            <a href="{{ route('products') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                         </div>
                     </form>
                 </div>

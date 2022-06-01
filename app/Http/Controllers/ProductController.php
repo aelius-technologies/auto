@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth, DB, Mail, Validator, File, DataTables;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class ProductController extends Controller{
     /** construct */
@@ -21,26 +23,33 @@ class ProductController extends Controller{
     /** index */
         public function index(Request $request){
             if($request->ajax()){
-                $data = Product::select('product.id' ,'obf.customer_name' ,'obf.booking_date' ,'obf.status','products.name AS product')->leftjoin('products' ,'obf.product_id' ,'products.id')->where('obf.status' ,'pending')->get();
+                $data = Product::orderBy('id' , 'desc')->get();
                 
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($data){
                             $return = '<div class="btn-group">';
 
-                            if(auth()->user()->can('obf_approval-view')){
-                                $return .= '<a href="'.route('obf_approval.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                            if(auth()->user()->can('products-view')){
+                                $return .= '<a href="'.route('products.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                 <i class="fa fa-eye"></i>
                                             </a> &nbsp;';
                             }   
+                            
+                            if(auth()->user()->can('products-edit')){
+                                $return .= '<a href="'.route('products.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-pencil"></i>
+                                            </a> &nbsp;';
+                            }   
 
-                            if (auth()->user()->can('obf_approval-delete')) {
+                            if (auth()->user()->can('products-delete')) {
                                 $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-bars"></i>
                                                 </a> &nbsp;
                                                 <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_accepted" data-id="' . base64_encode($data->id) . '">Obf Accepted</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_rejected" data-id="' . base64_encode($data->id) . '">Obf Rejected</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="inactive" data-id="' . base64_encode($data->id) . '">Inactive</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delete" data-id="' . base64_encode($data->id) . '">Delete</a></li>
                                                 </ul>';
                             }
 
@@ -49,30 +58,22 @@ class ProductController extends Controller{
                             return $return;
                         })
 
-                        ->editColumn('name', function($data) {
-                            return $data->customer_name;
-                        })
+                     
                         ->editColumn('status', function ($data) {
-                            if ($data->status == 'accepted') {
+                            if ($data->status == 'active') {
                                 return '<span class="badge badge-pill badge-success">Active</span>';
-                            } else if ($data->status == 'pending') {
+                            } else if ($data->status == 'inactive') {
                                 return '<span class="badge badge-pill badge-warning">Pending</span>';
                             } else if ($data->status == 'deleted') {
                                 return '<span class="badge badge-pill badge-danger">Deleted</span>';
                             }else if ($data->status == 'account_rejected') {
                                 return '<span class="badge badge-pill badge-danger">Account Rejected</span>';
-                            }else if ($data->status == 'obf_rejected') {
-                                return '<span class="badge badge-pill badge-danger">OBF Rejected</span>';
-                            }else if ($data->status == 'rejected') {
-                                return '<span class="badge badge-pill badge-danger">Rejected</span>';
-                            }else if ($data->status == 'obf_accepted') {
-                                return '<span class="badge badge-pill badge-success">Obf Accepted</span>';
-                            }else if ($data->status == 'account_accepted') {
-                                return '<span class="badge badge-pill badge-success">Account Accepted</span>';
+                            }else if ($data->status == 'pdi_hold') {
+                                return '<span class="badge badge-pill badge-warning">Hold By PDI</span>';
                             }
                         })
 
-                        ->rawColumns(['name', 'action' ,'status'])
+                        ->rawColumns([ 'action' ,'status'])
                         ->make(true);
             }
             return view('product.index');
@@ -81,29 +82,15 @@ class ProductController extends Controller{
 
     /**create */
         public function create(Request $request){
-            return view('product.create');
+            $data = Category::where(['status' => 'active'])->get();
+            return view('product.create')->with(['data' => $data]);
         }
     /**create */
 
     /** insert */
         public function insert(Request $request){
-            if(auth()->user()->can('products-create')){
-                $rules = [
-                    'category_id' => 'required',
-                    'name' => 'required',
-                    'ex_showroom_price' => 'required',
-                    'veriant' => 'required',
-                    'interior_color' => 'required',
-                    'exterior_color' => 'required',
-                    'is_applicable_for_mcp' => 'required'
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
+            if($request->ajax()) { return true; }
+            $crud = [
                     'category_id' => $request->category_id,
                     'name' => ucfirst($request->name),
                     'ex_showroom_price' => $request->ex_showroom_price,
@@ -117,55 +104,49 @@ class ProductController extends Controller{
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => auth()->user()->id
                 ];
-
-                $last_id = Product::insertGetId($crud);
-
-                if ($last_id) {
-                    return response()->json(['status' => 200, 'message' => 'Record inserted successfully']);
-                } else {
-                    return response()->json(['status' => 201, 'message' => 'Faild to insert Record!']);
+                DB::beginTransaction();
+                try {
+                    DB::enableQueryLog();
+                    $last_id = Product::insertGetId($crud);
+                    if ($last_id) {
+                        
+                        DB::commit();
+                        return redirect()->route('products')->with('success', 'Record inserted successfully');
+                    } else {
+                        DB::rollback();
+                        return redirect()->back()->with('error', 'Failed to insert record')->withInput();
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
                 }
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
-            }
+           
         }
     /** insert */
 
     /** view */
         public function view(Request $request){
-            $data = Product::where(['id' => $request->id])->first();
-
+            $id = base64_decode($request->id);
+            $data = Product::select('products.*' ,'categories.name AS category_name')->leftjoin('categories' ,'products.category_id' ,'categories.id')->where(['products.id' => $id])->first();
+            // dd($data);
             return view('product.view')->with(['data'=>$data]);
         }
     /** view */
 
     /** edit */
         public function edit(Request $request){
-            $data = Product::where(['id' => $request->id])->first();
+            $id = base64_decode($request->id);
+            $category = Category::where(['status' => 'active'])->get();
+            $data = Product::where(['id' => $id])->first();
 
-            return view('product.edit')->with(['data'=>$data]);
+            return view('product.edit')->with(['data'=>$data ,'category' => $category]);
         }
     /** edit */
 
     /** update */
         public function update(Request $request){
-            if(auth()->user()->can('products-edit')){
-                $rules = [
-                    'category_id' => 'required',
-                    'name' => 'required',
-                    'ex_showroom_price' => 'required',
-                    'veriant' => 'required',
-                    'interior_color' => 'required',
-                    'exterior_color' => 'required',
-                    'is_applicable_for_mcp' => 'required'
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
+            if($request->ajax()) { return true; }
+            $crud = [
                     'category_id' => $request->category_id,
                     'name' => ucfirst($request->name),
                     'ex_showroom_price' => $request->ex_showroom_price,
@@ -174,18 +155,23 @@ class ProductController extends Controller{
                     'exterior_color' => $request->exterior_color,
                     'is_applicable_for_mcp' => $request->is_applicable_for_mcp,
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => auth('sanctum')->user()->id
+                    'updated_by' => auth()->user()->id
                 ];
-
-
-                $update = Product::where(['id' => $request->id])->update($crud);
-                if ($update)
-                    return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
-                else
-                    return response()->json(['status' => 404, 'message' => 'Faild to update record']);
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
-            }
+                DB::beginTransaction();
+                try {
+                    DB::getQueryLog();
+                    $last_id = Product::where(['id' => $request->id])->update($crud);
+                    if ($last_id) {
+                        DB::commit();
+                        return redirect()->route('products')->with('success', 'Record updated successfully');
+                    } else {
+                        DB::rollback();
+                        return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
+                }
         }
     /** update */
 

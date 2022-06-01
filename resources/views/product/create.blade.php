@@ -21,7 +21,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('product') }}" class="text-muted">Car Master</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('products') }}" class="text-muted">Car Master</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">Create</li>
                     </ol>
                 </nav>
@@ -34,7 +34,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('user.insert') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('products.insert') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
 
@@ -61,8 +61,14 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="category_id">Car Type</label>
+                                
                                 <select class="form-control" name="category_id" id="category_id">
-                                    <option value="">{{ $data->category_id ??'' }}</option>
+                                    <option value="">Select Car Type</option>
+                                    @if(isset($data) && $data->isNotEmpty())
+                                        @foreach($data AS $row)
+                                            <option value="{{ $row->id }}">{{ $row->name ??'' }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <span class="kt-form__help error category_id"></span>
                             </div>
@@ -72,16 +78,18 @@
                                 <span class="kt-form__help error ex_showroom_price"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="is_applicable_for_mcp">My Convinience Program</label>
+                                <label for="is_applicable_for_mcp">Is Applicable For My Convinience Program</label>
                                 <select class="form-control" name="is_applicable_for_mcp" id="is_applicable_for_mcp">
-                                    <option value="">{{ $data->is_applicable_for_mcp ??'' }}</option>
+                                    <option value="">Select Is Applicable For My Convinience Program</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
                                 </select>
                                 <span class="kt-form__help error is_applicable_for_mcp"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
-                            <a href="{{ route('product') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
+                            <a href="{{ route('products') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                         </div>
                     </form>
                 </div>
