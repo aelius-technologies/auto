@@ -18,8 +18,64 @@ class ExtandWarrantyController extends Controller{
         }
     /** construct */
 
-    /** index */
+    /** index */ 
         public function index(Request $request){
+            if($request->ajax()){
+                $data = ExtandWarranty::orderBy('id' , 'desc')->get();
+                
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('action', function($data){
+                            $return = '<div class="btn-group">';
+
+                            if(auth()->user()->can('extand_warranties-view')){
+                                $return .= '<a href="'.route('extand_warranties.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-eye"></i>
+                                            </a> &nbsp;';
+                            }   
+                            
+                            if(auth()->user()->can('extand_warranties-edit')){
+                                $return .= '<a href="'.route('extand_warranties.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-pencil"></i>
+                                            </a> &nbsp;';
+                            }   
+
+                            if (auth()->user()->can('extand_warranties-delete')) {
+                                $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-bars"></i>
+                                                </a> &nbsp;
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="inactive" data-id="' . base64_encode($data->id) . '">Inactive</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="deleted" data-id="' . base64_encode($data->id) . '">Delete</a></li>
+                                                </ul>';
+                            }
+
+                            $return .= '</div>';
+
+                            return $return;
+                        })
+
+                     
+                        ->editColumn('years', function ($data) {
+                            return $data->years.' Years';
+                        })
+                     
+                        ->editColumn('status', function ($data) {
+                            if ($data->status == 'active') {
+                                return '<span class="badge badge-pill badge-success">Active</span>';
+                            } else if ($data->status == 'inactive') {
+                                return '<span class="badge badge-pill badge-warning">Inactive</span>';
+                            } else if ($data->status == 'deleted') {
+                                return '<span class="badge badge-pill badge-danger">Deleted</span>';
+                            }else if ($data->status == 'pdi_hold') {
+                                return '<span class="badge badge-pill badge-warning">Hold By PDI</span>';
+                            }
+                        })
+
+                        ->rawColumns(['years', 'action' ,'status'])
+                        ->make(true);
+            }
             return view('extand_warranties.index');
         }
     /** index */
@@ -32,112 +88,100 @@ class ExtandWarrantyController extends Controller{
 
     /** insert */
         public function insert(Request $request){
-            if(auth()->user()->can('extand_warranties-create')){
-                $rules = [
-                    'years' => 'required',
-                    'amount' => 'required'
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
-                    'years' => $request->years,
-                    'amount' => $request->amount,
-                    'status' => 'active',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'created_by' => auth()->user()->id,
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => auth()->user()->id
-                ];
-
+            if($request->ajax()){
+                return true;
+            }
+            $crud = [
+                'years' => $request->years,
+                'amount' => $request->amount,
+                'status' => 'active',
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => auth()->user()->id,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth()->user()->id
+            ];
+            DB::beginTransaction();
+            try {
+                DB::enableQueryLog();
                 $last_id = ExtandWarranty::insertGetId($crud);
-
                 if ($last_id) {
-                    return response()->json(['status' => 200, 'message' => 'Record inserted successfully']);
+                    
+                    DB::commit();
+                    return redirect()->route('extand_warranties')->with('success', 'Record inserted successfully');
                 } else {
-                    return response()->json(['status' => 201, 'message' => 'Faild to insert Record!']);
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Failed to insert record')->withInput();
                 }
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
             }
         }
     /** insert */
 
     /** view */
         public function view(Request $request){
-            return view('extand_warranties.view');
+            $id = base64_decode($request->id);
+            $data = ExtandWarranty::where(['id' => $id])->first();
+            return view('extand_warranties.view')->with(['data' => $data]);
         }
     /** view */
-
+        
     /** edit */
         public function edit(Request $request){
-            return view('extand_warranties.edit');
+            $id = base64_decode($request->id);
+            $data = ExtandWarranty::where(['id' => $id])->first();
+            return view('extand_warranties.edit')->with(['data' => $data]);
         }
     /** edit */
 
     /** update */
         public function update(Request $request){
-            if(auth()->user()->can('extand_warranties-edit')){
-                $rules = [
-                    'id' => 'required',
-                    'years' => 'required',
-                    'amount' => 'required'
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
-                    'years' => $request->years,
-                    'amount' => $request->amount,
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => auth('sanctum')->user()->id
-                ];
-
-
-                $update = ExtandWarranty::where(['id' => $request->id])->update($crud);
-                if ($update)
-                    return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
-                else
-                    return response()->json(['status' => 404, 'message' => 'Faild to update record']);
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+            if($request->ajax()){
+                return true;
             }
+   
+            $crud = [
+                'years' => $request->years,
+                'amount' => $request->amount,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth('sanctum')->user()->id
+            ];
+
+            DB::beginTransaction();
+            try {
+                DB::enableQueryLog();
+                $update = ExtandWarranty::where(['id' => $request->id])->update($crud);
+                if ($update) {
+                    
+                    DB::commit();
+                    return redirect()->route('extand_warranties')->with('success', 'Record updated successfully');
+                } else {
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                }
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
+            } 
         }
     /** update */
 
     /** change-status */
         public function change_status(Request $request){
-            if(auth()->user()->can('extand_warranties-delete')){
-                $rules = [
-                    'id' => 'required',
-                    'status' => 'required'
-                ];
+            if (!$request->ajax()) { exit('No direct script access allowed'); }  
+            $id = base64_decode($request->id);
+            $data = ExtandWarranty::where(['id' => $id])->first();
 
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $data = ExtandWarranty::where(['id' => $request->id])->first();
-
-                if (!empty($data)) {
-                    $update = ExtandWarranty::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
-                    if ($update) {
-                        return response()->json(['status' => 200, 'message' => 'Record status change successfully']);
-                    } else {
-                        return response()->json(['status' => 201, 'message' => 'Faild to update status']);
-                    }
+            if (!empty($data)) {
+                $update = ExtandWarranty::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
+                if ($update) {
+                    return response()->json(['code' => 200]);
                 } else {
-                    return response()->json(['status' => 201, 'message' => 'Somthing went wrong !']);
+                    return response()->json(['code' => 201]);
                 }
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+            } else {
+                return response()->json(['code' => 201]);
             }
         }
     /** change-status */

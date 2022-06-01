@@ -45,13 +45,24 @@
                                 <span class="kt-form__help error name"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="branch_id">Branch ID</label>
-                                <input type="number" name="branch_id" id="branch_id" class="form-control" placeholder="Enter Branch ID">
+                                <label for="branch_id">Branch</label>
+                                <select name="branch_id" id="branch_id" class="form-control">
+                                    <option value="">Select Brach</option>
+                                    @if(isset($branch) && $branch->isNotEmpty())
+                                        @foreach($branch As $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                                 <span class="kt-form__help error branch_id"></span>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="dsa_or_broker">DSA / Broker</label>
-                                <input type="text" name="dsa_or_broker" id="dsa_or_broker" class="form-control" placeholder="Enter DSA/Broker">
+                                <select name="dsa_or_broker" id="dsa_or_broker" class="form-control" placeholder="Enter DSA/Broker">
+                                    <option value="">Select DSA/Broker</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
                                 <span class="kt-form__help error dsa_or_broker"></span>
                             </div>
                         </div>

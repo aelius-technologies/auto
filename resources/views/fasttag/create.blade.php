@@ -8,8 +8,6 @@
 @endsection
 
 @section('styles')
-<link href="{{ asset('assets/css/dropify.min.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/sweetalert2.bundle.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -63,9 +61,6 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('assets/js/promise.min.js') }}"></script>
-<script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
-
 <script>
     $(document).ready(function() {
         var form = $('#form');

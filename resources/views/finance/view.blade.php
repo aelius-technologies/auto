@@ -46,12 +46,16 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="branch_id">Branch ID</label>
-                                <input type="number" name="branch_id" id="branch_id" class="form-control" placeholder="Enter Branch ID" value="{{ $data->branch_id ??'' }}" disabled>
+                                <select type="number" name="branch_id" id="branch_id" class="form-control" placeholder="Enter Branch ID" value="{{ $data->branch_id ??'' }}" disabled></select>
                                 <span class="kt-form__help error branch_id"></span>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="dsa_or_broker">DSA / Broker</label>
-                                <input type="text" name="dsa_or_broker" id="dsa_or_broker" class="form-control" placeholder="Enter DSA/Broker" value="{{ $data->dsa_or_broker ??'' }}" disabled>
+                                <select type="text" name="dsa_or_broker" id="dsa_or_broker" class="form-control" placeholder="Enter DSA/Broker" value="{{ $data->dsa_or_broker ??'' }}" disabled>
+                                    <option value="">Select DSA/Broker</option>
+                                    <option value="yes" @if($data->dsa_or_broker == 'yes') selected @endif>Yes</option>
+                                    <option value="no" @if($data->dsa_or_broker == 'no') selected @endif>No</option>
+                                </select>
                                 <span class="kt-form__help error dsa_or_broker"></span>
                             </div>
                         </div>

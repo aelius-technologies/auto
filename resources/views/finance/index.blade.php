@@ -106,8 +106,8 @@ Finance Master
                                         name: 'name'
                                     },
                                     {
-                                        data: 'branch_id',
-                                        name: 'branch_id'
+                                        data: 'branch_name',
+                                        name: 'branch_name'
                                     },
                                     {
                                         data: 'dsa_or_broker',

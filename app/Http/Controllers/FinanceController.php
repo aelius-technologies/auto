@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Finance;
 use Spatie\Permission\Models\Role;
@@ -20,58 +21,113 @@ class FinanceController extends Controller{
 
     /** index */
         public function index(Request $request){
+            if($request->ajax()){
+                $data = Finance::select('finance.*' ,'branches.name AS branch_name')->leftjoin('branches' ,'finance.branch_id' ,'branches.id')->orderBy('id' , 'desc')->get();
+                
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('action', function($data){
+                            $return = '<div class="btn-group">';
+
+                            if(auth()->user()->can('finance-view')){
+                                $return .= '<a href="'.route('finance.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-eye"></i>
+                                            </a> &nbsp;';
+                            }   
+                            
+                            if(auth()->user()->can('finance-edit')){
+                                $return .= '<a href="'.route('finance.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-pencil"></i>
+                                            </a> &nbsp;';
+                            }   
+
+                            if (auth()->user()->can('finance-delete')) {
+                                $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-bars"></i>
+                                                </a> &nbsp;
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="inactive" data-id="' . base64_encode($data->id) . '">Inactive</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="deleted" data-id="' . base64_encode($data->id) . '">Delete</a></li>
+                                                </ul>';
+                            }
+
+                            $return .= '</div>';
+
+                            return $return;
+                        })
+
+                     
+                        ->editColumn('status', function ($data) {
+                            if ($data->status == 'active') {
+                                return '<span class="badge badge-pill badge-success">Active</span>';
+                            } else if ($data->status == 'inactive') {
+                                return '<span class="badge badge-pill badge-warning">Inactive</span>';
+                            } else if ($data->status == 'deleted') {
+                                return '<span class="badge badge-pill badge-danger">Deleted</span>';
+                            }else{
+                                return '-';
+                            }
+                        })
+
+                        ->rawColumns([ 'action' ,'status'])
+                        ->make(true);
+            }
             return view('finance.index');
         }
     /** index */
 
+
+    /** create */
+        public function create(Request $request){
+            $branch = Branch::where(['status' => 'active'])->get();
+            return view('finance.create')->with(['branch' => $branch]);
+        }
+    /** create */
+
     /** insert */
         public function insert(Request $request){
-            if(auth()->user()->can('fasttags-create')){
+            if($request->ajax()){ 
+                return true ;
+            }
 
-                $rules = [
-                    'name' => 'required',
-                'dsa_or_broker' => 'required'
-            ];
-            
-            $validator = Validator::make($request->all(), $rules);
-            
-            if($validator->fails())
-            return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-            $password = $request->password ?? 'Abcd@1234';
             $crud = [
                 'name' => ucfirst($request->name),
+                'branch_id' => $request->branch_id,
                 'dsa_or_broker' => $request->dsa_or_broker,
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => auth('sanctum')->user()->id,
+                'created_by' => auth()->user()->id,
                 'updated_at' => date('Y-m-d H:i:s'),
-                'updated_by' => auth('sanctum')->user()->id
+                'updated_by' => auth()->user()->id
             ];
             
-            $last_id = Finance::insertGetId($crud);
-            
-            if($last_id){
-                return response()->json(['status' => 200 ,'message' => 'Record inserted successfully']);
-            } else {
-                return response()->json(['status' => 201 ,'message' => 'Faild to insert Record!']);
+            DB::beginTransaction();
+            try {
+                DB::enableQueryLog();
+                $last_id = Finance::insertGetId($crud);
+                if ($last_id) {
+                    
+                    DB::commit();
+                    return redirect()->route('finance')->with('success', 'Record inserted successfully');
+                } else {
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Failed to insert record')->withInput();
+                }
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
             }
-        }else{
-            return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
-        }
+        
         
         }
     /** insert */
 
-    /** create */
-        public function create(Request $request){
-            return view('finance.create');
-        }
-    /** create */
-
     /** view */
         public function view(Request $request){
-            return view('finance.view');
+            $id = base64_decode($request->id);
+            $data = Finance::where(['id' => $id])->first();
+            return view('finance.view')->with(['data' => $data]);
         }
     /** view */
 

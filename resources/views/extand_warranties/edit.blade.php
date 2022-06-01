@@ -36,8 +36,8 @@
                 <div class="card-body">
                     <form action="{{ route('extand_warranties.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
-                        @method('POST')
-
+                        @method('PATCH')
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="years">Years</label>

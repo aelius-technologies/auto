@@ -126,4 +126,34 @@
         </li>
     @endcanany
 <!-- Taxes -->
+<!-- Taxes -->
+    @canany(['extand_warranties-create','extand_warranties-edit','extand_warranties-view','extand_warranties-delete'])
+        <li class="nav-item {{ Request::is('extand_warranties*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('extand_warranties') }}">
+            <i class="fa-solid fa-award"></i>
+                <span>Extand Warranties</span>
+            </a>
+        </li>
+    @endcanany
+<!-- Taxes -->
+<!-- FastTags -->
+    @canany(['fasttags-create','fasttags-edit','fasttags-view','fasttags-delete'])
+        <li class="nav-item {{ Request::is('fasttag*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('fasttag') }}">
+            <i class="fa fa-tags"></i>
+                <span>FastTags</span>
+            </a>
+        </li>
+    @endcanany
+<!-- FastTags -->
+<!-- Finance -->
+    @canany(['finance-create','finance-edit','finance-view','finance-delete'])
+        <li class="nav-item {{ Request::is('finance*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('finance') }}">
+            <i class="fa fa-usd"></i>
+                <span>Finance</span>
+            </a>
+        </li>
+    @endcanany
+<!-- Finance -->
 </ul>

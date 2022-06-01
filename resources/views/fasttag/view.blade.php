@@ -8,8 +8,6 @@
 @endsection
 
 @section('styles')
-<link href="{{ asset('assets/css/dropify.min.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/sweetalert2.bundle.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -51,7 +49,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
                             <a href="{{ route('fasttag') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                         </div>
                     </form>
@@ -63,39 +60,4 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('assets/js/promise.min.js') }}"></script>
-<script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
-
-<script>
-    $(document).ready(function() {
-        var form = $('#form');
-        $('.kt-form__help').html('');
-        form.submit(function(e) {
-            $('.help-block').html('');
-            $('.m-form__help').html('');
-            $.ajax({
-                url: form.attr('action'),
-                type: form.attr('method'),
-                data: new FormData($(this)[0]),
-                dataType: 'json',
-                async: false,
-                processData: false,
-                contentType: false,
-                success: function(json) {
-                    return true;
-                },
-                error: function(json) {
-                    if (json.status === 422) {
-                        e.preventDefault();
-                        var errors_ = json.responseJSON;
-                        $('.kt-form__help').html('');
-                        $.each(errors_.errors, function(key, value) {
-                            $('.' + key).html(value);
-                        });
-                    }
-                }
-            });
-        });
-    });
-</script>
 @endsection
