@@ -229,7 +229,10 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('transfer/view/{id?}', 'TransferController@view')->name('transfer.view');
             Route::get('transfer/edit/{id?}', 'TransferController@edit')->name('transfer.edit');
             Route::patch('transfer/update', 'TransferController@update')->name('transfer.update');
-            Route::post('transfer/change-status', 'TransferController@change_status')->name('transfer.change.status');
+            Route::get('transfer/accept-check/{id?}', 'TransferController@accept_check')->name('transfer.accept.check');
+            Route::get('transfer/inventory-details', 'TransferController@inventory_details')->name('transfer.inventory.details');
+            Route::post('transfer/accept', 'TransferController@accept')->name('transfer.accept');
+            Route::post('transfer/reject', 'TransferController@reject')->name('transfer.reject');
         /** transfer */
     });
 });

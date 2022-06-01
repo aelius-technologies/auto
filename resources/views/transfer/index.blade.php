@@ -127,30 +127,31 @@ Transfers
         }
     });
 
-    function change_status(object) {
-        var id = $(object).data("id");
-        var status = $(object).data("status");
+    $(document).on("submit", ".transfer_reject",function(e){
+        e.preventDefault();
+        let form = $(this).serializeArray();
+        let id = form[0].value;
+        let reason = form[1].value;
 
-        if (confirm('Are you sure?')) {
-            $.ajax({
-                "url": "{!! route('transfer.change.status') !!}",
-                "dataType": "json",
-                "type": "POST",
-                "data": {
-                    id: id,
-                    status: status,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    if (response.code == 200) {
-                        datatable.ajax.reload();
-                        toastr.success('Status changed successfully', 'Success');
-                    } else {
-                        toastr.error('Failed to change status', 'Error');
-                    }
+        $.ajax({
+            "url": "{!! route('transfer.reject') !!}",
+            "dataType": "json",
+            "type": "POST",
+            "data":{
+                id: id,
+                reason: reason,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response){
+                if (response.code == 200){
+                    $('.modal').modal('hide');
+                    datatable.ajax.reload();
+                    toastr.success('Status chagned successfully', 'Success');
+                }else{
+                    toastr.error('Failed to change status', 'Error');
                 }
-            });
-        }
-    }
+            }
+        });
+    }); 
 </script>
 @endsection

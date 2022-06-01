@@ -161,6 +161,19 @@ class InventorySeeder extends Seeder{
                 'ex_showroom_price' => '1219000',
                 'interior_color' => 'Monotone',
                 'exterior_color' => 'Black',
+            ],
+            [
+                'category_id' => 1,
+                'name' => 'Sonet',
+                'branch_id' => 2,
+                'veriant' => 'HTK Diesel',
+                'key_number' => '0005557',
+                'engine_number' => '0006667',
+                'chassis_number' => '0007777',
+                'vin_number' => '0008887',
+                'ex_showroom_price' => '1219000',
+                'interior_color' => 'Monotone',
+                'exterior_color' => 'Brown',
             ]
         ];
 
