@@ -34,10 +34,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('fasttag.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('finance.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
-
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="name">Company Name</label>
@@ -46,12 +46,22 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="branch_id">Branch ID</label>
-                                <input type="number" name="branch_id" id="branch_id" class="form-control" placeholder="Enter Branch ID" value="{{ $data->branch_id ??'' }}">
+                                <select name="branch_id" id="branch_id" class="form-control">
+                                    @if(isset($branch) && $branch->isNotEmpty())
+                                        @foreach($branch AS $row)
+                                            <option value="{{ $row->id }}" @if($data->branch_id == $row->id) selected @endif>{{ $row->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                                 <span class="kt-form__help error branch_id"></span>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="dsa_or_broker">DSA / Broker</label>
-                                <input type="text" name="dsa_or_broker" id="dsa_or_broker" class="form-control" placeholder="Enter DSA/Broker" value="{{ $data->dsa_or_broker ??'' }}">
+                                <select name="dsa_or_broker" id="dsa_or_broker" class="form-control">
+                                    <option value="">Select DSA/Broker</option>
+                                    <option value="yes" @if($data->dsa_or_broker == 'yes') selected @endif>Yes</option>
+                                    <option value="no" @if($data->dsa_or_broker == 'no') selected @endif>No</option>
+                                </select>
                                 <span class="kt-form__help error dsa_or_broker"></span>
                             </div>
                         </div>

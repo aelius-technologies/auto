@@ -126,77 +126,68 @@ class FinanceController extends Controller{
     /** view */
         public function view(Request $request){
             $id = base64_decode($request->id);
-            $data = Finance::where(['id' => $id])->first();
+            $data = Finance::select('finance.*' ,'branches.name AS branch_name')->leftjoin('branches' ,'finance.branch_id' ,'branches.id')->where(['finance.id' => $id])->first();
             return view('finance.view')->with(['data' => $data]);
         }
     /** view */
 
     /** edit */
         public function edit(Request $request){
-            return view('finance.edit');
+            $id = base64_decode($request->id);
+            $branch = Branch::where(['status' => 'active'])->get();
+            $data = Finance::where(['finance.id' => $id])->first();
+            return view('finance.edit')->with(['data' => $data , 'branch' => $branch]);
         }
     /** edit */
 
     /** update */
         public function update(Request $request){
-            if(auth()->user()->can('fasttags-edit')){
+            if($request->ajax()){return true ;}
 
-                $rules = [
-                    'id' => 'required',
-                    'name' => 'required',
-                    'dsa_or_broker' => 'required',
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
-                    'name' => ucfirst($request->name) ?? '',
-                    'dsa_or_broker' => $request->dsa_or_broker ?? '',
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => auth('sanctum')->user()->id
-                ];
-                
+            $crud = [
+                'name' => ucfirst($request->name) ?? '',
+                'dsa_or_broker' => $request->dsa_or_broker ?? '',
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth('sanctum')->user()->id
+            ];
+            
+            DB::beginTransaction();
+            try {
+                DB::enableQueryLog();
                 $update = Finance::where(['id' => $request->id])->update($crud);
-                if($update)
-                return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
-                else
-                return response()->json(['status' => 201, 'message' => 'Faild to update record']);
-                
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+                if ($update) {
+                    
+                    DB::commit();
+                    return redirect()->route('finance')->with('success', 'Record updated successfully');
+                } else {
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                }
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
             }
         }
     /** update */
 
     /** change-status */
         public function change_status(Request $request){
-            if(auth()->user()->can('fasttags-delete')){
-                $rules = [
-                    'id' => 'required',
-                    'status' => 'required'
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $data = Finance::where(['id' => $request->id])->first();
+            if (!$request->ajax()) { exit('No direct script access allowed'); }
+               
+                $id = base64_decode($request->id);
+                $data = Finance::where(['id' => $id])->first();
 
                 if(!empty($data)){
-                    $update = Finance::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                    $update = Finance::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
                     if($update){
-                        return response()->json(['status' => 200 ,'message' => 'Record status change successfully']);
+                        return response()->json(['code' => 200]);
                     }else{
-                        return response()->json(['status' => 201, 'message' => 'Faild to update status']);
+                        return response()->json(['code' => 201]);
                     }
                 }else{
-                    return response()->json(['status' => 201, 'message' => 'Somthing went wrong !']);
+                    return response()->json(['code' => 201]);
                 }
-            }else{return response()->json(['status' => 401, 'message' => 'Not Authorized.']);}
+          
         }
     /** change-status */
 }
