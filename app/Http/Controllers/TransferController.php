@@ -40,9 +40,9 @@ class TransferController extends Controller{
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($data){
-                            $return = '<div class="btn-group">';
-
-                            if (auth()->user()->can('transfer-delete')) {
+                            $return = '';
+                            if (auth()->user()->can('transfer-delete') && $data->status == 'pending') {
+                                $return = '<div class="btn-group">';
                                 $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                 <i class="fa fa-bars"></i>
                                             </a> &nbsp;
@@ -50,9 +50,8 @@ class TransferController extends Controller{
                                                 <li><a class="dropdown-item" href="'.route('transfer.accept.check', ['id' => base64_encode($data->id)]).'">Accept</a></li>
                                                 <li><button type="button" class="dropdown-item" data-toggle="modal" data-target="#model_reject_'.$data->id.'">Reject</button></li>
                                             </ul>';
+                                $return .= '</div>';
                             }
-
-                            $return .= '</div>';
 
                             $return .= '<div class="modal fade" id="model_reject_'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="model_reject_'.$data->id.'" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
