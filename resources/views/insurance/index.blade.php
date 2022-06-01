@@ -87,7 +87,7 @@ Insurance Master
                                 // lengthChange: false,
 
                                 "ajax": {
-                                    "url": "{{ route('product') }}",
+                                    "url": "{{ route('insurance') }}",
                                     "type": "POST",
                                     "dataType": "json",
                                     "data": {

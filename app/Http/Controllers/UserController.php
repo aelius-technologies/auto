@@ -234,10 +234,11 @@ class UserController extends Controller{
                         $process = User::where(['id' => $id])->update(['status' => $status, 'updated_by' => auth()->user()->id]);
                     }
 
-                    if($process)
+                    if($process){
                         return response()->json(['code' => 200]);
-                    else
+                    }else{
                         return response()->json(['code' => 201]);
+                    }
                 } else {
                     return response()->json(['code' => 201]);
                 }

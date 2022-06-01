@@ -8,8 +8,7 @@
 @endsection
 
 @section('styles')
-<link href="{{ asset('assets/css/dropify.min.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/sweetalert2.bundle.css') }}" rel="stylesheet">
+
 @endsection
 
 @section('content')
@@ -34,7 +33,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('user.insert') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('tax.insert') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
 
@@ -63,8 +62,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('assets/js/promise.min.js') }}"></script>
-<script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
+
 
 <script>
     $(document).ready(function() {

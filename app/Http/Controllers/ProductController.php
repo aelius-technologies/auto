@@ -63,11 +63,9 @@ class ProductController extends Controller{
                             if ($data->status == 'active') {
                                 return '<span class="badge badge-pill badge-success">Active</span>';
                             } else if ($data->status == 'inactive') {
-                                return '<span class="badge badge-pill badge-warning">Pending</span>';
+                                return '<span class="badge badge-pill badge-warning">Inactive</span>';
                             } else if ($data->status == 'deleted') {
                                 return '<span class="badge badge-pill badge-danger">Deleted</span>';
-                            }else if ($data->status == 'account_rejected') {
-                                return '<span class="badge badge-pill badge-danger">Account Rejected</span>';
                             }else if ($data->status == 'pdi_hold') {
                                 return '<span class="badge badge-pill badge-warning">Hold By PDI</span>';
                             }
@@ -177,31 +175,18 @@ class ProductController extends Controller{
 
     /** change-status */
         public function change_status(Request $request){
-            if(auth()->user()->can('products-delete')){
-                $rules = [
-                    'id' => 'required',
-                    'status' => 'required'
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $data = Product::where(['id' => $request->id])->first();
-
-                if (!empty($data)) {
-                    $update = Product::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+            if (!$request->ajax()) { exit('No direct script access allowed'); }
+            $id = base64_decode($request->id);
+            $data = Product::where(['id' => $id])->first();
+            if (!empty($data)) {
+                $update = Product::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
                     if ($update) {
-                        return response()->json(['status' => 200, 'message' => 'Record status change successfully']);
-                    } else {
-                        return response()->json(['status' => 201, 'message' => 'Faild to update status']);
+                        return response()->json(['code' => 200]);
+                    }else{
+                        return response()->json(['code' => 201]);
                     }
-                } else {
-                    return response()->json(['status' => 201, 'message' => 'Somthing went wrong !']);
-                }
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+            } else {
+                return response()->json(['code' => 201]);
             }
         }
     /** change-status */
