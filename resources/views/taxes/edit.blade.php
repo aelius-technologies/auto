@@ -8,8 +8,6 @@
 @endsection
 
 @section('styles')
-<link href="{{ asset('assets/css/dropify.min.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/sweetalert2.bundle.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -21,7 +19,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('user') }}" class="text-muted">Tax Master</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('tax') }}" class="text-muted">Tax Master</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">Update</li>
                     </ol>
                 </nav>
@@ -37,7 +35,8 @@
                     <form action="{{ route('tax.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
-
+                 
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="name">Tax Name</label>
@@ -63,8 +62,20 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('assets/js/promise.min.js') }}"></script>
-<script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
+<script>
+    $("#percentage").keyup(function(e){
+        $('.percentage').html('');
+        if ($(this).val() > 99){
+            $('.percentage').html('');
+            $('.percentage').html('Enter Value Between 0 to 100!');
+            $(this).val();
+            $(this).val(100);
+        }else if($(this).val() <= 99){
+            $('.percentage').html('');
+        }
+    });
+
+</script>
 
 <script>
     $(document).ready(function() {

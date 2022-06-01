@@ -28,19 +28,26 @@ class TaxesController extends Controller{
                         ->addColumn('action', function($data){
                             $return = '<div class="btn-group">';
 
-                            if(auth()->user()->can('tax-view')){
+                            if(auth()->user()->can('taxes-view')){
                                 $return .= '<a href="'.route('tax.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                 <i class="fa fa-eye"></i>
                                             </a> &nbsp;';
                             }   
+                            
+                            if(auth()->user()->can('taxes-edit')){
+                                $return .= '<a href="'.route('tax.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-pencil"></i>
+                                            </a> &nbsp;';
+                            }   
 
-                            if (auth()->user()->can('tax-delete')) {
+                            if (auth()->user()->can('taxes-delete')) {
                                 $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-bars"></i>
                                                 </a> &nbsp;
                                                 <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_accepted" data-id="' . base64_encode($data->id) . '">Obf Accepted</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="obf_rejected" data-id="' . base64_encode($data->id) . '">Obf Rejected</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="inactive" data-id="' . base64_encode($data->id) . '">Inactive</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="deleted" data-id="' . base64_encode($data->id) . '">Deleted</a></li>
                                                 </ul>';
                             }
 
@@ -49,17 +56,20 @@ class TaxesController extends Controller{
                             return $return;
                         })
 
+                        ->editColumn('percentage', function ($data) {
+                            return $data->percentage."%";
+                        })
                         ->editColumn('status', function ($data) {
                             if ($data->status == 'active') {
                                 return '<span class="badge badge-pill badge-success">Active</span>';
                             } else if ($data->status == 'inactive') {
-                                return '<span class="badge badge-pill badge-warning">Pending</span>';
+                                return '<span class="badge badge-pill badge-warning">Inactive</span>';
                             } else if ($data->status == 'deleted') {
                                 return '<span class="badge badge-pill badge-danger">Deleted</span>';
                             }
                         })
 
-                        ->rawColumns(['action' ,'status'])
+                        ->rawColumns(['action' ,'percentage' ,'status'])
                         ->make(true);
             }
             return view('taxes.index');
@@ -74,61 +84,41 @@ class TaxesController extends Controller{
 
     /** insert */
         public function insert(Request $request){
-            if(auth()->user()->can('products-create')){
-                $rules = [
-                    'category_id' => 'required',
-                    'name' => 'required',
-                    'ex_showroom_price' => 'required',
-                    'veriant' => 'required',
-                    'interior_color' => 'required',
-                    'exterior_color' => 'required',
-                    'is_applicable_for_mcp' => 'required'
-                ];
+            if($request->ajax()) { return true; }
+            $crud = [
+                'name' => $request->name,
+                'percentage' => $request->percentage,
+                'status' => 'active',
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => auth()->user()->id,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth()->user()->id
+            ];
 
-                $validator = Validator::make($request->all(), $rules);
+            $last_id = Tax::insertGetId($crud);
 
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
-                    'category_id' => $request->category_id,
-                    'name' => ucfirst($request->name),
-                    'ex_showroom_price' => $request->ex_showroom_price,
-                    'veriant' => $request->veriant,
-                    'interior_color' => $request->interior_color,
-                    'exterior_color' => $request->exterior_color,
-                    'is_applicable_for_mcp' => $request->is_applicable_for_mcp,
-                    'status' => 'active',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'created_by' => auth()->user()->id,
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => auth()->user()->id
-                ];
-
-                $last_id = Tax::insertGetId($crud);
-
-                if ($last_id) {
-                    return response()->json(['status' => 200, 'message' => 'Record inserted successfully']);
-                } else {
-                    return response()->json(['status' => 201, 'message' => 'Faild to insert Record!']);
-                }
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+            if ($last_id) {
+                return redirect()->route('tax')->with(['success' => 'Record inserted successfully']);
+            } else {
+                return redirect()->back()->with(['error'=>'Faild to insert Record!'])->withInput();
             }
+        
         }
     /** insert */
 
     /** view */
         public function view(Request $request){
-            $data = Tax::where(['id' => $request->id])->first();
-
+            $id = base64_decode($request->id);
+            $data = Tax::where(['id' => $id])->first();
+            
             return view('taxes.view')->with(['data'=>$data]);
         }
-    /** view */
-
-    /** edit */
+        /** view */
+        
+        /** edit */
         public function edit(Request $request){
-            $data = Tax::where(['id' => $request->id])->first();
+            $id = base64_decode($request->id);
+            $data = Tax::where(['id' => $id])->first();
 
             return view('taxes.edit')->with(['data'=>$data]);
         }
@@ -136,70 +126,44 @@ class TaxesController extends Controller{
 
     /** update */
         public function update(Request $request){
-            if(auth()->user()->can('taxes-edit')){
-                $rules = [
-                    'id' => 'required',
-                    'name' => 'required',
-                    'percentage' => 'required',
-                ];
-
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $crud = [
-                    'category_id' => $request->category_id,
-                    'name' => ucfirst($request->name),
-                    'ex_showroom_price' => $request->ex_showroom_price,
-                    'veriant' => $request->veriant,
-                    'interior_color' => $request->interior_color,
-                    'exterior_color' => $request->exterior_color,
-                    'is_applicable_for_mcp' => $request->is_applicable_for_mcp,
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => auth('sanctum')->user()->id
-                ];
-
-
-                $update = Tax::where(['id' => $request->id])->update($crud);
-                if ($update)
-                    return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
-                else
-                    return response()->json(['status' => 404, 'message' => 'Faild to update record']);
+            if($request->ajax()){ return true; }
+            $id = $request->id;
+            
+            $crud = [
+                'name' => $request->name,
+                'percentage' => $request->percentage,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth()->user()->id
+            ];
+            DB::enableQueryLog();
+            $update = Tax::where(['id' => $id])->update($crud);
+            // dd(DB::getQueryLog());
+            if ($update){
+                return redirect()->route('tax')->with(['success' => 'Record updated successfully']);
             }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+                return redirect()->back()->with(['error'=>'Faild to update Record!'])->withInput();
             }
         }
     /** update */
 
     /** change-status */
         public function change_status(Request $request){
-            if(auth()->user()->can('taxes-delete')){
-                $rules = [
-                    'id' => 'required',
-                    'status' => 'required'
-                ];
+            if (!$request->ajax()) { exit('No direct script access allowed'); }
+            $id = base64_decode($request->id);
+            
+            $data = Tax::where(['id' => $id])->first();
 
-                $validator = Validator::make($request->all(), $rules);
-
-                if ($validator->fails())
-                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
-
-                $data = Tax::where(['id' => $request->id])->first();
-
-                if (!empty($data)) {
-                    $update = Tax::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
-                    if ($update) {
-                        return response()->json(['status' => 200, 'message' => 'Record status change successfully']);
-                    } else {
-                        return response()->json(['status' => 201, 'message' => 'Faild to update status']);
-                    }
+            if (!empty($data)) {
+                $update = Tax::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                if ($update) {
+                    return response()->json(['code' => 200]);
                 } else {
-                    return response()->json(['status' => 201, 'message' => 'Somthing went wrong !']);
+                    return response()->json(['code' => 201]);
                 }
-            }else{
-                return response()->json(['status' => 401, 'message' => 'Not Authorized.']);
+            } else {
+                return response()->json(['code' => 201]);
             }
+           
         }
     /** change-status */
 }

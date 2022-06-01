@@ -85,7 +85,7 @@ Taxes Master
                                 // lengthChange: false,
 
                                 "ajax": {
-                                    "url": "{{ route('cash_receipt') }}",
+                                    "url": "{{ route('tax') }}",
                                     "type": "POST",
                                     "dataType": "json",
                                     "data": {
@@ -128,7 +128,7 @@ Taxes Master
 
                 if (confirm('Are you sure?')) {
                     $.ajax({
-                        "url": "{!! route('cash_receipt.change.status') !!}",
+                        "url": "{!! route('tax.change.status') !!}",
                         "dataType": "json",
                         "type": "POST",
                         "data": {

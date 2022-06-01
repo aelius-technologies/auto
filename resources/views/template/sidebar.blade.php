@@ -106,4 +106,24 @@
         </li>
     @endcanany
 <!-- Product -->
+<!-- Taxes -->
+    @canany(['taxes-create','taxes-edit','taxes-view','taxes-delete'])
+        <li class="nav-item {{ Request::is('tax*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('tax') }}">
+            <i class="fa fa-percent" aria-hidden="true"></i>
+                <span>Taxes</span>
+            </a>
+        </li>
+    @endcanany
+<!-- Taxes -->
+<!-- Taxes -->
+    @canany(['insurance-create','insurance-edit','insurance-view','insurance-delete'])
+        <li class="nav-item {{ Request::is('insurance*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('insurance') }}">
+            <i class="fas fa-file-invoice-dollar"></i>
+                <span>Insurance</span>
+            </a>
+        </li>
+    @endcanany
+<!-- Taxes -->
 </ul>
