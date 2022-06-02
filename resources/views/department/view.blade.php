@@ -46,13 +46,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Branch</label>
-                                    <select name="branch" id="branch" class="form-control" disabled>
-                                        <option value="">Select Branch</option>
-                                            @if(isset($branch) && $branch->isNotEmpty())
-                                                @foreach($branch AS $branch)
-                                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                                @endforeach
-                                            @endif
+                                    <select name="branch" id="branch" class="form-control" disabled>  
+                                        <option value="">{{ $data->branch_name ?? 'Select Branch' }}</option>
                                     </select>
                                 <span class="kt-form__help error branch"></span>
                             </div>
@@ -68,21 +63,11 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Authorised Person</label>
-                                    <select name="authorised_person" id="authorised_person" class="form-control" disabled>
-                                        <option value="">Select Authorised Person</option>
-                                            @if(isset($sales) && $sales->isNotEmpty())
-                                                @foreach($sales AS $row)
-                                                    <option value="{{ $row->id }}">{{ $row->name ??'' }}</option>
-                                                @endforeach
-                                            @else        
-                                                    <option value="1">Super Admin</option>
-                                            @endif
-                                    </select>
+                                    <input name="authorised_person" value="{{ $data->authorised_person ??'' }}" id="authorised_person" class="form-control" disabled>
                                 <span class="kt-form__help error authorised_person"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
                             <a href="{{ route('department') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                         </div>
                     </form>

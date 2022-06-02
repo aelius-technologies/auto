@@ -37,7 +37,7 @@
                     <form action="{{ route('department.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
-
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="name">Department Name</label>
@@ -68,16 +68,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Authorised Person</label>
-                                    <select name="authorised_person" id="authorised_person" class="form-control">
-                                        <option value="">Select Authorised Person</option>
-                                            @if(isset($sales) && $sales->isNotEmpty())
-                                                @foreach($sales AS $row)
-                                                    <option value="{{ $row->id }}">{{ $row->name ??'' }}</option>
-                                                @endforeach
-                                            @else        
-                                                    <option value="1">Super Admin</option>
-                                            @endif
-                                    </select>
+                                    <input name="authorised_person" id="authorised_person" value="{{ $data->authorised_person ?? ''  }}" class="form-control" placeholder="Enter Authorised Person">
                                 <span class="kt-form__help error authorised_person"></span>
                             </div>
                         </div>

@@ -37,7 +37,7 @@
                     <form action="{{ route('branches.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
-
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="name">Branch Name</label>
@@ -46,8 +46,8 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="city">City</label>
-                                <input type="text" name="city" id="city" class="form-control" placeholder="Enter City">
-                                <span class="kt-form__help error city" value="{{ $data->city ??'' }}"></span>
+                                <input type="text" name="city" id="city" value="{{ $data->city ??'' }}" class="form-control" placeholder="Enter City">
+                                <span class="kt-form__help error city"></span>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="address">Address</label>

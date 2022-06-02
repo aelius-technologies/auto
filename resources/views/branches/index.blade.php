@@ -49,8 +49,6 @@ Branch Master
                                 <th>Email</th>
                                 <th>Contact No.</th>
                                 <th>Manager</th>
-                                <th>Manager Contact</th>
-                                <th>GST</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -129,14 +127,6 @@ Branch Master
                                     {
                                         data: 'manager',
                                         name: 'manager'
-                                    },
-                                    {
-                                        data: 'manager_contact_number',
-                                        name: 'manager_contact_number'
-                                    },
-                                    {
-                                        data: 'gst',
-                                        name: 'gst'
                                     },
                                     {
                                         data: 'status',

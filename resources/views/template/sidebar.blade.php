@@ -76,84 +76,53 @@
         </li>
     @endcanany
 <!-- OBF -->
-<!-- Orders -->
-    @canany(['orders-create','orders-edit','orders-view','orders-delete'])
-        <li class="nav-item {{ Request::is('order*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('order') }}">
-                <i class="fa fa-shopping-bag"></i>
-                <span>Orders</span>
+
+<!-- Masters -->
+@canany(['orders-create','orders-edit','orders-view','orders-delete','transfer-create','transfer-edit','transfer-view','transfer-delete','products-create','products-edit','products-view','products-delete','taxes-create','taxes-edit','taxes-view','taxes-delete','insurance-create','insurance-edit','insurance-view','insurance-delete','extand_warranties-create','extand_warranties-edit','extand_warranties-view','extand_warranties-delete','fasttags-create','fasttags-edit','fasttags-view','fasttags-delete','finance-create','finance-edit','finance-view','finance-delete','branches-create','branches-edit','branches-view','branches-delete','department-create','department-edit','department-view','department-delete','lead-create','lead-edit','lead-view','lead-delete'])
+        <li class="nav-item {{ (Request::is('order*') || Request::is('transfer*') || Request::is('products*') || Request::is('tax*') || Request::is('insurance*') || Request::is('extand_warranties*') || Request::is('fasttag*') || Request::is('finance.*') || Request::is('branches*') || Request::is('department*') ||  Request::is('lead*')) ? 'active' : '' }}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                aria-expanded="false" aria-controls="collapseThree">
+                <i class="fas fa-asterisk"></i>
+                <span>Masters</span>
             </a>
+            <div id="collapseThree" class="collapse {{ (Request::is('order*') || Request::is('transfer*') || Request::is('products*') || Request::is('tax*') || Request::is('insurance*') || Request::is('extand_warranties*') || Request::is('fasttag*') || Request::is('finance.*') || Request::is('branches*') || Request::is('department*') ||  Request::is('lead*')) ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    @canany(['orders-create','orders-edit','orders-view','orders-delete'])
+                        <a class="collapse-item {{ Request::is('order*') ? 'active' : '' }}" href="{{ route('obf') }}">Orders</a>
+                    @endcanany
+                    @canany(['transfer-create','transfer-edit','transfer-view','transfer-delete'])
+                        <a class="collapse-item {{ Request::is('transfer*') ? 'active' : '' }}" href="{{ route('transfer') }}">Transfer</a>
+                    @endcanany
+                    @canany(['products-create','products-edit','products-view','products-delete'])
+                        <a class="collapse-item {{ Request::is('products*') ? 'active' : '' }}" href="{{ route('products') }}">Car Master</a>
+                    @endcanany
+                    @canany(['taxes-create','taxes-edit','taxes-view','taxes-delete'])
+                        <a class="collapse-item {{ Request::is('tax*') ? 'active' : '' }}" href="{{ route('tax') }}">Taxes</a>
+                    @endcanany
+                    @canany(['insurance-create','insurance-edit','insurance-view','insurance-delete'])
+                        <a class="collapse-item {{ Request::is('insurance*') ? 'active' : '' }}" href="{{ route('insurance') }}">Insurance</a>
+                    @endcanany
+                    @canany(['extand_warranties-create','extand_warranties-edit','extand_warranties-view','extand_warranties-delete'])
+                        <a class="collapse-item {{ Request::is('extand_warranties*') ? 'active' : '' }}" href="{{ route('extand_warranties') }}">Extand Warranty</a>
+                    @endcanany
+                    @canany(['fasttags-create','fasttags-edit','fasttags-view','fasttags-delete'])
+                        <a class="collapse-item {{ Request::is('fasttag*') ? 'active' : '' }}" href="{{ route('fasttag') }}">FastTag</a>
+                    @endcanany
+                    @canany(['finance-create','finance-edit','finance-view','finance-delete'])
+                        <a class="collapse-item {{ Request::is('finance*') ? 'active' : '' }}" href="{{ route('finance') }}">Finance</a>
+                    @endcanany
+                    @canany(['branches-create','branches-edit','branches-view','branches-delete'])
+                        <a class="collapse-item {{ Request::is('branches*') ? 'active' : '' }}" href="{{ route('branches') }}">Branches</a>
+                    @endcanany
+                    @canany(['department-create','department-edit','department-view','department-delete'])
+                        <a class="collapse-item {{ Request::is('department*') ? 'active' : '' }}" href="{{ route('department') }}">Department</a>
+                    @endcanany
+                    @canany(['lead-create','lead-edit','lead-view','lead-delete'])
+                        <a class="collapse-item {{ Request::is('lead*') ? 'active' : '' }}" href="{{ route('lead') }}">Lead Source</a>
+                    @endcanany
+                </div>
+            </div>
         </li>
     @endcanany
-<!-- Orders -->
-<!-- Transfer -->
-    @canany(['transfer-create','transfer-edit','transfer-view','transfer-delete'])
-        <li class="nav-item {{ Request::is('transfer*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('transfer') }}">
-                <i class="fa-solid fa-truck-moving"></i>
-                <span>Transfers</span>
-            </a>
-        </li>
-    @endcanany
-<!-- Transfer -->
-<!-- Product -->
-    @canany(['products-create','products-edit','products-view','products-delete'])
-        <li class="nav-item {{ Request::is('products*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('products') }}">
-                <i class="fa fa-car"></i>
-                <span>Car Master</span>
-            </a>
-        </li>
-    @endcanany
-<!-- Product -->
-<!-- Taxes -->
-    @canany(['taxes-create','taxes-edit','taxes-view','taxes-delete'])
-        <li class="nav-item {{ Request::is('tax*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('tax') }}">
-            <i class="fa fa-percent" aria-hidden="true"></i>
-                <span>Taxes</span>
-            </a>
-        </li>
-    @endcanany
-<!-- Taxes -->
-<!-- Taxes -->
-    @canany(['insurance-create','insurance-edit','insurance-view','insurance-delete'])
-        <li class="nav-item {{ Request::is('insurance*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('insurance') }}">
-            <i class="fas fa-file-invoice-dollar"></i>
-                <span>Insurance</span>
-            </a>
-        </li>
-    @endcanany
-<!-- Taxes -->
-<!-- Taxes -->
-    @canany(['extand_warranties-create','extand_warranties-edit','extand_warranties-view','extand_warranties-delete'])
-        <li class="nav-item {{ Request::is('extand_warranties*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('extand_warranties') }}">
-            <i class="fa-solid fa-award"></i>
-                <span>Extand Warranties</span>
-            </a>
-        </li>
-    @endcanany
-<!-- Taxes -->
-<!-- FastTags -->
-    @canany(['fasttags-create','fasttags-edit','fasttags-view','fasttags-delete'])
-        <li class="nav-item {{ Request::is('fasttag*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('fasttag') }}">
-            <i class="fa fa-tags"></i>
-                <span>FastTags</span>
-            </a>
-        </li>
-    @endcanany
-<!-- FastTags -->
-<!-- Finance -->
-    @canany(['finance-create','finance-edit','finance-view','finance-delete'])
-        <li class="nav-item {{ Request::is('finance*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('finance') }}">
-            <i class="fa fa-usd"></i>
-                <span>Finance</span>
-            </a>
-        </li>
-    @endcanany
-<!-- Finance -->
+<!-- Masters -->
 </ul>

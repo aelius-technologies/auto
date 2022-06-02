@@ -68,16 +68,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Authorised Person</label>
-                                    <select name="authorised_person" id="authorised_person" class="form-control">
-                                        <option value="">Select Authorised Person</option>
-                                            @if(isset($sales) && $sales->isNotEmpty())
-                                                @foreach($sales AS $row)
-                                                    <option value="{{ $row->id }}">{{ $row->name ??'' }}</option>
-                                                @endforeach
-                                            @else        
-                                                    <option value="1">Super Admin</option>
-                                            @endif
-                                    </select>
+                                    <input name="authorised_person" id="authorised_person" class="form-control" placeholder="Enter Authorised Person">
                                 <span class="kt-form__help error authorised_person"></span>
                             </div>
                         </div>
