@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-Transfers
+    Inventories
 @endsection
 
 @section('styles')
@@ -14,21 +14,21 @@ Transfers
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
-            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Transfers</h4>
+            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Inventories</h4>
             <div class="d-flex align-items-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('transfer') }}" class="text-muted">Transfers</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('inventory') }}" class="text-muted">Inventories</a></li>
                         <li class="breadcrumb-item text-muted active" aria-current="page">List</li>
                     </ol>
                 </nav>
             </div>
         </div>
         <div class="col-5 align-self-center">
-            <div class="customize-input float-right">
-                @canany(['transfer-create'])
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('transfer.create') }}">Add New</a>
+        <div class="customize-input float-right">
+                @canany(['inventory-create'])
+                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('inventory.create') }}">Add New</a>
                 @endcanany
             </div>
         </div>
@@ -43,9 +43,11 @@ Transfers
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Product</th>
-                                <th>From Branch</th>
-                                <th>To Branch</th>
+                                <th>Category</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th>Veriant</th>
+                                <th>Ex Showroom Price</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -65,13 +67,13 @@ Transfers
     $(document).ready(function() {
         if ($('#data-table').length > 0) {
             datatable = $('#data-table').DataTable({
-                processing: true,
-                serverSide: true,
+            processing: true,
+            serverSide: true,
 
-                // "pageLength": 10,
-                // "iDisplayLength": 10,
-                "responsive": true,
-                "aaSorting": [],
+            // "pageLength": 10,
+            // "iDisplayLength": 10,
+            "responsive": true,
+            "aaSorting": [],
                 // "order": [], //Initial no order.
                 //     "aLengthMenu": [
                 //     [5, 10, 25, 50, 100, -1],
@@ -86,7 +88,7 @@ Transfers
                 // lengthChange: false,
 
                 "ajax": {
-                    "url": "{{ route('transfer') }}",
+                    "url": "{{ route('inventory') }}",
                     "type": "POST",
                     "dataType": "json",
                     "data": {
@@ -102,16 +104,24 @@ Transfers
                         name: 'DT_RowIndex'
                     },
                     {
-                        data: 'product',
-                        name: 'product'
+                        data: 'category',
+                        name: 'category'
                     },
                     {
-                        data: 'from_branch',
-                        name: 'from_branch'
+                        data: 'name',
+                        name: 'name'
                     },
                     {
-                        data: 'to_branch',
-                        name: 'to_branch'
+                        data: 'branch',
+                        name: 'branch'
+                    },
+                    {
+                        data: 'veriant',
+                        name: 'veriant'
+                    },
+                    {
+                        data: 'ex_showroom_price',
+                        name: 'ex_showroom_price'
                     },
                     {
                         data: 'status',
@@ -127,40 +137,13 @@ Transfers
         }
     });
 
-    $(document).on("submit", ".transfer_reject",function(e){
-        e.preventDefault();
-        let form = $(this).serializeArray();
-        let id = form[0].value;
-        let reason = form[1].value;
-
-        $.ajax({
-            "url": "{!! route('transfer.reject') !!}",
-            "dataType": "json",
-            "type": "POST",
-            "data":{
-                id: id,
-                reason: reason,
-                _token: "{{ csrf_token() }}"
-            },
-            success: function (response){
-                if (response.code == 200){
-                    $('.modal').modal('hide');
-                    datatable.ajax.reload();
-                    toastr.success('Status chagned successfully', 'Success');
-                }else{
-                    toastr.error('Failed to change status', 'Error');
-                }
-            }
-        });
-    }); 
-
     function change_status(object) {
         var id = $(object).data("id");
         var status = $(object).data("status");
 
         if (confirm('Are you sure?')) {
             $.ajax({
-                "url": "{!! route('transfer.change.status') !!}",
+                "url": "{!! route('inventory.change.status') !!}",
                 "dataType": "json",
                 "type": "POST",
                 "data": {

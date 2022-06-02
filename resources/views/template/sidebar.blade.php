@@ -76,7 +76,16 @@
         </li>
     @endcanany
 <!-- OBF -->
-
+<!-- Inventory -->
+@canany(['inventory-create','inventory-edit','inventory-view','inventory-delete'])
+    <li class="nav-item {{ Request::is('inventory*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('inventory') }}">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>inventory</span>
+        </a>
+    </li>
+@endcanany
+<!-- inventory -->
 <!-- Masters -->
 @canany(['orders-create','orders-edit','orders-view','orders-delete','transfer-create','transfer-edit','transfer-view','transfer-delete','products-create','products-edit','products-view','products-delete','taxes-create','taxes-edit','taxes-view','taxes-delete','insurance-create','insurance-edit','insurance-view','insurance-delete','extand_warranties-create','extand_warranties-edit','extand_warranties-view','extand_warranties-delete','fasttags-create','fasttags-edit','fasttags-view','fasttags-delete','finance-create','finance-edit','finance-view','finance-delete','branches-create','branches-edit','branches-view','branches-delete','department-create','department-edit','department-view','department-delete','lead-create','lead-edit','lead-view','lead-delete'])
         <li class="nav-item {{ (Request::is('products*') || Request::is('tax*') || Request::is('insurance*') || Request::is('extand_warranties*') || Request::is('fasttag*') || Request::is('finance.*') || Request::is('branches*') || Request::is('department*') ||  Request::is('lead*')) ? 'active' : '' }}">
@@ -119,7 +128,6 @@
         </li>
     @endcanany
 <!-- Masters -->
-
 <!-- Order -->
     @canany(['orders-create','orders-edit','orders-view','orders-delete'])
         <li class="nav-item {{ Request::is('order*') ? 'active' : '' }}">
@@ -130,7 +138,6 @@
         </li>
     @endcanany
 <!-- Order -->
-
 <!-- Transfer -->
     @canany(['transfer-create','transfer-edit','transfer-view','transfer-delete'])
         <li class="nav-item {{ Request::is('transfer*') ? 'active' : '' }}">
@@ -141,5 +148,4 @@
         </li>
     @endcanany
 <!-- Transfer -->
-
 </ul>

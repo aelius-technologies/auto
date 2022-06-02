@@ -229,8 +229,20 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('transfer/accept-check/{id?}', 'TransferController@accept_check')->name('transfer.accept.check');
             Route::get('transfer/inventory-details', 'TransferController@inventory_details')->name('transfer.inventory.details');
             Route::get('transfer/gate-pass/{id?}', 'TransferController@gate_pass')->name('transfer.gate.pass');
-            Route::post('transfer/accept', 'TransferController@accept')->name('transfer.accept');
             Route::post('transfer/reject', 'TransferController@reject')->name('transfer.reject');
+            Route::post('transfer/accept', 'TransferController@accept')->name('transfer.accept');
+            Route::get('transfer/transfer-details/{id?}', 'TransferController@transfer_details')->name('transfer.transfer.details');
+            Route::post('transfer/change-status', 'TransferController@change_status')->name('transfer.change.status');
         /** transfer */
+
+        /** inventory */
+            Route::any('inventory', 'InventoryController@index')->name('inventory');
+            Route::get('inventory/create', 'InventoryController@create')->name('inventory.create');
+            Route::post('inventory/insert', 'InventoryController@insert')->name('inventory.insert');
+            Route::get('inventory/view/{id?}', 'InventoryController@view')->name('inventory.view');
+            Route::get('inventory/edit/{id?}', 'InventoryController@edit')->name('inventory.edit');
+            Route::patch('inventory/update', 'InventoryController@update')->name('inventory.update');
+            Route::post('inventory/change-status', 'InventoryController@change_status')->name('inventory.change.status');
+        /** inventory */
     });
 });

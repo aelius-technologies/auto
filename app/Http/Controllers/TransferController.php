@@ -27,13 +27,13 @@ class TransferController extends Controller{
         public function index(Request $request){
             if($request->ajax()){
                 $collection = DB::table('transfer as t')
-                                ->select('t.id', 'tb.name as to_branch', 'fb.name as from_branch', 'p.name as product', 't.status')
+                                ->select('t.id', 't.to_branch as to_branch_id', 't.from_branch as from_branch_id', 'tb.name as to_branch', 'fb.name as from_branch', 'p.name as product', 't.status')
                                 ->leftjoin('branches as tb', 'tb.id', 't.to_branch')
                                 ->leftjoin('branches as fb', 'fb.id', 't.from_branch')
                                 ->leftjoin('products as p', 'p.id', 't.product_id');
                     
-                if(auth()->user()->roles->pluck('name')[0] != 'admin')
-                    $collection->where(['t.to_branch' => auth()->user()->branch]);
+                // if(auth()->user()->roles->pluck('name')[0] != 'admin')
+                //     $collection->where(['t.to_branch' => auth()->user()->branch]);
                 
                 $data = $collection->get();
                 
@@ -42,21 +42,31 @@ class TransferController extends Controller{
                         ->addColumn('action', function($data){
                             $return = '';
                             if (auth()->user()->can('transfer-delete') && $data->status == 'pending') {
-                                $return = '<div class="btn-group">';
-                                $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                <i class="fa fa-bars"></i>
-                                            </a> &nbsp;
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="'.route('transfer.accept.check', ['id' => base64_encode($data->id)]).'">Accept</a></li>
-                                                <li><button type="button" class="dropdown-item" data-toggle="modal" data-target="#model_reject_'.$data->id.'">Reject</button></li>
-                                            </ul>';
-                                $return .= '</div>';
+                                if($data->to_branch_id == auth()->user()->branch){
+                                    $return = '<div class="btn-group">';
+                                    $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-bars"></i>
+                                                </a> &nbsp;
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="'.route('transfer.accept.check', ['id' => base64_encode($data->id)]).'">Accept</a></li>
+                                                    <li><button type="button" class="dropdown-item" data-toggle="modal" data-target="#model_reject_'.$data->id.'">Reject</button></li>
+                                                </ul>';
+                                    $return .= '</div>';
+                                }else{
+                                    $return =   '<a class="btn btn-default btn-xs" href="javascript:;" onclick="change_status(this);" data-status="delete" data-id="'.base64_encode($data->id).'"><i class="fa fa-trash"></i></a>';
+                                }
                             }
 
                             if($data->status == 'accepted'){
-                                $return .= '<a href="'.route('transfer.gate.pass', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                <i class="fa fa-eye"></i>
-                                            </a>';
+                                if($data->to_branch_id == auth()->user()->branch){
+                                    $return .=  '<a href="'.route('transfer.gate.pass', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>';
+                                }else{
+                                    $return .=  '<a href="'.route('transfer.transfer.details', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>';
+                                }
                             }
 
                             $return .= '<div class="modal fade" id="model_reject_'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="model_reject_'.$data->id.'" aria-hidden="true">
@@ -103,7 +113,7 @@ class TransferController extends Controller{
                             if ($data->status == 'rejected') {
                                 return '<span class="badge badge-pill badge-danger">Rejected</span>';
                             } else if ($data->status == 'accepted') {
-                                return '<span class="badge badge-pill badge-success">Accepter</span>';
+                                return '<span class="badge badge-pill badge-success">Accepted</span>';
                             } else {
                                 return '<span class="badge badge-pill badge-info">Pending</span>';
                             }
@@ -276,4 +286,45 @@ class TransferController extends Controller{
         }
     /** gate-pass */
 
+    /** transfer-details */
+        public function transfer_details(Request $request, $id = ''){
+            if (isset($id) && $id != '' && $id != null)
+                $id = base64_decode($id);
+            else
+                return redirect()->route('transfer')->with('error', 'Something went wrong');
+
+            $data = DB::table('transfer as t')
+                        ->select('t.id', 't.transfer_fee', 'fb.name as from_branch', 'tb.name as to_branch', 'i.name', 'i.veriant', 
+                                'i.key_number', 'i.engine_number', 'i.chassis_number', 'i.vin_number', 'i.ex_showroom_price',
+                                'i.interior_color', 'i.exterior_color')
+                        ->leftjoin('branches as fb', 'fb.id', 't.from_branch')
+                        ->leftjoin('branches as tb', 'tb.id', 't.to_branch')
+                        ->leftjoin('inventory as i', 'i.id', 't.inventory_id')
+                        ->where(['t.id' => $id])
+                        ->first();
+
+            return view('transfer.transfer_details')->with(['data' => $data]);
+        }
+    /** transfer-details */
+
+    /** change-status */
+        public function change_status(Request $request){
+            if (!$request->ajax()) { exit('No direct script access allowed'); }
+            $id = base64_decode($request->id);
+            
+            $data = Transfer::where(['id' => $id])->first();
+
+            if (!empty($data)) {
+                $update = Transfer::where(['id' => $id])->delete();
+                if ($update) {
+                    return response()->json(['code' => 200]);
+                } else {
+                    return response()->json(['code' => 201]);
+                }
+            } else {
+                return response()->json(['code' => 201]);
+            }
+        
+        }
+    /** change-status */
 }
