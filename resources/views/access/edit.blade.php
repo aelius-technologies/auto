@@ -46,7 +46,9 @@ Access-Create
                                 <span class="kt-form__help error permissions"></span>
                             </div>
                             @if(isset($permissions) && $permissions->isNotEmpty())
+                            @php $abc = true @endphp
                                 @foreach($permissions as $permission)
+                                    @php if(in_array($permission->id, $data->permissions)){ $abc = true; }else{ $abc = false; }   @endphp
                                     <div class="col-sm-3 mb-1">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" name="permissions[]" class="custom-control-input checkboxClass" id="{{ $permission->id }}" value="{{ $permission->id }}" @if(in_array($permission->id, $data->permissions)) checked @endif >
@@ -101,17 +103,24 @@ Access-Create
             });
         });
 
-        
-    $("#ckbCheckAll").on('click', function() {
-        if (this.checked) {
-            $('.checkboxClass').each(function() {
-                $(".checkboxClass").prop('checked', true);
-            })
-        } else {
-            $('.checkboxClass').each(function() {
-                $(".checkboxClass").prop('checked', false);
-            })
-        }
-    });
+        $(document).ready(function () {
+            var abc = '<?php echo $abc; ?>';
+            if(abc == true){
+                $("#ckbCheckAll").prop('checked', true);
+            }
+            
+        });
+      
+        $("#ckbCheckAll").on('click', function() {
+            if (this.checked) {
+                $('.checkboxClass').each(function() {
+                    $(".checkboxClass").prop('checked', true);
+                })
+            } else {
+                $('.checkboxClass').each(function() {
+                    $(".checkboxClass").prop('checked', false);
+                })
+            }
+        });
     </script>
 @endsection

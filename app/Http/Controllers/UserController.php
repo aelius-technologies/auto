@@ -51,7 +51,7 @@ class UserController extends Controller{
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
                                                 <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="inactive" data-id="' . base64_encode($data->id) . '">Inactive</a></li>
-                                                <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delete" data-id="' . base64_encode($data->id) . '">Delete</a></li>
+                                                <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="deleted" data-id="' . base64_encode($data->id) . '">Delete</a></li>
                                             </ul>';
                         }
 
@@ -65,6 +65,8 @@ class UserController extends Controller{
                             return '<span class="badge badge-pill badge-success">Active</span>';
                         } else if ($data->status == 'inactive') {
                             return '<span class="badge badge-pill badge-warning">Inactive</span>';
+                        } else if ($data->status == 'deleted') {
+                            return '<span class="badge badge-pill badge-danger">Deleted</span>';
                         } else {
                             return '-';
                         }
@@ -144,7 +146,7 @@ class UserController extends Controller{
 
             $roles = Role::all();
             $branch = Branch::where(['status' => 'active'])->get();
-            $data = User::select('id','first_name', 'last_name','email', 'contact_number', 'password')->where(['id' => $id])->first();
+            $data = User::select('id','first_name', 'branch','last_name','email', 'contact_number', 'password')->where(['id' => $id])->first();
 
             return view('user.edit')->with(['data' => $data, 'roles' => $roles ,'branch' => $branch]);
         }
@@ -220,20 +222,7 @@ class UserController extends Controller{
                 $data = User::where(['id' => $id])->first();
 
                 if(!empty($data)){
-                    if($status == 'delete'){
-                        $process = User::where(['id' => $id])->delete();
-
-                        $file_path = public_path().'/uploads/users/'.$data->photo;
-
-                        if(File::exists($file_path) && $file_path != ''){
-                            if($data->photo != 'user-icon.jpg'){
-                                @unlink($file_path);
-                            }
-                        }
-                    }else{
-                        $process = User::where(['id' => $id])->update(['status' => $status, 'updated_by' => auth()->user()->id]);
-                    }
-
+                    $process = User::where(['id' => $id])->update(['status' => $status, 'updated_by' => auth()->user()->id]);
                     if($process){
                         return response()->json(['code' => 200]);
                     }else{

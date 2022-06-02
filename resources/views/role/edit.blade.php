@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('template.app')
 
 @section('meta')
 @endsection
@@ -49,19 +49,21 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-12">
+                        <input type="checkbox" class="checkboxClass mr-1" id="ckbCheckAll" value=""><span></span><b>Select All</b>
                             <div class="form-group">
                                 <strong>Permissions:</strong>
                                 <div class="row">
                                     @foreach($permissions as $value)
                                         <div class="col-sm-3">
                                             <label class="ui-checkbox ui-checkbox-success mt-2" for="checkbox-{{ $value->id }}">
-                                                <input type="checkbox" name="permissions[]" id="checkbox-{{ $value->id }}" value="{{ $value->id }}" <?php if(in_array($value->id, $role_permissions)){ echo 'checked'; } ?>>
+                                                <input type="checkbox" class="checkboxClass" name="permissions[]" id="checkbox-{{ $value->id }}" value="{{ $value->id }}" <?php if(in_array($value->id, $role_permissions)){ echo 'checked'; } ?>>
                                                 <span class="input-span"></span>{{ $value->name }}
                                             </label>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
+                            <span class="kt-form__help error permissions"></span>
                         </div>
                         <div class="form-group ml-3">
                             <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
@@ -106,6 +108,17 @@
                     }
                 });
             });
+        });
+        $("#ckbCheckAll").on('click',function () {
+            if(this.checked){
+            $('.checkboxClass').each(function(){
+                $(".checkboxClass").prop('checked', true);
+            })
+        }else{
+            $('.checkboxClass').each(function(){
+                $(".checkboxClass").prop('checked', false);
+            })
+        }
         });
     </script>
 @endsection

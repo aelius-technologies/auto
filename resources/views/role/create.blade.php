@@ -60,6 +60,7 @@
                                             </div>
                                         @endforeach
                                     </div>
+                                    <span class="kt-form__help error permissions"></span>
                                 </div>
                             </div>
                         </div>

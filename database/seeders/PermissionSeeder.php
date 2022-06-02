@@ -120,6 +120,7 @@ class PermissionSeeder extends Seeder{
             'cash_receipt-view',
             'cash_receipt-edit',
             'cash_receipt-create',
+            'cash_receipt-generate_gate_pass',
             'obf_approval-delete',
             'obf_approval-view',
             'obf_approval-edit',
