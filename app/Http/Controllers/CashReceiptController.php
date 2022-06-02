@@ -25,7 +25,6 @@ use DataTables, DB;
 
 class CashReceiptController extends Controller
 {
-
     /** construct */
     public function __construct()
     {

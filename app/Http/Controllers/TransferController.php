@@ -53,6 +53,12 @@ class TransferController extends Controller{
                                 $return .= '</div>';
                             }
 
+                            if($data->status == 'accepted'){
+                                $return .= '<a href="'.route('transfer.gate.pass', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <i class="fa fa-eye"></i>
+                                            </a>';
+                            }
+
                             $return .= '<div class="modal fade" id="model_reject_'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="model_reject_'.$data->id.'" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -183,7 +189,7 @@ class TransferController extends Controller{
             if (isset($id) && $id != '' && $id != null)
                 $id = base64_decode($id);
             else
-                return redirect()->route('user')->with('error', 'Something went wrong');
+                return redirect()->route('transfer')->with('error', 'Something went wrong');
             
             $transfer = Transfer::select('from_branch', 'to_branch', 'product_id')->where(['id' => $id])->first();
             if(!$transfer){
@@ -248,4 +254,26 @@ class TransferController extends Controller{
             }
         }
     /** accept */
+
+    /** gate-pass */
+        public function gate_pass(Request $request, $id = ''){
+            if (isset($id) && $id != '' && $id != null)
+                $id = base64_decode($id);
+            else
+                return redirect()->route('transfer')->with('error', 'Something went wrong');
+
+            $data = DB::table('transfer as t')
+                        ->select('t.id', 't.transfer_fee', 'fb.name as from_branch', 'tb.name as to_branch', 'i.name', 'i.veriant', 
+                                'i.key_number', 'i.engine_number', 'i.chassis_number', 'i.vin_number', 'i.ex_showroom_price',
+                                'i.interior_color', 'i.exterior_color')
+                        ->leftjoin('branches as fb', 'fb.id', 't.from_branch')
+                        ->leftjoin('branches as tb', 'tb.id', 't.to_branch')
+                        ->leftjoin('inventory as i', 'i.id', 't.inventory_id')
+                        ->where(['t.id' => $id])
+                        ->first();
+
+            return view('transfer.gate_pass')->with(['data' => $data]);
+        }
+    /** gate-pass */
+
 }

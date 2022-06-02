@@ -32,7 +32,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                <form action="{{ route('transfer.accept') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('transfer.accept') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
 
