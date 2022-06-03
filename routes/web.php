@@ -264,7 +264,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::post('car_exchange_category/insert', 'CarExchangeCategoryController@insert')->name('car_exchange_category.insert');
             Route::get('car_exchange_category/view/{id?}', 'CarExchangeCategoryController@view')->name('car_exchange_category.view');
             Route::get('car_exchange_category/edit/{id?}', 'CarExchangeCategoryController@edit')->name('car_exchange_category.edit');
-            Route::post('car_exchange_category/update', 'CarExchangeCategoryController@update')->name('car_exchange_category.update');
+            Route::patch('car_exchange_category/update', 'CarExchangeCategoryController@update')->name('car_exchange_category.update');
             Route::post('car_exchange_category/change-status', 'CarExchangeCategoryController@change_status')->name('car_exchange_category.change.status');
         /** Car Exchange Category */
     
@@ -273,16 +273,18 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('car_exchange_product/create', 'CarExchangeProductController@create')->name('car_exchange_product.create');
             Route::post('car_exchange_product/insert', 'CarExchangeProductController@insert')->name('car_exchange_product.insert');
             Route::get('car_exchange_product/view/{id?}', 'CarExchangeProductController@view')->name('car_exchange_product.view');
-            Route::post('car_exchange_product/update', 'CarExchangeProductController@update')->name('car_exchange_product.update');
+            Route::get('car_exchange_product/edit/{id?}', 'CarExchangeProductController@edit')->name('car_exchange_product.edit');
+            Route::patch('car_exchange_product/update', 'CarExchangeProductController@update')->name('car_exchange_product.update');
             Route::post('car_exchange_product/change-status', 'CarExchangeProductController@change_status')->name('car_exchange_product.change.status');
         /** Car Exchange Product */
     
         /** Car Exchange */
             Route::any('car_exchange', 'CarExchangeController@index')->name('car_exchange');
-            Route::post('car_exchange/create', 'CarExchangeController@create')->name('car_exchange.create');
+            Route::get('car_exchange/create', 'CarExchangeController@create')->name('car_exchange.create');
             Route::post('car_exchange/insert', 'CarExchangeController@insert')->name('car_exchange.insert');
             Route::get('car_exchange/view/{id?}', 'CarExchangeController@view')->name('car_exchange.view');
-            Route::post('car_exchange/update', 'CarExchangeController@update')->name('car_exchange.update');
+            Route::get('car_exchange/edit/{id?}', 'CarExchangeController@edit')->name('car_exchange.edit');
+            Route::patch('car_exchange/update', 'CarExchangeController@update')->name('car_exchange.update');
             Route::post('car_exchange/change-status', 'CarExchangeController@change_status')->name('car_exchange.change.status');
         /** Car Exchange */
 

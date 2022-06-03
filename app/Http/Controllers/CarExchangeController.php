@@ -4,43 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CarExchangeCategory;
+use App\Models\CarExchangeProduct;
+use App\Models\CarExchange;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB, Validator ,DataTables;
 
 
-class CarExchangeCategoryController extends Controller{
+class CarExchangeController extends Controller{
     /** construct */
         public function __construct(){
-            $this->middleware('permission:car_exchange_category-create', ['only' => ['create']]);
-            $this->middleware('permission:car_exchange_category-edit', ['only' => ['edit']]);
-            $this->middleware('permission:car_exchange_category-view', ['only' => ['view']]);
-            $this->middleware('permission:car_exchange_category-delete', ['only' => ['delete']]);
+            $this->middleware('permission:car_exchange-create', ['only' => ['create']]);
+            $this->middleware('permission:car_exchange-edit', ['only' => ['edit']]);
+            $this->middleware('permission:car_exchange-view', ['only' => ['view']]);
+            $this->middleware('permission:car_exchange-delete', ['only' => ['delete']]);
         }
     /** construct */
     /** index */
         public function index(Request $request){
             if($request->ajax()){
-                $data = CarExchangeCategory::orderBy('id' , 'desc')->get();
+                $data = CarExchange::select('car_exchange.*' ,'car_exchange_product.name AS product_name' ,'car_exchange_category.name AS category_name')->leftjoin('car_exchange_product' ,'car_exchange.product_id' ,'car_exchange_product.id')->leftjoin('car_exchange_category' ,'car_exchange.category_id' ,'car_exchange_category.id')->orderBy('id' , 'desc')->get();
                 
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($data){
                             $return = '<div class="btn-group">';
 
-                            if(auth()->user()->can('car_exchange_category-view')){
-                                $return .= '<a href="'.route('car_exchange_category.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                            if(auth()->user()->can('car_exchange-view')){
+                                $return .= '<a href="'.route('car_exchange.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                 <i class="fa fa-eye"></i>
                                             </a> &nbsp;';
                             }   
                             
-                            if(auth()->user()->can('car_exchange_category-edit')){
-                                $return .= '<a href="'.route('car_exchange_category.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                            if(auth()->user()->can('car_exchange-edit')){
+                                $return .= '<a href="'.route('car_exchange.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                 <i class="fa fa-pencil"></i>
                                             </a> &nbsp;';
                             }   
 
-                            if (auth()->user()->can('car_exchange_category-delete')) {
+                            if (auth()->user()->can('car_exchange-delete')) {
                                 $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-bars"></i>
                                                 </a> &nbsp;
@@ -72,10 +74,18 @@ class CarExchangeCategoryController extends Controller{
                         ->rawColumns([ 'action' ,'status'])
                         ->make(true);
             }
-            return view('car_exchange_category.index');
+            return view('car_exchange.index');
         }
     /** index */
- 
+    
+    /** Create */
+        public function create(Request $request){
+            $product = CarExchangeProduct::where(['status' => 'active'])->get();
+            $category = CarExchangeCategory::where(['status' => 'active'])->get();
+            return view('car_exchange.create')->with(['product' => $product ,'category' => $category]);
+        }
+    /** Create */
+
     /** insert */
         public function insert(Request $request)
         {
@@ -84,7 +94,11 @@ class CarExchangeCategoryController extends Controller{
             }
 
             $crud = [
-                'name' => ucfirst($request->name),
+                'product_id' => $request->name,
+                'category_id' => $request->category,
+                'engine_number' => $request->engine_number,
+                'chassis_number' => $request->chassis_number,
+                'price' => $request->price,
                 'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s'),
                 'created_by' => auth()->user()->id,
@@ -94,15 +108,13 @@ class CarExchangeCategoryController extends Controller{
             
             DB::beginTransaction();
             try {
-                DB::enableQueryLog();
-                $last_id = CarExchangeCategory::insertGetId($crud);
+                $last_id = CarExchange::insertGetId($crud);
                 if ($last_id) {
-                    
                     DB::commit();
-                    return redirect()->route('car_exchange_category')->with('success', 'Record inserted successfully');
+                    return redirect()->route('car_exchange')->with('success', 'Record updated successfully');
                 } else {
                     DB::rollback();
-                    return redirect()->back()->with('error', 'Failed to insert record')->withInput();
+                    return redirect()->back()->with('error', 'Failed to update record')->withInput();
                 }
             } catch (\Throwable $th) {
                 DB::rollback();
@@ -115,16 +127,20 @@ class CarExchangeCategoryController extends Controller{
         public function view(Request $request)
         {
             $id = base64_decode($request->id);
-            $data = CarExchangeCategory::where(['id' => $id])->first();
-            return view('car_exchange_category.view')->with(['data' => $data]);
+            $data = CarExchange::where(['id' => $id])->first();
+            $category = CarExchangeCategory::where(['status' => 'active'])->get();
+            $product = CarExchangeProduct::where(['status' => 'active'])->get();
+            return view('car_exchange.view')->with(['data' => $data ,'category' => $category ,'product' => $product]);
         }
     /** view */
 
     /** Edit */
         public function edit(Request $request){
             $id = base64_decode($request->id);
-            $data = CarExchangeCategory::where(['id' => $id])->first();
-            return view('car_exchange_category.edit')->with(['data' => $data]);
+            $data = CarExchange::where(['id' => $id])->first();
+            $category = CarExchangeCategory::where(['status' => 'active'])->get();
+            $product = CarExchangeProduct::where(['status' => 'active'])->get();
+            return view('car_exchange.edit')->with(['data' => $data ,'category' =>$category ,'product' =>$product]);
         }
     /** Edit */
 
@@ -136,10 +152,12 @@ class CarExchangeCategoryController extends Controller{
             }
 
             $crud = [
-                'name' => ucfirst($request->name),
+                'product_id' => $request->name,
+                'category_id' => $request->category,
+                'engine_number' => $request->engine_number,
+                'chassis_number' => $request->chassis_number,
+                'price' => $request->price,
                 'status' => 'active',
-                'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => auth()->user()->id,
                 'updated_at' => date('Y-m-d H:i:s'),
                 'updated_by' => auth()->user()->id
             ];
@@ -147,11 +165,11 @@ class CarExchangeCategoryController extends Controller{
             DB::beginTransaction();
             try {
                 DB::enableQueryLog();
-                $update = CarExchangeCategory::where(['id' => $request->id])->update($crud);
+                $update = CarExchange::where(['id' => $request->id])->update($crud);
                 if ($update) {
                     
                     DB::commit();
-                    return redirect()->route('car_exchange_category')->with('success', 'Record updated successfully');
+                    return redirect()->route('car_exchange')->with('success', 'Record updated successfully');
                 } else {
                     DB::rollback();
                     return redirect()->back()->with('error', 'Failed to update record')->withInput();
@@ -168,10 +186,10 @@ class CarExchangeCategoryController extends Controller{
             if (!$request->ajax()) { exit('No direct script access allowed'); }
 
             $id = base64_decode($request->id);
-            $data = CarExchangeCategory::where(['id' => $id])->first();
+            $data = CarExchange::where(['id' => $id])->first();
 
             if(!empty($data)){
-                $update = CarExchangeCategory::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                $update = CarExchange::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
                 if($update){
                     return response()->json(['code' => 200]);
                 }else{

@@ -4,24 +4,25 @@
 @endsection
 
 @section('title')
-    Taxes Create
+    Car Exchange Product Update
 @endsection
 
 @section('styles')
-
+<link href="{{ asset('assets/css/dropify.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/sweetalert2.bundle.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
-            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Tax Master</h4>
+            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Car Exchange Product Master</h4>
             <div class="d-flex align-items-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('tax') }}" class="text-muted">Tax Master</a></li>
-                        <li class="breadcrumb-item text-muted active" aria-current="page">Create</li>
+                        <li class="breadcrumb-item"><a href="{{ route('car_exchange_product') }}" class="text-muted">Car Exchange Product Master</a></li>
+                        <li class="breadcrumb-item text-muted active" aria-current="page">Update</li>
                     </ol>
                 </nav>
             </div>
@@ -33,25 +34,33 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('tax.insert') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('car_exchange_product.update') }}" name="form" id="form" method="post" enctype="multipart/form-data">
                         @csrf
-                        @method('POST')
-
+                        @method('PATCH')
+                        <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="name">Tax Name</label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Tax Name">
+                                <label for="name">Product Name</label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter Category Name" value="{{ $data->name ??'' }}">
                                 <span class="kt-form__help error name"></span>
                             </div>
+
                             <div class="form-group col-sm-6">
-                                <label for="percentage">Percentage</label>
-                                <input type="text" name="percentage" id="percentage" class="form-control" placeholder="Enter Percentage">
-                                <span class="kt-form__help error percentage"></span>
+                                <label for="category">Select Category</label>
+                                <select name="category" id="category" class="form-control" placeholder="Enter Category Name">
+                                    <option value="">Select Category</option>
+                                    @if(isset($category) && $category->isNOtEmpty())
+                                        @foreach($category AS $row)
+                                            <option value="{{ $row->id }}" @if($data->category_id == $row->id) selected @endif> {{ $row->name }} </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <span class="kt-form__help error category"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
-                            <a href="{{ route('tax') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
+                            <a href="{{ route('car_exchange_product') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                         </div>
                     </form>
                 </div>
@@ -62,20 +71,8 @@
 @endsection
 
 @section('scripts')
-<script>
-    $("#percentage").keyup(function(e){
-        $('.percentage').html('');
-        if ($(this).val() > 99){
-            $('.percentage').html('');
-            $('.percentage').html('Enter Value Between 0 to 100!');
-            $(this).val();
-            $(this).val(100);
-        }else if($(this).val() <= 99){
-            $('.percentage').html('');
-        }
-    });
-
-</script>
+<script src="{{ asset('assets/js/promise.min.js') }}"></script>
+<script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
 
 <script>
     $(document).ready(function() {

@@ -164,7 +164,7 @@
                 <i class="fa-solid fa-shuffle"></i>
                 <span>Car Exchange</span>
             </a>
-            <div id="collapseFour" class="collapse {{ (Request::is('car_exchange*') || Request::is('car_exchange_category*') || Request::is('car_exchange_product*')) ? 'active' : '' }}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+            <div id="collapseFour" class="collapse {{ (Request::is('car_exchange*') || Request::is('car_exchange_category*') || Request::is('car_exchange_product*')) ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     @canany(['car_exchange-create', 'car_exchange-edit', 'car_exchange-view', 'car_exchange-delete'])
                         <a class="collapse-item {{ Request::is('car_exchange*') ? 'active' : '' }}" href="{{ route('car_exchange') }}">Car Exchange</a>
