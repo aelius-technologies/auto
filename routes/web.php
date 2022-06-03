@@ -235,6 +235,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::post('transfer/change-status', 'TransferController@change_status')->name('transfer.change.status');
         /** transfer */
 
+<<<<<<< HEAD
         /** inventory */
             Route::any('inventory', 'InventoryController@index')->name('inventory');
             Route::get('inventory/create', 'InventoryController@create')->name('inventory.create');
@@ -246,5 +247,16 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('inventory/accept/{id?}', 'InventoryController@accept')->name('inventory.accept');
             Route::post('inventory/accepted', 'InventoryController@accepted')->name('inventory.accepted');
         /** inventory */
+=======
+        /** Accessory */
+            Route::any('accessory', 'AccessoryController@index')->name('accessory');
+            Route::get('accessory/create', 'AccessoryController@create')->name('accessory.create');
+            Route::post('accessory/insert', 'AccessoryController@insert')->name('accessory.insert');
+            Route::get('accessory/view/{id?}', 'AccessoryController@view')->name('accessory.view');
+            Route::get('accessory/edit/{id?}', 'AccessoryController@edit')->name('accessory.edit');
+            Route::patch('accessory/update', 'AccessoryController@update')->name('accessory.update');
+            Route::post('accessory/change_status', 'AccessoryController@change_status')->name('accessory.change.status');
+        /** Accessory */
+>>>>>>> 7e5977a (2022-06-03)
     });
 });

@@ -103,7 +103,7 @@ Order View
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label class="control-label">Registration Correspondence</label>
-                                            <span class="btn btn-outline-secondary ml-5 mb-2">&nbsp;&nbsp;&nbsp;<input id="chek_address" type="checkbox" class="form-check-input mr-0" value=""><b>Same AS Above</b></span>
+                                            <span class="btn btn-outline-secondary ml-5 mb-2">&nbsp;&nbsp;&nbsp;<input id="chek_address" type="checkbox" class="form-check-input mr-0" value="" disabled><b>Same AS Above</b></span>
                                             <textarea  name="address_2" id="address_2" class="form-control" placeholder="Enter Registration Correspondence" disabled>{{ $data->registration ?? '' }}</textarea>
                                             <span class="kt-form__help error address_2"></span>
                                         </div>
@@ -420,7 +420,7 @@ Order View
 <script>
     $(document).ready(function(){
         if($('#address_1').val() == $('#address_2').val()){
-            $("#chek_address").attr("checked" ,true);
+            $("#chek_address").prop("checked" ,true);
         }
 
         var copyData = '';
