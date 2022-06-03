@@ -72,6 +72,7 @@
                     </div>
                     <div class="form-group">
                         <span onclick="printDiv('#print')" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Print</span>
+                        <a href="{{ route('transfer') }}"><button class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</button></a>
                     </div>
                 </div>
             </div>
