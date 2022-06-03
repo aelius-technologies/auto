@@ -22,7 +22,7 @@ Access-Create
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                <form action="{{ route('access.update') }}" name="form" id="form" method="post">
+                <form action="{{ route('access_permission.update') }}" name="form" id="form" method="post">
                         @csrf
                         @method('PATCH')
 
@@ -60,7 +60,7 @@ Access-Create
                         </div>
                         <div class="form-group mt-3">
                             <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
-                            <a href="{{ route('access') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Cancel</a>
+                            <a href="{{ route('access_permission') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

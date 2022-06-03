@@ -28,13 +28,13 @@ class AccessController extends Controller{
                             $return = '<div class="btn-group">';
 
                             if(auth()->user()->can('access-view')){
-                                $return .= '<a href="'.route('access.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                $return .= '<a href="'.route('access_permission.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                 <i class="fa fa-eye"></i>
                                             </a> &nbsp;';
                             }
 
                             if(auth()->user()->can('access-edit')){
-                                $return .= '<a href="'.route('access.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                $return .= '<a href="'.route('access_permission.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>
                                             </a> &nbsp;';
                             }
@@ -86,7 +86,7 @@ class AccessController extends Controller{
             $role = Role::find($request->role);
             // dd($role->givePermissionTo(95));
             if($role->givePermissionTo($permissions))
-                return redirect()->route('access')->with('success', 'Record updated successfully');
+                return redirect()->route('access_permission')->with('success', 'Record updated successfully');
             else
                 return redirect()->back()->with('error', 'Failed to update record')->withInput();
         }
@@ -97,7 +97,7 @@ class AccessController extends Controller{
             if(isset($request->id) && $request->id != '' && $request->id != null)
                 $id = base64_decode($request->id);
             else
-                return redirect()->route('access')->with('error', 'Something went wrong');
+                return redirect()->route('access_permission')->with('error', 'Something went wrong');
 
             $permissions = Permission::select('id', 'name')->get();
             $roles = Role::select('id', 'name')->get();

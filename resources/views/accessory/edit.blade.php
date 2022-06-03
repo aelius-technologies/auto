@@ -113,7 +113,6 @@
             $('.warranty').html('Enter Valid Number!');
         }
     });
-
 </script>
 <script>
     $(document).ready(function() {

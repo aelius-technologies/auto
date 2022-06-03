@@ -53,7 +53,7 @@ Access-View
                     </div>
                     <div class="form-group mt-3">
                         <!-- <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button> -->
-                        <a href="{{ route('access') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
+                        <a href="{{ route('access_permission') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                     </div>
                 </div>
             </div>

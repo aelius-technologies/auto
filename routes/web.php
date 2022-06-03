@@ -77,10 +77,10 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             /** permission */
 
             /** access */
-                Route::any('access', 'AccessController@index')->name('access');
-                Route::get('access/edit', 'AccessController@edit')->name('access.edit');
-                Route::patch('access/update/{id?}', 'AccessController@update')->name('access.update');
-                Route::get('access/view', 'AccessController@view')->name('access.view');
+                Route::any('access_permission', 'AccessController@index')->name('access_permission');
+                Route::get('access_permission/edit', 'AccessController@edit')->name('access_permission.edit');
+                Route::patch('access_permission/update/{id?}', 'AccessController@update')->name('access_permission.update');
+                Route::get('access_permission/view', 'AccessController@view')->name('access_permission.view');
             /** access */
         /** access control */
         
@@ -235,7 +235,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::post('transfer/change-status', 'TransferController@change_status')->name('transfer.change.status');
         /** transfer */
 
-<<<<<<< HEAD
+
         /** inventory */
             Route::any('inventory', 'InventoryController@index')->name('inventory');
             Route::get('inventory/create', 'InventoryController@create')->name('inventory.create');
@@ -247,7 +247,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('inventory/accept/{id?}', 'InventoryController@accept')->name('inventory.accept');
             Route::post('inventory/accepted', 'InventoryController@accepted')->name('inventory.accepted');
         /** inventory */
-=======
+
         /** Accessory */
             Route::any('accessory', 'AccessoryController@index')->name('accessory');
             Route::get('accessory/create', 'AccessoryController@create')->name('accessory.create');
@@ -257,6 +257,34 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::patch('accessory/update', 'AccessoryController@update')->name('accessory.update');
             Route::post('accessory/change_status', 'AccessoryController@change_status')->name('accessory.change.status');
         /** Accessory */
->>>>>>> 7e5977a (2022-06-03)
+
+        /** Car Exchange Category */
+            Route::any('car_exchange_category', 'CarExchangeCategoryController@index')->name('car_exchange_category');
+            Route::get('car_exchange_category/create', 'CarExchangeCategoryController@create')->name('car_exchange_category.create');
+            Route::post('car_exchange_category/insert', 'CarExchangeCategoryController@insert')->name('car_exchange_category.insert');
+            Route::get('car_exchange_category/view/{id?}', 'CarExchangeCategoryController@view')->name('car_exchange_category.view');
+            Route::get('car_exchange_category/edit/{id?}', 'CarExchangeCategoryController@edit')->name('car_exchange_category.edit');
+            Route::post('car_exchange_category/update', 'CarExchangeCategoryController@update')->name('car_exchange_category.update');
+            Route::post('car_exchange_category/change-status', 'CarExchangeCategoryController@change_status')->name('car_exchange_category.change.status');
+        /** Car Exchange Category */
+    
+        /** Car Exchange Product */
+            Route::any('car_exchange_product', 'CarExchangeProductController@index')->name('car_exchange_product');
+            Route::get('car_exchange_product/create', 'CarExchangeProductController@create')->name('car_exchange_product.create');
+            Route::post('car_exchange_product/insert', 'CarExchangeProductController@insert')->name('car_exchange_product.insert');
+            Route::get('car_exchange_product/view/{id?}', 'CarExchangeProductController@view')->name('car_exchange_product.view');
+            Route::post('car_exchange_product/update', 'CarExchangeProductController@update')->name('car_exchange_product.update');
+            Route::post('car_exchange_product/change-status', 'CarExchangeProductController@change_status')->name('car_exchange_product.change.status');
+        /** Car Exchange Product */
+    
+        /** Car Exchange */
+            Route::any('car_exchange', 'CarExchangeController@index')->name('car_exchange');
+            Route::post('car_exchange/create', 'CarExchangeController@create')->name('car_exchange.create');
+            Route::post('car_exchange/insert', 'CarExchangeController@insert')->name('car_exchange.insert');
+            Route::get('car_exchange/view/{id?}', 'CarExchangeController@view')->name('car_exchange.view');
+            Route::post('car_exchange/update', 'CarExchangeController@update')->name('car_exchange.update');
+            Route::post('car_exchange/change-status', 'CarExchangeController@change_status')->name('car_exchange.change.status');
+        /** Car Exchange */
+
     });
 });

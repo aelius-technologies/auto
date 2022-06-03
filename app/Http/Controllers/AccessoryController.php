@@ -177,10 +177,10 @@ class AccessoryController extends Controller
             if (!$request->ajax()) { exit('No direct script access allowed'); }
             
             $id = base64_decode($request->id);
-            $data = Branch::where(['id' => $id])->first();
+            $data = Accessory::where(['id' => $id])->first();
 
             if(!empty($data)){
-                $update = Branch::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
+                $update = Accessory::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
                 if($update){
                     return response()->json(['code' => 200]);
                 }else{

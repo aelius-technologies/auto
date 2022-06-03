@@ -82,7 +82,7 @@ Access
                     // lengthChange: false,
 
                     "ajax":{
-                        "url": "{{ route('access') }}",
+                        "url": "{{ route('access_permission') }}",
                         "type": "POST",
                         "dataType": "json",
                         "data":{
