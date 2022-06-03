@@ -243,6 +243,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('inventory/edit/{id?}', 'InventoryController@edit')->name('inventory.edit');
             Route::patch('inventory/update', 'InventoryController@update')->name('inventory.update');
             Route::post('inventory/change-status', 'InventoryController@change_status')->name('inventory.change.status');
+            Route::get('inventory/accept/{id?}', 'InventoryController@accept')->name('inventory.accept');
+            Route::post('inventory/accepted', 'InventoryController@accepted')->name('inventory.accepted');
         /** inventory */
     });
 });

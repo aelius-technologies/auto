@@ -8,7 +8,10 @@ use Spatie\Permission\Models\Permission;
 use App\Models\Branch;
 use App\Models\Inventory;
 use App\Models\Category;
+use App\Models\OBF;
+use App\Models\Order;
 use App\Http\Requests\InventoryRequest;
+use App\Http\Requests\InventoryAcceptRequest;
 use Auth, DB, Mail, Validator, File, DataTables;
 
 class InventoryController extends Controller{
@@ -44,8 +47,8 @@ class InventoryController extends Controller{
     
                             if (auth()->user()->can('inventory-edit')) {
                                 $return .= '<a href="'.route('inventory.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>
-                                                </a> &nbsp;';
+                                                <i class="fa fa-edit"></i>
+                                            </a> &nbsp;';
                             }
     
                             if (auth()->user()->can('inventory-delete')) {
@@ -55,8 +58,13 @@ class InventoryController extends Controller{
                                     $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                         <i class="fa fa-bars"></i>
                                                     </a> &nbsp;
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
+                                                    <ul class="dropdown-menu">';
+
+                                            if($data->status == 'active'){
+                                                $return .= '<li><a class="dropdown-item" href="'.route('inventory.accept', ['id' => base64_encode($data->id)]).'">Assign</a></li>';
+                                            }
+
+                                            $return .= '<li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="active" data-id="' . base64_encode($data->id) . '">Active</a></li>
                                                         <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="inactive" data-id="' . base64_encode($data->id) . '">Inactive</a></li>
                                                         <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="deleted" data-id="' . base64_encode($data->id) . '">Delete</a></li>
                                                     </ul>';
@@ -203,4 +211,47 @@ class InventoryController extends Controller{
             }       
         }
     /** change-status */
+
+    /** accept */
+        public function accept(Request $request, $id = ''){
+            if (isset($id) && $id != '' && $id != null)
+                $id = base64_decode($id);
+            else
+                return redirect()->back()->with('error', 'Something went wrong');
+
+            $data = OBF::select('id', 'customer_name as name')->where(['status' => 'account_accepted'])->get();
+
+            return view('inventory.accept')->with(['data' => $data, 'id' => $id]);
+        }
+    /** accept */
+
+    /** accepted */
+        public function accepted(InventoryAcceptRequest $request){
+            if($request->ajax()){ return true; }
+
+            DB::beginTransaction();
+            try {
+                $inventory = Inventory::where(['id' => $request->id])->update(['status' => 'sold', 'updated_by' => auth()->user()->id, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                if(!$inventory)
+                    return redirect()->back()->with(['error' => 'something went wrong, please try later']);
+
+                $obf = OBF::where(['id' => $request->obf_id])->update(['status' => 'completed', 'updated_by' => auth()->user()->id, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                if(!$obf)
+                    return redirect()->back()->with(['error' => 'something went wrong, please try later']);
+
+                $order = Order::where(['obf_id' => $request->obf_id])->update(['status' => 'delivered', 'updated_by' => auth()->user()->id, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                if(!$order)
+                    return redirect()->back()->with(['error' => 'something went wrong, please try later']);
+
+                DB::commit();
+                return redirect()->route('inventory')->with(['success' => 'Assign completed']);
+            }catch (\Throwable $th){
+                DB::rollback();
+                return redirect()->back()->with('error', 'something went wrong, please try again later')->withInput();
+            }
+        }
+    /** accepted */
 }

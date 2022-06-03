@@ -4,15 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateObfTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
+class CreateObfTable extends Migration{
+    public function up(){
         Schema::create('obf', function (Blueprint $table) {
             $table->id();
             $table->string('temporary_id')->nullable();
@@ -59,20 +52,14 @@ class CreateObfTable extends Migration
             $table->string('booking_amount')->nullable();
             $table->string('mode_of_payment')->nullable();
             $table->text('reason')->nullable();
-            $table->enum('status', ['pending','accepted','obf_accepted','account_accepted', 'obf_rejected' ,'account_rejected' ,'rejected','deleted'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'obf_accepted', 'account_accepted', 'obf_rejected', 'account_rejected', 'rejected', 'deleted', 'completed'])->default('pending');
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
+    public function down(){
         Schema::dropIfExists('obf');
     }
 }
