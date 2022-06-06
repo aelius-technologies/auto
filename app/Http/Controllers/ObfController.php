@@ -34,7 +34,7 @@ class ObfController extends Controller{
         }
     /** construct */
     
-     /** index */
+    /** index */
         public function index(Request $request){
             if($request->ajax()){
 
@@ -578,37 +578,11 @@ class ObfController extends Controller{
 
     /** Import */
         public function import(Request $request){
-
-            // $pathTofile = $request->file('file')->store('excel_import');
-            // $import =  new ImportObf;
-            // $import->import($pathTofile); 
-            // dd($pathTofile);
-            // try{
-                $import = Excel::import(new ImportObf, request()->file('file') ,'excel_import');    
+                $import = Excel::import(new ImportObf(), $request->file('file'));    
                 if($import){
+                    Excel::store(new ImportObf(2018), 'Obf'.Date('YmdHis').'.xlsx' ,'excel_import');
                     return redirect()->route('obf')->with('sucess' ,'File Imported Sucessfully');
                 }
-                dd($import->errors());
-        //     }catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-                
-        //         $failures = $e->failures();
-                
-        //         foreach ($failures as $failure) {
-        //             $failure->row(); // row that went wrong
-        //             $failure->attribute(); // either heading key (if using heading row concern) or column index
-        //             $failure->errors(); // Actual error messages from Laravel validator
-        //             $failure->values(); // The values of the row that has failed.
-        //         }
-        //    }
-            // if($import->failures()->isNotEmpty()){
-            //     $failures = $import->failures();
-            //     return redirect()->route('obf')->with('error' ,$failures);
-            // }else{
-            //     dd('by');
-            //     return redirect()->route('obf')->with('sucess' ,'File Imported Sucessfully');
-            // }
-                
-            
         }
     /** Import */
 

@@ -140,6 +140,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('products/edit/{id?}', 'ProductController@edit')->name('products.edit');
             Route::patch('products/update', 'ProductController@update')->name('products.update');
             Route::post('products/change-status', 'ProductController@change_status')->name('products.change.status');
+            Route::post('products/import','ProductController@import')->name('products.import');
+            Route::get('products/export/{slug?}','ProductController@export')->name('products.export');
         /** product */
 
         /** taxes */

@@ -23,6 +23,7 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
 use DB;
+use Illuminate\Support\Arr;
 
 class ImportObf implements ToModel , WithStartRow , SkipsOnError, SkipsOnFailure ,WithProgressBar
 {
@@ -38,6 +39,7 @@ class ImportObf implements ToModel , WithStartRow , SkipsOnError, SkipsOnFailure
     }
     public function model(array $row)
     {   
+        $user = (object)'';
         if(isset($row[1]) && !empty($row[1])){
             $user_name = explode(' ',$row[1]);
             $user = User::select('id')->where(['first_name' => $user_name[0] ,'last_name' => $user_name[1]])->first();
@@ -45,38 +47,142 @@ class ImportObf implements ToModel , WithStartRow , SkipsOnError, SkipsOnFailure
                 session(['error' => 'No User Found In at least one record!']);
                 return null;
             }
+        }else{
+            $user->id = null;
         }
-        
+       
+        $branch = (object)'';
         if(isset($row[5]) && !empty($row[5])){
             $branch = Branch::select('id')->where(['name' => $row[5]])->first();
             if(!$branch){
-                return null;    
+                session(['error' => 'No Branch Found In at least one record!']);
+                return null;
             }
+        }else{
+            $branch->id = null;
         }
-
-        $product = Product::select('id')->where(['name' => $row[20]])->first();
-
-        $registration_tax = Tax::select('id')->where(['name' => 'registration_tax' , 'percentage' => $row[26]])->first();
         
-        $insurance = Insurance::select('id')->where(['name' => $row[27]])->first();
-        // DB::enableQueryLog();
-        $municipal_tax = Tax::select('id')->where(['name' => 'municipal_tax' , 'percentage' => $row[28]])->first();
-        // dd(DB::getQueryLog());
+        $product = (object)'';
+        if(isset($row[20]) && !empty($row[20])){
+            $product = Product::select('id')->where(['name' => $row[20]])->first();
+            if(!$product){
+                session(['error' => 'No Branch Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $product->id = null;
+        }
         
-        $tcs_tax = Tax::select('id')->where(['name' => 'tcs_tax' , 'percentage' => $row[29]])->first();
+        $registration_tax = (object)'';
+        if(isset($row[26]) && !empty($row[26])){
+            $registration_tax = Tax::select('id')->where(['name' => 'registration_tax' , 'percentage' => $row[26]])->first();
+            if(!$registration_tax){
+                session(['error' => 'No Registration Tax Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $registration_tax->id = null;
+        }
         
-        $accessory = Accessory::select('id')->where(['name' => $row[30]])->first();
+        $insurance = (object)'';
+        if(isset($row[27]) && !empty($row[27])){
+            $insurance = Insurance::select('id')->where(['name' => $row[27]])->first();
+            if(!$insurance){
+                session(['error' => 'No Insurance Found In at least one record!']);
+                return null;
+            }
+            
+        }else{
+            $insurance->id = null;
+        }
         
-        $warranty = ExtandWarranty::select('id')->where(['years' => $row[31]])->first();
+        $municipal_tax = (object)'';
+        if(isset($row[28]) && !empty($row[28])){
+            $municipal_tax = Tax::select('id')->where(['name' => 'municipal_tax' , 'percentage' => $row[28]])->first();
+            if(!$municipal_tax){
+                session(['error' => 'No Municipal Tax Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $municipal_tax->id = null;
+        }
         
-        $fasttag = Fasttag::select('id')->where(['tag_id' => $row[33]])->first();
-       
-        $finance = Finance::select('id' ,'branch_id')->where(['name' => $row[38]])->first();
+        $tcs_tax = (object)'';
+        if(isset($row[29]) && !empty($row[29])){
+            $tcs_tax = Tax::select('id')->where(['name' => 'tcs_tax' , 'percentage' => $row[29]])->first();
+            if(!$tcs_tax){
+                session(['error' => 'No TCS Tax Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $tcs_tax->id = null;
+        }
         
-        $lead = Lead::select('id')->where(['name' => $row[40]])->first();
-
-        $trad_in_value = explode(' - ',$row[35]);
-        $tred = CarExchange::select('id')->where(['price' => $trad_in_value[1]])->first();
+        $accessory = (object)'';
+        if(isset($row[30]) && !empty($row[30])){
+            $accessory = Accessory::select('id')->where(['name' => $row[30]])->first();
+            if(!$accessory){
+                session(['error' => 'No Accessory Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $accessory->id = null;
+        }
+        
+        $warranty = (object)'';
+        if(isset($row[31]) && $row[31]){
+            $warranty = ExtandWarranty::select('id')->where(['years' => $row[31]])->first();
+            if(!$warranty){
+                session(['error' => 'No Extend Warranty Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $warranty->id = null;
+        }
+        
+        $fasttag = (object)'';
+        if(isset($row[33]) && !empty($row[33])){
+            $fasttag = Fasttag::select('id')->where(['tag_id' => $row[33]])->first();
+            if(!$fasttag){
+                session(['error' => 'No FastTag Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $fasttag->id = null;
+        }
+        
+        $finance = (object)'';
+        if(isset($row[38]) && $row[38]){
+            $finance = Finance::select('id' ,'branch_id')->where(['name' => $row[38]])->first();
+            if(!$finance){
+                session(['error' => 'No Finance Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $finance->id = null;
+        }
+        $lead = (object)'';
+        if(isset($row[40]) && !empty($row[40])){
+            $lead = Lead::select('id')->where(['name' => $row[40]])->first();
+            if(!$lead){
+                session(['error' => 'No Lead Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $lead->id = null;
+        }
+        
+        $tred = (object)'';
+        if(isset($row[35]) && !empty($row[35])){
+            $trad_in_value = explode(' - ',$row[35]);
+            $tred = CarExchange::select('id')->where(['price' => $trad_in_value[1]])->first();
+            if(!$tred){
+                session(['error' => 'No Tread-In-Value Found In at least one record!']);
+                return null;
+            }
+        }else{
+            $tred->id = null;
+        }
         
         // dd($row[0]);
         $data = [
@@ -128,6 +234,7 @@ class ImportObf implements ToModel , WithStartRow , SkipsOnError, SkipsOnFailure
         ];
         
         $obf = OBF::create($data);
+        session(['success' => 'Record Imported Succesfully']);
         return $obf;
     }
     

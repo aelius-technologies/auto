@@ -42,17 +42,29 @@ Users
                 @endcanany
             </div>
         </div>
+        <!-- Modal -->
             <div class="col-md-12 align-self-center collapse " id="collapseExample">
                 <div class="customize-input float-right">
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('user.export', ['slug' => 'active']) }}">Export Active Users</a>
-               
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('user.export', ['slug' => 'inactive']) }}">Export Inactive Users</a>
-               
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('user.export', ['slug' => 'deleted']) }}">Export Deleted Users</a>
-               
-                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('user.export') }}">Export All Users</a>
+                    <form action="{{ route('user.export') }}" method="get">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-md-6 ">
+                                <select name="slug" class="form-control" required>
+                                    <option value="">Select Status</option>
+                                    <option value="all">All</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="deleted">Deleted</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+        <!-- Modal -->
     </div>
 </div>
 <div class="container-fluid">

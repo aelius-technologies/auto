@@ -37,10 +37,22 @@
 
     if(success != ''){
         toastr.success(success, 'Success');
+        // Session::forget('Success');
     }
 
     if(error != ''){
         toastr.error(error, 'error');
+        // $request->session()->flash('error');
     }
+
+    @php
+        $success = '';
+        if(\Session::has('success'))
+            \Session::flash('success');
+
+        $error = '';
+        if(\Session::has('error'))
+            \Session::flash('error');
+    @endphp
 </script>
 @yield('scripts')

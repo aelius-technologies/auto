@@ -9,6 +9,9 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth, DB, Mail, Validator, File, DataTables;
 use Illuminate\Support\Facades\DB as FacadesDB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ImportProduct;
+use App\Exports\ExportProduct;
 
 class ProductController extends Controller{
     /** construct */
@@ -190,4 +193,24 @@ class ProductController extends Controller{
             }
         }
     /** change-status */
+
+    /** Import */
+        public function import(Request $request){
+            $import = Excel::import(new ImportProduct(), $request->file('file'));    
+            if($import){
+                Excel::store(new ImportProduct(2018), 'Product'.Date('YmdHis').'.xlsx' ,'excel_import');
+                return redirect()->route('products')->with('sucess' ,'File Imported Sucessfully');
+            }
+        }
+    /** Import */
+
+    /** Export */
+        public function export(Request $request){
+            $slug = $request->slug;
+            $name = 'Product'.Date('YmdHis').'.xlsx';
+            
+            return Excel::download(new ExportProduct($slug), $name);
+            
+        }
+    /** Export */
 }
