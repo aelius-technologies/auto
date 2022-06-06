@@ -48,8 +48,8 @@ Account Approvals
             </div>
         </div>
 
-           <!-- Modal -->
-           <div class="modal fade" id="DescModal" role="dialog">
+        <!-- Modal -->
+        <div class="modal fade" id="DescModal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -59,16 +59,16 @@ Account Approvals
                     </div>
                     <form action="">
                         <div class="modal-body">
-                            
-                                <input type="hidden" name="id" id="id" value="">
-                                <input type="hidden" name="status" id="status" value="">
-                                <label for="">Enter Your Reason</label>
-                                <textarea placeholder="Please Enter Your Reason" class="form-control" name="reason" id="reason" cols="30" rows="10"></textarea>
-                            
+
+                            <input type="hidden" name="id" id="id" value="">
+                            <input type="hidden" name="status" id="status" value="">
+                            <label for="">Enter Your Reason</label>
+                            <textarea placeholder="Please Enter Your Reason" class="form-control" name="reason" id="reason" cols="30" rows="10"></textarea>
+
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default " onclick="status_reject(this);" >Apply!</button>
+                            <button type="button" class="btn btn-default " onclick="status_reject(this);">Apply!</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -89,13 +89,13 @@ Account Approvals
     $(document).ready(function() {
         if ($('#data-table').length > 0) {
             datatable = $('#data-table').DataTable({
-            processing: true,
-            serverSide: true,
+                processing: true,
+                serverSide: true,
 
-            // "pageLength": 10,
-            // "iDisplayLength": 10,
-            "responsive": true,
-            "aaSorting": [],
+                // "pageLength": 10,
+                // "iDisplayLength": 10,
+                "responsive": true,
+                "aaSorting": [],
                 // "order": [], //Initial no order.
                 //     "aLengthMenu": [
                 //     [5, 10, 25, 50, 100, -1],
@@ -177,10 +177,11 @@ Account Approvals
             });
         }
     }
+
     function change_status(object) {
         var id = $(object).data("id");
         var status = $(object).data("status");
-        
+
         if (confirm('Are you sure?')) {
             $.ajax({
                 "url": "{!! route('account_approval.change.status') !!}",
@@ -202,15 +203,15 @@ Account Approvals
             });
         }
     }
-    
+
     function change_status_reject(object) {
         var id = $(object).data("id");
         var status = $(object).data("status");
         $('#DescModal').modal("show");
         $('#id').val(id);
         $('#status').val(status);
-    } 
-    
+    }
+
     function status_reject(object) {
         var id = $('#id').val();
         var status = $('#status').val();

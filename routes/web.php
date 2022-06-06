@@ -92,6 +92,9 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('user/edit/{id?}', 'UserController@edit')->name('user.edit');
             Route::patch('user/update', 'UserController@update')->name('user.update');
             Route::post('user/change-status', 'UserController@change_status')->name('user.change.status');
+            Route::post('users/exel_import','UserController@exel_import')->name('user.exel_import');
+            Route::post('users/import','UserController@import')->name('user.import');
+            Route::get('users/export/{slug?}','UserController@export')->name('user.export');
         /** users */
         
         /** Order Booking Fourm (OBF) */
@@ -104,6 +107,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::patch('obf/update', 'ObfController@update')->name('obf.update');
             Route::post('obf/change-status', 'ObfController@change_status')->name('obf.change_status');
             Route::post('obf/profile-remove', 'ObfController@obf_profile_remove')->name('obf.profile.remove');
+            Route::post('obf/import','ObfController@import')->name('obf.import');
+            Route::get('obf/export/{slug?}','ObfController@export')->name('obf.export');
         /** Order Booking Fourm (OBF) */
         
         /** OBF Approval */

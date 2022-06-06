@@ -19,6 +19,9 @@ use App\Models\Product;
 use App\Models\Tax;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ImportObf;
+use App\Exports\ExportObf;
 use Auth, DB, Mail, Validator, File, DataTables;
 
 class ObfController extends Controller{
@@ -88,6 +91,10 @@ class ObfController extends Controller{
                                 return '<span class="badge badge-pill badge-success">Obf Accepted</span>';
                             }else if ($data->status == 'account_accepted') {
                                 return '<span class="badge badge-pill badge-success">Account Accepted</span>';
+                            }else if($data->status == 'completed'){
+                                return '<span class="badge badge-pill badge-success">Completed</span>';
+                            }else{
+                                return '-';
                             }
                         })
                         ->rawColumns(['action' ,'status'])
@@ -568,4 +575,48 @@ class ObfController extends Controller{
             }
         }
     /** remove-profile */
+
+    /** Import */
+        public function import(Request $request){
+
+            // $pathTofile = $request->file('file')->store('excel_import');
+            // $import =  new ImportObf;
+            // $import->import($pathTofile); 
+            // dd($pathTofile);
+            // try{
+                $import = Excel::import(new ImportObf, request()->file('file') ,'excel_import');    
+                if($import){
+                    return redirect()->route('obf')->with('sucess' ,'File Imported Sucessfully');
+                }
+                dd($import->errors());
+        //     }catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+                
+        //         $failures = $e->failures();
+                
+        //         foreach ($failures as $failure) {
+        //             $failure->row(); // row that went wrong
+        //             $failure->attribute(); // either heading key (if using heading row concern) or column index
+        //             $failure->errors(); // Actual error messages from Laravel validator
+        //             $failure->values(); // The values of the row that has failed.
+        //         }
+        //    }
+            // if($import->failures()->isNotEmpty()){
+            //     $failures = $import->failures();
+            //     return redirect()->route('obf')->with('error' ,$failures);
+            // }else{
+            //     dd('by');
+            //     return redirect()->route('obf')->with('sucess' ,'File Imported Sucessfully');
+            // }
+                
+            
+        }
+    /** Import */
+
+    /** Export */
+        public function export(Request $request){
+            $slug = $request->slug;
+            $name = 'Obf'.Date('YmdHis').'.xlsx';
+            return Excel::download(new ExportOBF($slug), $name);
+        }
+    /** Export */
 }

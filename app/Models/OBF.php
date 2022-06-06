@@ -10,7 +10,7 @@ class OBF extends Model{
     protected $table = 'obf';
 
     protected $fillable = [
-        'temporary_number',
+        'temporary_id',
         'booking_date',
         'customer_name',
         'customer_type',

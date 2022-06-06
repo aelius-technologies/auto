@@ -166,14 +166,14 @@
             </a>
             <div id="collapseFour" class="collapse {{ (Request::is('car_exchange*') || Request::is('car_exchange_category*') || Request::is('car_exchange_product*')) ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    @canany(['car_exchange-create', 'car_exchange-edit', 'car_exchange-view', 'car_exchange-delete'])
-                        <a class="collapse-item {{ Request::is('car_exchange*') ? 'active' : '' }}" href="{{ route('car_exchange') }}">Car Exchange</a>
-                    @endcanany
                     @canany(['car_exchange_category-create', 'car_exchange_category-edit', 'car_exchange_category-view', 'car_exchange_category-delete'])
-                        <a class="collapse-item {{ Request::is('car_exchange_category*') ? 'active' : '' }}" href="{{ route('car_exchange_category') }}">Car Exchange Category</a>
+                    <a class="collapse-item {{ Request::is('car_exchange_category*') ? 'active' : '' }}" href="{{ route('car_exchange_category') }}">Car Exchange Category</a>
                     @endcanany
                     @canany(['car_exchange_product-create', 'car_exchange_product-edit', 'car_exchange_product-view', 'car_exchange_product-delete'])
-                        <a class="collapse-item {{ Request::is('car_exchange_product*') ? 'active' : '' }}" href="{{ route('car_exchange_product') }}">Car Exchange Product</a>
+                    <a class="collapse-item {{ Request::is('car_exchange_product*') ? 'active' : '' }}" href="{{ route('car_exchange_product') }}">Car Exchange Product</a>
+                    @endcanany
+                    @canany(['car_exchange-create', 'car_exchange-edit', 'car_exchange-view', 'car_exchange-delete'])
+                        <a class="collapse-item {{ Request::is('car_exchange*') ? 'active' : '' }}" href="{{ route('car_exchange') }}">Car Exchange</a>
                     @endcanany
                 </div>
             </div>

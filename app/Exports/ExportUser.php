@@ -14,13 +14,20 @@ class ExportUser implements FromCollection, WithHeadings,WithStyles ,ShouldAutoS
     /**
     * @return \Illuminate\Support\Collection
     */
+    function __construct($slug) {
+        $this->slug = $slug;
+    }
     public function collection()
     {
-        return User::get(['first_name','last_name','email']);
+        if($this->slug != 'all'){
+            return User::select('first_name','last_name','email','status')->where(['status' => $this->slug])->get();
+        }else{
+            return User::select('first_name','last_name','email','status')->get();
+        }
     }
 
     public function headings() :array{
-        return ["First Name" , "Last Name" , "Email"];
+        return ["First Name" , "Last Name" , "Email" ,"Status"];
     }
 
     public function styles(Worksheet $sheet)

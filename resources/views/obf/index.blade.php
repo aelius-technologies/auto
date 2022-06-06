@@ -27,11 +27,48 @@
         </div>
         <div class="col-5 align-self-center">
             <div class="customize-input float-right">
+                    <!-- Import -->
+                        <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" data-toggle="modal" data-target="#exampleModal" href="Javascript:void(0)">Import OBF</a>
+                    <!-- Import -->
+                    
+                    <!-- Export -->
+                        <button class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Export OBF
+                        </button>
+                    <!-- Export -->
                 @canany(['obf-create'])
                     <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('obf.create') }}">Add New</a>
                 @endcanany
             </div>
         </div>
+
+            <div class="col-md-12 align-self-center collapse " id="collapseExample">
+                <div class="customize-input float-right">
+                    <form action="{{ route('obf.export') }}" method="get">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-md-6 ">
+                                <select name="slug" class="form-control" required>
+                                    <option value="">Select Status</option>
+                                    <option value="all">All</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="accepted">Accepted</option>
+                                    <option value="obf_accepted">OBF Accepted</option>
+                                    <option value="account_accepted">Account Accepted</option>
+                                    <option value="obf_rejected">OBF Accepted</option>
+                                    <option value="account_rejected">ACcount Accepted</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="deleted">Deleted</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
     </div>
 </div>
 <div class="container-fluid">
@@ -54,6 +91,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Reject Request</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                    </div>
+                    <form action="{{ route('obf.import') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label for="first_name">Upload File Here</label>
+                                    <input type="file" name="file" id="file" class="form-control" placeholder="Plese upload file here" required>
+                                    <span class="kt-form__help error file"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">Submit!</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Modal -->
     </div>
 </div>
 @endsection

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Http\Requests\UserRequest;
 use Spatie\Permission\Models\Role;
-use App\Mail\UserRegister;
-use App\Models\Branch;
-use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ImportUser;
+use App\Exports\ExportUser;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Auth, DB, Mail, Validator, File, DataTables;
 
 class UserController extends Controller{
@@ -83,7 +84,7 @@ class UserController extends Controller{
                     ->rawColumns(['name', 'role', 'action', 'status'])
                     ->make(true);
             }
-
+            
             return view('user.index');
         }
     /** index */
@@ -272,4 +273,28 @@ class UserController extends Controller{
             }
         }
     /** remove-profile */
+    
+    /** Import */
+        public function import(Request $request){
+            if(Excel::import(new ImportUser, $request->file('file')->store('file'))){
+                return redirect()->route('user')->with('sucess' ,'File Imported Sucessfully');
+            }else{
+                return redirect()->route('user')->with('error' ,'Faild To Import File!');
+            }
+        }
+    /** Import */
+    
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+            
+            $name = 'Users'.Date('YmdHis').'.xlsx';
+            return Excel::download(new ExportUser($slug), $name);
+          
+        }
+    /** Export */
 }

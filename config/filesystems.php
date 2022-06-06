@@ -42,9 +42,13 @@ return [
             'visibility' => 'public',
         ],
         
-        'excel_store' => [
+        'excel_import' => [
             'driver' => 'local',
             'root'   => public_path().'/uploads/excel/',
+        ],
+        'excel_export' => [
+            'driver' => 'local',
+            'root'   => public_path().'/downloads/excel/',
         ],
 
         's3' => [
