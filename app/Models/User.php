@@ -32,4 +32,17 @@ class User extends Authenticatable{
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = ['email_verified_at' => 'datetime'];
+
+    public function export($slug){
+        $collection =User::select('first_name','last_name','email','status'); 
+        if($this->slug != 'all'){
+            $collection->where(['status' => $this->slug]);
+        }
+        $data = $collection->get();
+        if($data->isNotEmpty()){
+            return $data;
+        }else{
+            return null;
+        }
+    }
 }

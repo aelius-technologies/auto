@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Tax;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ImportTax;
+use App\Exports\ExportTax;
+use Auth, DB, Mail, Validator, File, DataTables ,Exception;
 
 class TaxesController extends Controller{
     /** construct */
@@ -166,4 +169,27 @@ class TaxesController extends Controller{
            
         }
     /** change-status */
+
+    /** Import */
+        public function import(Request $request){
+            $import = Excel::import(new ImportTax(), $request->file('file'));    
+            if($import){
+                Excel::store(new ImportTax(), 'Tax_'.Date('YmdHis').'.xlsx' ,'excel_import');
+                return redirect()->route('tax')->with('sucess' ,'File Imported Sucessfully');
+            }
+        }
+    /** Import */
+
+    /** Export */
+        public function export(Request $request){
+            $slug = $request->slug;
+            $name = 'Tax_'.Date('YmdHis').'.xlsx';
+      
+            try {
+                return Excel::download(new ExportTax($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error' ,$e->getMessage());
+            }
+        }
+    /** Export */
 }

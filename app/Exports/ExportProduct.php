@@ -3,14 +3,18 @@
 namespace App\Exports;
 
 use App\Models\Product;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Validators\Failure;
 
 class ExportProduct implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSize
 {
+    
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -19,10 +23,13 @@ class ExportProduct implements FromCollection, WithHeadings,WithStyles ,ShouldAu
     }
     public function collection()
     {
-        if($this->slug != 'all'){
-            return Product::select('products.name','products.veriant','products.ex_showroom_price','products.interior_color','products.exterior_color','products.is_applicable_for_mcp','products.status', 'categories.name AS category_name')->leftjoin('categories' ,'products.category_id' ,'categories.id')->where(['products.status' => $this->slug])->get();
+        $product = new Product();
+        $data = $product->export($this->slug);
+
+        if($data == null){
+            return throw new \ErrorException('No Data Found!');
         }else{
-            return Product::select('products.name','products.veriant','products.ex_showroom_price','products.interior_color','products.exterior_color','products.is_applicable_for_mcp','products.status', 'categories.name AS category_name')->leftjoin('categories' ,'products.category_id' ,'categories.id')->get();
+            return $data;
         }
     }
 
@@ -37,4 +44,9 @@ class ExportProduct implements FromCollection, WithHeadings,WithStyles ,ShouldAu
             1    => ['font' => ['bold' => true]],
         ];
     }
+    public function onFailure(Failure ...$failures){
+        $exception = ValidationException::withMessages(collect($failures)->map->toArray()->all());
+        throw $exception;
+    }
+ 
 }

@@ -293,7 +293,13 @@ class UserController extends Controller{
             }
             
             $name = 'Users'.Date('YmdHis').'.xlsx';
-            return Excel::download(new ExportUser($slug), $name);
+
+            try {
+                return Excel::download(new ExportUser($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error' ,$e->getMessage());
+            }
+           
           
         }
     /** Export */

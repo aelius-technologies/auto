@@ -2,14 +2,14 @@
 
 namespace App\Exports;
 
-use App\Models\User;
+use App\Models\Tax;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ExportUser implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSize
+class ExportTax implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -19,11 +19,10 @@ class ExportUser implements FromCollection, WithHeadings,WithStyles ,ShouldAutoS
     }
     public function collection()
     {
-        $user = new User();
-        $data = $user->export($this->slug);
+        $tax = new Tax();
+        $data = $tax->export($this->slug);
 
         if($data == null){
-            
             return throw new \ErrorException('No Data Found!');
         }else{
             return $data;
@@ -31,7 +30,7 @@ class ExportUser implements FromCollection, WithHeadings,WithStyles ,ShouldAutoS
     }
 
     public function headings() :array{
-        return ["First Name" , "Last Name" , "Email" ,"Status"];
+        return ["Name" , "Percentage","Status"];
     }
 
     public function styles(Worksheet $sheet)

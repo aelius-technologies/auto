@@ -580,7 +580,7 @@ class ObfController extends Controller{
         public function import(Request $request){
                 $import = Excel::import(new ImportObf(), $request->file('file'));    
                 if($import){
-                    Excel::store(new ImportObf(2018), 'Obf'.Date('YmdHis').'.xlsx' ,'excel_import');
+                    Excel::store(new ImportObf(), 'OBF_'.Date('YmdHis').'.xlsx' ,'excel_import');
                     return redirect()->route('obf')->with('sucess' ,'File Imported Sucessfully');
                 }
         }
@@ -590,7 +590,13 @@ class ObfController extends Controller{
         public function export(Request $request){
             $slug = $request->slug;
             $name = 'Obf'.Date('YmdHis').'.xlsx';
-            return Excel::download(new ExportOBF($slug), $name);
+
+            try {
+                return Excel::download(new ExportOBF($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error' ,$e->getMessage());
+            }
+           
         }
     /** Export */
 }

@@ -152,6 +152,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('tax/edit/{id?}', 'TaxesController@edit')->name('tax.edit');
             Route::patch('tax/update', 'TaxesController@update')->name('tax.update');
             Route::post('tax/change-status', 'TaxesController@change_status')->name('tax.change.status');
+            Route::post('tax/import','TaxesController@import')->name('tax.import');
+            Route::get('tax/export/{slug?}','TaxesController@export')->name('tax.export');
         /** taxes */
 
         /** insurance */
@@ -162,6 +164,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('insurance/edit/{id?}', 'InsuranceController@edit')->name('insurance.edit');
             Route::patch('insurance/update', 'InsuranceController@update')->name('insurance.update');
             Route::post('insurance/change-status', 'InsuranceController@change_status')->name('insurance.change.status');
+            Route::post('insurance/import','InsuranceController@import')->name('insurance.import');
+            Route::get('insurance/export/{slug?}','InsuranceController@export')->name('insurance.export');
         /** insurance */
 
         /** extand_warranty */

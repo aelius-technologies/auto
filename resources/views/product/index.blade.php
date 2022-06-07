@@ -86,7 +86,37 @@ Car Master
                 </div>
             </div>
         </div>
-            
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Import Excel</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                    </div>
+                    <form action="{{ route('products.import') }}" name="form" id="form" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label for="first_name">Upload File Here</label>
+                                    <input type="file" name="file" id="file" class="form-control" placeholder="Plese upload file here" required>
+                                    <span class="kt-form__help error file"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">Submit!</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Modal -->
     </div>
 </div>
 @endsection

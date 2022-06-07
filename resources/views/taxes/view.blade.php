@@ -49,7 +49,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn waves-effect waves-light btn-rounded btn-outline-primary">Submit</button>
                             <a href="{{ route('tax') }}" class="btn waves-effect waves-light btn-rounded btn-outline-secondary">Back</a>
                         </div>
                     </form>

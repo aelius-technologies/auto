@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportProduct;
@@ -198,7 +198,7 @@ class ProductController extends Controller{
         public function import(Request $request){
             $import = Excel::import(new ImportProduct(), $request->file('file'));    
             if($import){
-                Excel::store(new ImportProduct(2018), 'Product'.Date('YmdHis').'.xlsx' ,'excel_import');
+                Excel::store(new ImportProduct(), 'Product_'.Date('YmdHis').'.xlsx' ,'excel_import');
                 return redirect()->route('products')->with('sucess' ,'File Imported Sucessfully');
             }
         }
@@ -208,9 +208,12 @@ class ProductController extends Controller{
         public function export(Request $request){
             $slug = $request->slug;
             $name = 'Product'.Date('YmdHis').'.xlsx';
-            
-            return Excel::download(new ExportProduct($slug), $name);
-            
+      
+            try {
+                return Excel::download(new ExportProduct($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error' ,$e->getMessage());
+            }
         }
     /** Export */
 }
