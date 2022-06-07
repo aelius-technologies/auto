@@ -134,10 +134,9 @@ class CashReceiptController extends Controller
         public function insert(Request $request)
         {
             $id = $request->id;
-
             $data = OBF::select('obf.id')
-                ->where(['id' => $id])
-                ->first();
+            ->where(['id' => $id])
+            ->first();
             if ($data) {
                 if ($request->amount < 25000) {
                     $crud = [
@@ -168,9 +167,9 @@ class CashReceiptController extends Controller
                 try {
                     DB::enableQueryLog();
                     $last_id = CashReceipt::insertGetId($crud);
-                    // dd(DB::getQueryLog());
                     if ($last_id) {
                         $obf = OBF::where('id', $id)->update(['status' => $obf_status]);
+                        // dd(DB::getQueryLog());
                         if ($obf) {
                             DB::commit();
                             return redirect()->route('cash_receipt')->with('success', 'Record inserted successfully');
@@ -183,6 +182,7 @@ class CashReceiptController extends Controller
                         return redirect()->back()->with('error', 'Failed to update record')->withInput();
                     }
                 } catch (\Throwable $th) {
+                    dd('by');
                     DB::rollback();
                     return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
                 }

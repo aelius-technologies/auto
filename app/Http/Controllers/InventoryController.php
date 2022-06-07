@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\Branch;
 use App\Models\Inventory;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\OBF;
 use App\Models\Order;
@@ -218,10 +219,26 @@ class InventoryController extends Controller{
                 $id = base64_decode($id);
             else
                 return redirect()->back()->with('error', 'Something went wrong');
+            $product = Product::select('products.id')->leftjoin('inventory' ,'products.name' ,'inventory.name')->where(['inventory.id' => $id])->get();
+            
+            if($product->isNotEmpty()){
+                $product = $product->toArray();
+                $ids = array_map(function($element) {
+                        return $element['id'];
+                    },
+                    $product
+                );
 
-            $data = OBF::select('id', 'customer_name as name')->where(['status' => 'account_accepted'])->get();
+                $data = OBF::select('obf.id', 'obf.customer_name as name')->where(['obf.status' => 'account_accepted'])->whereIn('obf.product_id' , $ids)->get();
 
-            return view('inventory.accept')->with(['data' => $data, 'id' => $id]);
+                if($data->isNotEmpty()){
+                    return view('inventory.accept')->with(['data' => $data, 'id' => $id]);
+                }else{
+                    return redirect()->route('inventory')->with('error' , 'No Data Found In User!');
+                }
+            }else{
+                return redirect()->route('inventory')->with('error', 'No Data Found For This Car!');
+            }
         }
     /** accept */
 

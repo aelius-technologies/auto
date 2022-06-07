@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Insurance;
 use App\Exports\ExportInsurance;
+use App\Imports\ImportInsurance;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Maatwebsite\Excel\Facades\Excel;
@@ -187,6 +188,16 @@ class InsuranceController extends Controller{
             }
         }
     /** change-status */
+
+    /** Import */
+        public function import(Request $request){
+            $import = Excel::import(new ImportInsurance(), $request->file('file'));    
+            if($import){
+                Excel::store(new ImportInsurance(), 'Insurance_'.Date('YmdHis').'.xlsx' ,'excel_import');
+                return redirect()->route('insurance')->with('sucess' ,'File Imported Sucessfully');
+            }
+        }
+    /** Import */
 
     /** Export */
         public function export(Request $request){

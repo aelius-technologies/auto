@@ -26,7 +26,7 @@ class ExportTax implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSi
     }
 
     public function headings() :array{
-        return ["Name" , "Percentage","Status"];
+        return ["Name","Percentage","Status"];
     }
 
     public function styles(Worksheet $sheet){
