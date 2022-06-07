@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Fasttag extends Model{
     use HasFactory;
@@ -18,4 +19,20 @@ class Fasttag extends Model{
         'updated_by',
         'updated_at'
     ];
+
+    public function export($slug){
+        $collection = DB::table('fasttags')
+                        ->select('tag_id', 'amount', 'status');
+
+        if($slug != 'all')
+            $collection->where(['status' => $slug]);
+        
+        $data = $collection->get();
+        
+        if($data->isNotEmpty()){
+            return $data;
+        }else{
+            return null;
+        }
+    }
 }

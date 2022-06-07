@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Insurance extends Model{
     use HasFactory;
@@ -20,4 +21,20 @@ class Insurance extends Model{
         'updated_by',
         'updated_at'
     ];
+
+    public function export($slug){
+        $collection = DB::table('insurance')
+                        ->select('name', 'type', 'years', 'amount', 'status');
+
+        if($slug != 'all')
+            $collection->where(['status' => $slug]);
+        
+        $data = $collection->get();
+        
+        if($data->isNotEmpty()){
+            return $data;
+        }else{
+            return null;
+        }
+    }
 }

@@ -2,31 +2,31 @@
 
 namespace App\Exports;
 
-use App\Models\User;
+use App\Models\Fasttag;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ExportUser implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize{
+class ExportFasttag implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSize{
     function __construct($slug) {
         $this->slug = $slug;
     }
 
     public function collection(){
-        $user = new User();
-        $data = $user->export($this->slug);
+        $model = new Fasttag();
+        $data = $model->export($this->slug);
 
         if($data == null){
-            return throw new \ErrorException('No Data Found!');
+            return throw new \ErrorException('No data found');
         }else{
             return $data;
         }
     }
 
     public function headings() :array{
-        return ["First Name", "Last Name", "Email", "Status"];
+        return ['Tag Id', 'Amount', 'Status'];
     }
 
     public function styles(Worksheet $sheet){

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Lead;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use App\Models\Lead;
+use App\Exports\ExportLead;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
 class LeadController extends Controller{
     /** construct */
@@ -114,8 +116,6 @@ class LeadController extends Controller{
         }
     /** insert */
 
-  
-
     /** view */
         public function view(Request $request){
             $id = base64_decode($request->id);
@@ -183,4 +183,22 @@ class LeadController extends Controller{
        
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+
+            $name = 'Lead_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportLead($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+    /** Export */
 }

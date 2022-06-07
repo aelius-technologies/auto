@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Branch;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, Validator , DB, Mail ,DataTables;
+use App\Models\User;
+use App\Models\Branch;
+use App\Exports\ExportBranch;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
-class BranchController extends Controller
-{
-    public function __construct(){
-        $this->middleware('permission:branches-create', ['only' => ['create']]);
-        $this->middleware('permission:branches-edit', ['only' => ['edit']]);
-        $this->middleware('permission:branches-view', ['only' => ['view']]);
-        $this->middleware('permission:branches-delete', ['only' => ['delete']]);
-    }
+class BranchController extends Controller{
+    /** construct */
+        public function __construct(){
+            $this->middleware('permission:branches-create', ['only' => ['create']]);
+            $this->middleware('permission:branches-edit', ['only' => ['edit']]);
+            $this->middleware('permission:branches-view', ['only' => ['view']]);
+            $this->middleware('permission:branches-delete', ['only' => ['delete']]);
+        }
+    /** construct */
+
     /** index */
         public function index(Request $request){
             if($request->ajax()){
@@ -194,4 +198,22 @@ class BranchController extends Controller
           
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+
+            $name = 'Branch_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportBranch($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+    /** Export */
 }

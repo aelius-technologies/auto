@@ -8,9 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use DB;
 
 class User extends Authenticatable{
     use HasFactory, Notifiable, HasApiTokens , HasRoles;
+
     public function guardName(){
         return "web";
     }
@@ -34,11 +36,14 @@ class User extends Authenticatable{
     protected $casts = ['email_verified_at' => 'datetime'];
 
     public function export($slug){
-        $collection =User::select('first_name','last_name','email','status'); 
-        if($this->slug != 'all'){
-            $collection->where(['status' => $this->slug]);
-        }
+        $collection = DB::table('users')
+                        ->select('first_name', 'last_name', 'email', 'status'); 
+        
+        if($slug != 'all')
+            $collection->where(['status' => $slug]);
+        
         $data = $collection->get();
+
         if($data->isNotEmpty()){
             return $data;
         }else{

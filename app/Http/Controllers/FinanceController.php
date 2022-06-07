@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
 use Illuminate\Http\Request;
-use App\Models\Finance;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use App\Models\Finance;
+use App\Models\Branch;
+use App\Exports\ExportFinance;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
 class FinanceController extends Controller{
     /** construct */
@@ -76,7 +78,6 @@ class FinanceController extends Controller{
             return view('finance.index');
         }
     /** index */
-
 
     /** create */
         public function create(Request $request){
@@ -190,4 +191,22 @@ class FinanceController extends Controller{
           
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+
+            $name = 'Finance_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportFinance($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error' ,$e->getMessage());
+            }
+        }
+    /** Export */
 }

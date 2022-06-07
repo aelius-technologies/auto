@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tax;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Tax;
 use App\Imports\ImportTax;
 use App\Exports\ExportTax;
-use Auth, DB, Mail, Validator, File, DataTables ,Exception;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
 class TaxesController extends Controller{
     /** construct */
@@ -116,9 +116,9 @@ class TaxesController extends Controller{
             
             return view('taxes.view')->with(['data'=>$data]);
         }
-        /** view */
-        
-        /** edit */
+    /** view */
+    
+    /** edit */
         public function edit(Request $request){
             $id = base64_decode($request->id);
             $data = Tax::where(['id' => $id])->first();

@@ -26,10 +26,36 @@ Department Master
             </div>
         </div>
         <div class="col-5 align-self-center">
-        <div class="customize-input float-right">
+            <div class="customize-input float-right">
+                <!-- Export -->
+                    <button class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Export</button>
+                <!-- Export -->
                 @canany(['department-create'])
                     <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('department.create') }}">Add New</a>
                 @endcanany
+            </div>
+        </div>
+        <div class="col-sm-8"></div>
+        <div class="col-sm-4">
+            <div class="col-md-12 align-self-center collapse" id="collapseExample">
+                <div class="customize-input float-right">
+                    <form action="{{ route('department.export') }}" method="get">
+                        <div class="row">
+                            <div class="form-group col-md-6 ">
+                                <select name="slug" class="form-control" required>
+                                    <option value="">Select Status</option>
+                                    <option value="all">All</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="deleted">Deleted</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

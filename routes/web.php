@@ -176,6 +176,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('extand_warranties/edit/{id?}', 'ExtandWarrantyController@edit')->name('extand_warranties.edit');
             Route::patch('extand_warranties/update', 'ExtandWarrantyController@update')->name('extand_warranties.update');
             Route::post('extand_warranties/change-status', 'ExtandWarrantyController@change_status')->name('extand_warranties.change.status');
+            Route::get('extand_warranties/export/{slug?}','ExtandWarrantyController@export')->name('extand_warranties.export');
         /** extand_warranty */
 
         /** fasttag */
@@ -186,6 +187,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('fasttag/edit/{id?}', 'FasttagController@edit')->name('fasttag.edit');
             Route::patch('fasttag/update', 'FasttagController@update')->name('fasttag.update');
             Route::post('fasttag/change-status', 'FasttagController@change_status')->name('fasttag.change.status');
+            Route::get('fasttag/export/{slug?}','FasttagController@export')->name('fasttag.export');
         /** fasttag */
 
         /** finance */
@@ -196,9 +198,10 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('finance/edit/{id?}', 'FinanceController@edit')->name('finance.edit');
             Route::patch('finance/update', 'FinanceController@update')->name('finance.update');
             Route::post('finance/change-status', 'FinanceController@change_status')->name('finance.change.status');
+            Route::get('finance/export/{slug?}','FinanceController@export')->name('finance.export');
         /** finance */
 
-         /** branch */
+        /** branch */
             Route::any('branches', 'BranchController@index')->name('branches');
             Route::get('branches/create', 'BranchController@create')->name('branches.create');
             Route::post('branches/insert', 'BranchController@insert')->name('branches.insert');
@@ -206,9 +209,10 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('branches/edit/{id?}', 'BranchController@edit')->name('branches.edit');
             Route::patch('branches/update', 'BranchController@update')->name('branches.update');
             Route::post('branches/change-status', 'BranchController@change_status')->name('branches.change.status');
-         /** branch */
+            Route::get('branches/export/{slug?}','BranchController@export')->name('branches.export');
+        /** branch */
 
-         /** department */
+        /** department */
             Route::any('department', 'DepartmentController@index')->name('department');
             Route::get('department/create', 'DepartmentController@create')->name('department.create');
             Route::post('department/insert', 'DepartmentController@insert')->name('department.insert');
@@ -216,7 +220,8 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('department/edit/{id?}', 'DepartmentController@edit')->name('department.edit');
             Route::patch('department/update', 'DepartmentController@update')->name('department.update');
             Route::post('department/change-status', 'DepartmentController@change_status')->name('department.change.status');
-         /** department */
+            Route::get('department/export/{slug?}','DepartmentController@export')->name('department.export');
+        /** department */
 
         /** lead */
             Route::any('lead', 'LeadController@index')->name('lead');
@@ -226,6 +231,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('lead/edit/{id?}', 'LeadController@edit')->name('lead.edit');
             Route::patch('lead/update', 'LeadController@update')->name('lead.update');
             Route::post('lead/change-status', 'LeadController@change_status')->name('lead.change.status');
+            Route::get('lead/export/{slug?}','LeadController@export')->name('lead.export');
         /** lead */
 
         /** orders */
@@ -267,6 +273,7 @@ Route::group(['middleware' => ['prevent-back-history', 'mail-service']], functio
             Route::get('accessory/edit/{id?}', 'AccessoryController@edit')->name('accessory.edit');
             Route::patch('accessory/update', 'AccessoryController@update')->name('accessory.update');
             Route::post('accessory/change_status', 'AccessoryController@change_status')->name('accessory.change.status');
+            Route::get('accessory/export/{slug?}','AccessoryController@export')->name('accessory.export');
         /** Accessory */
 
         /** Car Exchange Category */

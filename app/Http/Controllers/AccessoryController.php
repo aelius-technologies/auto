@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Accessory;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, Validator , DB, Mail ,DataTables;
+use App\Models\User;
+use App\Models\Accessory;
+use App\Exports\ExportAccessory;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
-class AccessoryController extends Controller
-{
-    public function __construct(){
-        $this->middleware('permission:accessories-create', ['only' => ['create']]);
-        $this->middleware('permission:accessories-edit', ['only' => ['edit']]);
-        $this->middleware('permission:accessories-view', ['only' => ['view']]);
-        $this->middleware('permission:accessories-delete', ['only' => ['delete']]);
-    }
+class AccessoryController extends Controller{
+    /** construct */
+        public function __construct(){
+            $this->middleware('permission:accessories-create', ['only' => ['create']]);
+            $this->middleware('permission:accessories-edit', ['only' => ['edit']]);
+            $this->middleware('permission:accessories-view', ['only' => ['view']]);
+            $this->middleware('permission:accessories-delete', ['only' => ['delete']]);
+        }
+    /** construct */
+
     /** index */
         public function index(Request $request){
             if($request->ajax()){
@@ -192,4 +196,22 @@ class AccessoryController extends Controller
           
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+
+            $name = 'Accessory_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportAccessory($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+    /** Export */
 }

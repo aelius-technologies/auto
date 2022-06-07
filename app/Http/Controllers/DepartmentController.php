@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
 use Illuminate\Http\Request;
-use App\Models\Department;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use App\Models\Branch;
+use App\Models\Department;
+use App\Exports\ExportDepartment;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
-class DepartmentController extends Controller
-{
+class DepartmentController extends Controller{
     /** construct */
         public function __construct(){
             $this->middleware('permission:department-create', ['only' => ['create']]);
@@ -122,7 +123,6 @@ class DepartmentController extends Controller
         }
     /** insert */
 
-
     /** view */
         public function view(Request $request){  
             $id = base64_decode($request->id);
@@ -139,8 +139,6 @@ class DepartmentController extends Controller
             return view('department.edit')->with(['data' => $data ,'branch' => $branch]);
         }
     /** edit */
-
-
 
     /** update */
         public function update(Request $request){
@@ -194,4 +192,22 @@ class DepartmentController extends Controller
                 }
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+
+            $name = 'Department_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportDepartment($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+    /** Export */
 }

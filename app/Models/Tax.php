@@ -22,7 +22,7 @@ class Tax extends Model{
 
     public function export($slug){
         $collection = DB::table('taxes')
-                        ->select('name','percentage' ,'status');
+                        ->select('name', 'percentage', 'status');
 
         if($slug != 'all')
             $collection->where(['status' => $slug]);

@@ -9,16 +9,12 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ExportTax implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSize
-{
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+class ExportTax implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSize{
     function __construct($slug) {
         $this->slug = $slug;
     }
-    public function collection()
-    {
+
+    public function collection(){
         $tax = new Tax();
         $data = $tax->export($this->slug);
 
@@ -33,10 +29,8 @@ class ExportTax implements FromCollection, WithHeadings,WithStyles ,ShouldAutoSi
         return ["Name" , "Percentage","Status"];
     }
 
-    public function styles(Worksheet $sheet)
-    {
+    public function styles(Worksheet $sheet){
         return [
-            // Style the first row as bold text.
             1    => ['font' => ['bold' => true]],
         ];
     }

@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Fasttag;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use App\Exports\ExportFasttag;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
 class FasttagController extends Controller{
     /** construct */
@@ -183,4 +185,22 @@ class FasttagController extends Controller{
            
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            if(isset($request->slug) && $request->slug != null){
+                $slug = $request->slug;
+            }else{
+                $slug = 'all';
+            }
+
+            $name = 'Fasttag_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportFasttag($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error' ,$e->getMessage());
+            }
+        }
+    /** Export */
 }

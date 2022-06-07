@@ -27,21 +27,20 @@ Car Master
         </div>
         <div class="col-5 align-self-center">
         <div class="customize-input float-right">
-                    <!-- Import -->
-                        <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" data-toggle="modal" data-target="#exampleModal" href="Javascript:void(0)">Import Products</a>
-                    <!-- Import -->
-                    
-                    <!-- Export -->
-                        <button class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            Export Products
-                        </button>
-                    <!-- Export -->
+                <!-- Import -->
+                    <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" data-toggle="modal" data-target="#exampleModal" href="Javascript:void(0)">Import</a>
+                <!-- Import -->
+                <!-- Export -->
+                    <button class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Export</button>
+                <!-- Export -->
                 @canany(['products-create'])
                     <a class="btn waves-effect waves-light btn-rounded btn-outline-primary pull-right" href="{{ route('products.create') }}">Add New</a>
                 @endcanany
             </div>
         </div>
-        <div class="col-md-12 align-self-center collapse" id="collapseExample">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-4">
+            <div class="col-md-12 align-self-center collapse" id="collapseExample">
                 <div class="customize-input float-right">
                     <form action="{{ route('products.export') }}" method="get">
                         @csrf
@@ -62,6 +61,7 @@ Car Master
                     </form>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 <div class="container-fluid">

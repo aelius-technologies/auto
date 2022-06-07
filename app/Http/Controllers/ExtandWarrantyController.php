@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ExtandWarranty;
+use App\Exports\ExportExtandWarranty;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Auth, DB, Mail, Validator, File, DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
 class ExtandWarrantyController extends Controller{
     /** construct */
@@ -185,4 +187,17 @@ class ExtandWarrantyController extends Controller{
             }
         }
     /** change-status */
+
+    /** Export */
+        public function export(Request $request){
+            $slug = $request->slug;
+            $name = 'Extand_warranty_'.Date('YmdHis').'.xlsx';
+
+            try {
+                return Excel::download(new ExportExtandWarranty($slug), $name);
+            }catch(\Exception $e){
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+    /** Export */
 }

@@ -6,12 +6,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 use App\Imports\ImportUser;
 use App\Exports\ExportUser;
-use App\Models\User;
-use Illuminate\Support\Facades\Storage;
-use Auth, DB, Mail, Validator, File, DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
 class UserController extends Controller{
     /** construct */
@@ -291,16 +291,14 @@ class UserController extends Controller{
             }else{
                 $slug = 'all';
             }
-            
-            $name = 'Users'.Date('YmdHis').'.xlsx';
+
+            $name = 'Users_'.Date('YmdHis').'.xlsx';
 
             try {
                 return Excel::download(new ExportUser($slug), $name);
             }catch(\Exception $e){
                 return redirect()->back()->with('error' ,$e->getMessage());
             }
-           
-          
         }
     /** Export */
 }
