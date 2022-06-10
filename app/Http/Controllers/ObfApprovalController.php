@@ -21,7 +21,7 @@ class ObfApprovalController extends Controller{
     /** index */
         public function index(Request $request){
             if($request->ajax()){
-                $data = OBF::select('obf.id' ,'obf.customer_name' ,'obf.booking_date' ,'obf.status','products.name AS product')->leftjoin('products' ,'obf.product_id' ,'products.id')->where('obf.status' ,'pending')->get();
+                $data = OBF::select('obf.id' ,'obf.customer_name' ,'obf.booking_date' ,'obf.status','products.name AS product')->leftjoin('products' ,'obf.product_id' ,'products.id')->where('obf.status' ,'pending')->orderBy('obf.id' ,'desc')->get();
                 
                 return Datatables::of($data)
                         ->addIndexColumn()

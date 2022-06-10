@@ -38,21 +38,23 @@
     if(success != ''){
         toastr.success(success, 'Success');
         // Session::forget('Success');
+        // \Session::flash('success');
     }
 
     if(error != ''){
         toastr.error(error, 'error');
         // $request->session()->flash('error');
+        // \Session::flash('error');
     }
 
     @php
         $success = '';
         if(\Session::has('success'))
-            \Session::flash('success');
+            \Session::forget('success');
 
         $error = '';
         if(\Session::has('error'))
-            \Session::flash('error');
+            \Session::forget('error');
     @endphp
 </script>
 @yield('scripts')

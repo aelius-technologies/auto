@@ -38,6 +38,7 @@ class OrderController extends Controller{
                 $data = DB::table('orders as o')
                             ->select('o.id', 'o.order_id', 'b.name as branch_name')
                             ->leftjoin('branches as b', 'b.id', 'o.branch_id')
+                            ->orderBy('o.id' ,'desc')
                             ->get();
                 
                 return Datatables::of($data)

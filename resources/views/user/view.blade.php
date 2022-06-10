@@ -57,6 +57,7 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="branch">Branch</label>
+                                
                                 <select class="form-control" name="branch" id="branch" disabled>
                                     <option value="">Select Branch</option>
                                     @if(isset($branch) && $branch->isNotEmpty())

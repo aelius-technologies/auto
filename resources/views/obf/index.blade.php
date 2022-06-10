@@ -11,6 +11,10 @@
 @endsection
 
 @section('content')
+@php
+ if(Auth::user()->roles->pluck('name') == 'fasttag')
+@endphp
+
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
@@ -53,7 +57,7 @@
                                     <option value="obf_accepted">OBF Accepted</option>
                                     <option value="account_accepted">Account Accepted</option>
                                     <option value="obf_rejected">OBF Accepted</option>
-                                    <option value="account_rejected">ACcount Accepted</option>
+                                    <option value="account_rejected">Account Accepted</option>
                                     <option value="rejected">Rejected</option>
                                     <option value="deleted">Deleted</option>
                                     <option value="completed">Completed</option>

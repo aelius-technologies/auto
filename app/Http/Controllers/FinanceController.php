@@ -157,7 +157,6 @@ class FinanceController extends Controller{
                 DB::enableQueryLog();
                 $update = Finance::where(['id' => $request->id])->update($crud);
                 if ($update) {
-                    
                     DB::commit();
                     return redirect()->route('finance')->with('success', 'Record updated successfully');
                 } else {
@@ -179,7 +178,7 @@ class FinanceController extends Controller{
                 $data = Finance::where(['id' => $id])->first();
 
                 if(!empty($data)){
-                    $update = Finance::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                    $update = Finance::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
                     if($update){
                         return response()->json(['code' => 200]);
                     }else{

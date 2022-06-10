@@ -70,6 +70,17 @@ Obf Insert
                                             <input type="text"  name="customer_name" id="customer_name" class="form-control" placeholder="Enter Customer Name">
                                             <span class="kt-form__help error customer_name"></span>
                                         </div>
+                                        
+                                        <div class="form-group col-md-6">
+                                            <label class="control-label">Customer Type</label>
+                                            <select  name="customer_type" id="customer_type" class="form-control" placeholder="Enter Customer Type">
+                                                <option value="">Select Customer Type</option>
+                                                <option value="individual">Individual</option>
+                                                <option value="corporate">Corporate</option>
+                                                <option value="govt">Govt.</option>
+                                            </select>
+                                            <span class="kt-form__help error customer_type"></span>
+                                        </div>
 
                                         <div class="form-group col-md-6">
                                             <label class="control-label">Branch</label>
@@ -89,6 +100,12 @@ Obf Insert
                                             <input type="text"  name="company_name" id="company_name" class="form-control" placeholder="Enter Company Name">
                                             <span class="kt-form__help error company_name"></span>
                                         </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="control-label">GST</label>
+                                            <input type="text"  name="gst" id="gst" class="form-control" placeholder="Enter GSTIN">
+                                            <span class="kt-form__help error gst"></span>
+                                        </div>
                                         
                                         <div class="form-group col-md-6">
                                             <label class="control-label mt-3">Address Correspondence</label>
@@ -103,11 +120,7 @@ Obf Insert
                                             <span class="kt-form__help error address_2"></span>
                                         </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label class="control-label">GST</label>
-                                            <input type="text"  name="gst" id="gst" class="form-control" placeholder="Enter GSTIN">
-                                            <span class="kt-form__help error gst"></span>
-                                        </div>
+                                        
 
                                         <div class="form-group col-md-6">
                                             <label class="control-label">Email</label>
@@ -221,11 +234,12 @@ Obf Insert
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label class="control-label">Model</label>
+
                                             <select name="model" id="model" class="form-control" >
                                                 <option value="">Select Model</option>
                                                 @if(isset($product) && $product->isNotEmpty())
                                                     @foreach($product AS $row)
-                                                        <option value="{{ $row->id }}">{{ $row->name ??'' }}</option>
+                                                        <option value="{{ $row->id }}" data-is_applicable_for_mcp="{{ $row->is_applicable_for_mcp }}">{{ $row->name ??'' }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -401,11 +415,13 @@ Obf Insert
                                             <input type="number"  name="booking_amount" id="booking_amount" class="form-control" placeholder="Enter Booking Amount">
                                             <span class="kt-form__help error booking_amount"></span>
                                         </div>
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-6 convinience_program_div">
                                             <label class="control-label">My Convinience Program</label>
                                             <input type="checkbox" name="convinience_program">
                                             <select name="convinience_program" id="convinience_program" class="form-control">
                                                 <option value="">Select Convinience Program</option>
+                                                <option value="mcp">My Convinience Program</option>
+                                                <option value="mcp_plus">My Convinience Program Plus</option>
                                             </select>
                                             <span class="kt-form__help error convinience_program"></span>
                                         </div>
@@ -431,6 +447,26 @@ Obf Insert
 
 <script>
     $(document).ready(function(){
+        $('#model').on('change' ,function(){
+            var is_applicable_for_mcp = $('#model :selected').data("is_applicable_for_mcp");
+            if(is_applicable_for_mcp == 'yes'){
+                $('.convinience_program_div').show();
+            }else{
+                $('.convinience_program_div').hide();
+                $("#model").val([]);
+            }
+        });
+        
+        $('#convinience_program').on('change' ,function(){
+            var convinience_program = $('#convinience_program :selected').val();
+            if(convinience_program == 'mcp_plus'){
+                $('#extended_warranty').attr('disabled',true);
+                $("#extended_warranty").val([]);
+            }else{
+                $('#extended_warranty').removeAttr('disabled',true);
+            }
+        });
+
         var copyData = '';
         $('#chek_address').on('click', function(){
             if($('#chek_address').is(":checked")){

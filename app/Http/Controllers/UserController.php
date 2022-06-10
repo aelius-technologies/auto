@@ -8,8 +8,10 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Branch;
 use App\Imports\ImportUser;
 use App\Exports\ExportUser;
+use App\Http\Requests\UserRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth, DB, Mail, Validator, File, DataTables, Exception;
 
@@ -148,7 +150,6 @@ class UserController extends Controller{
             $roles = Role::all();
             $branch = Branch::where(['status' => 'active'])->get();
             $data = User::select('id','first_name', 'branch','last_name','email', 'contact_number', 'password')->where(['id' => $id])->first();
-
             return view('user.edit')->with(['data' => $data, 'roles' => $roles ,'branch' => $branch]);
         }
     /** edit */
@@ -203,12 +204,13 @@ class UserController extends Controller{
                 return redirect()->route('user')->with('error', 'Something went wrong');
 
             $roles = Role::all();
+            $branch = Branch::where(['status' => 'active'])->get();
             
-            $data = User::select( 'id', 'first_name' ,'last_name', 'email', 'contact_number', 'password')
+            $data = User::select( 'id', 'first_name' ,'branch' ,'last_name', 'email', 'contact_number', 'password')
                                 ->where(['id' => $id])
                                 ->first();
-
-            return view('user.view')->with(['data' => $data, 'roles' => $roles]);
+            
+            return view('user.view')->with(['data' => $data, 'roles' => $roles ,'branch' => $branch]);
         }
     /** view */
 

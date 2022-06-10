@@ -87,9 +87,26 @@ Obf Edit
                                         </div>
 
                                         <div class="form-group col-md-6">
+                                            <label class="control-label">Customer Type</label>
+                                            <select  name="customer_type" id="customer_type" class="form-control" placeholder="Enter Customer Type">
+                                                <option value="">Select Customer Type</option>
+                                                <option value="individual" @if($data->customer_type == 'individual') selected @endif>Individual</option>
+                                                <option value="corporate" @if($data->customer_type == 'corporate') selected @endif>Corporate</option>
+                                                <option value="govt" @if($data->customer_type == 'govt') selected @endif>Govt.</option>
+                                            </select>
+                                            <span class="kt-form__help error customer_type"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
                                             <label class="control-label">Company Name</label>
                                             <input type="text"  name="company_name" id="company_name" class="form-control" placeholder="Enter Company Name" value="{{ $data->company_name ?? '' }}">
                                             <span class="kt-form__help error company_name"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="control-label">GST</label>
+                                            <input type="text"  name="gst" id="gst" class="form-control" placeholder="Enter GSTIN" value="{{ $data->gst ?? '' }}">
+                                            <span class="kt-form__help error gst"></span>
                                         </div>
                                         
                                         <div class="form-group col-md-6">
@@ -103,12 +120,6 @@ Obf Edit
                                             <span class="btn btn-outline-secondary ml-5 mb-2">&nbsp;&nbsp;&nbsp;<input id="chek_address" type="checkbox" class="form-check-input mr-0" value=""><b>Same AS Above</b></span>
                                             <textarea  name="address_2" id="address_2" class="form-control" placeholder="Enter Registration Correspondence">{{ $data->registration ?? '' }}</textarea>
                                             <span class="kt-form__help error address_2"></span>
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label class="control-label">GST</label>
-                                            <input type="text"  name="gst" id="gst" class="form-control" placeholder="Enter GSTIN" value="{{ $data->gst ?? '' }}">
-                                            <span class="kt-form__help error gst"></span>
                                         </div>
 
                                         <div class="form-group col-md-6">

@@ -32,6 +32,7 @@ class CashReceiptController extends Controller
         $this->middleware('permission:cash_receipt-edit', ['only' => ['edit']]);
         $this->middleware('permission:cash_receipt-view', ['only' => ['view']]);
         $this->middleware('permission:cash_receipt-delete', ['only' => ['delete']]);
+        $this->middleware('permission:obf-edit', ['only' => ['edit']]);
     }
     /** construct */
 
@@ -43,6 +44,7 @@ class CashReceiptController extends Controller
                 ->leftjoin('products', 'obf.product_id', 'products.id')
                 ->where(['obf.status' => 'obf_accepted'])
                 ->orWhere(['obf.status' => 'account_accepted'])
+                ->orderBy('obf.id' ,'desc')
                 ->get();
 
             return Datatables::of($data)
@@ -147,7 +149,7 @@ class CashReceiptController extends Controller
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id,
-                        'created_by' => auth()->user()->id,
+                        'created_by' => auth()->user()->id
                     ];
                     $obf_status = 'account_rejected';
                 } else {
@@ -159,33 +161,46 @@ class CashReceiptController extends Controller
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id,
-                        'created_by' => auth()->user()->id,
+                        'created_by' => auth()->user()->id
                     ];
                     $obf_status = 'account_accepted';
                 }
-                DB::beginTransaction();
-                try {
+                // DB::beginTransaction();
+                // try {
                     DB::enableQueryLog();
-                    $last_id = CashReceipt::insertGetId($crud);
+                        $cash_receipt = CashReceipt::where(['obf_id' => $id])->first();
+                        if(!empty($cash_receipt)){
+                            $last_id = CashReceipt::where(['id' => $cash_receipt->id])->update($crud);
+                        }else{
+                            $last_id = CashReceipt::insertGetId($crud);
+                        }
+                        // dd($last_id);
                     if ($last_id) {
-                        $obf = OBF::where('id', $id)->update(['status' => $obf_status]);
-                        // dd(DB::getQueryLog());
-                        if ($obf) {
+                        $crud_data = [
+                            'status' => $obf_status,
+                            'updated_at' => date('Y-m-d H:i:s'), 
+                            'updated_by' => auth()->user()->id
+                        ];
+                        $obf_update = OBF::where(['id' => $id])->update($crud_data);
+                        if ($obf_update) {
+                            // dd($obf_update);
                             DB::commit();
                             return redirect()->route('cash_receipt')->with('success', 'Record inserted successfully');
                         } else {
+                            dd('ho');
                             DB::rollback();
-                            return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                            return redirect()->back()->with('error', 'Failed to update record1')->withInput();
                         }
                     } else {
+                        dd('by');
                         DB::rollback();
-                        return redirect()->back()->with('error', 'Failed to update record')->withInput();
+                        return redirect()->back()->with('error', 'Failed to update record2')->withInput();
                     }
-                } catch (\Throwable $th) {
-                    dd('by');
+                // } catch (\Throwable $th) {
+                    dd('exit');
                     DB::rollback();
                     return redirect()->back()->with('error', 'Something went wrong, please try again later')->withInput();
-                }
+                // }
             } else {
                 return view('cash_receipt.index')->with('error', 'No Record Found!');
             }
@@ -340,15 +355,7 @@ class CashReceiptController extends Controller
                         } else if ($request->status == 'account_accepted') {
                             $update = OBF::where(['id' => $id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
 
-                            $order_crud = [
-                                'order_id' => 'Order_ID' . Date('YmdHis'),
-                                'obf_id' => $data->id,
-                                'branch_id' => $data->branch_id,
-                                'created_by' => auth()->user()->id,
-                                'created_at' => date('Y-m-d H:i:s'),
-                            ];
-                            $order = DB::table('orders')->insertGetId($order_crud);
-                            if ($order) {
+                            if ($update) {
                                 DB::commit();
                                 return response()->json(['code' => 200]);
                             } else {
@@ -470,12 +477,22 @@ class CashReceiptController extends Controller
                 $obf = OBF::where(['id' => $data->id])->first();
                 if ($obf) {
                     $crud = [
-                        'order_id' =>  'Order_ID' . Date('YmdHis'),
+                        'order_id' => 'Order_ID' . Date('YmdHis'),
                         'obf_id' => $data->id,
                         'branch_id' => $data->branch_id,
-                        'status' => 'waiting'
+                        'created_by' => auth()->user()->id,
+                        'created_at' => date('Y-m-d H:i:s'),
                     ];
-                    $order = Order::insertGetId($crud);
+                    $curd_update = [
+                        'updated_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    $get_order = Order::where(['obf_id' => $data->id])->first();
+                    if(!empty($get_order)){
+                        $order = Order::where(['id' => $get_order->id])->update($curd_update);
+                    }else{
+                        $order = Order::insertGetId($crud);
+                    }
                     if ($order) {
                         return view('cash_receipt.cash_receipt')->with(['data' => $data]);
                     } else {

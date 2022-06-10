@@ -86,9 +86,26 @@ Obf View
                                         </div>
 
                                         <div class="form-group col-md-6">
+                                            <label class="control-label">Customer Type</label>
+                                            <select  name="customer_type" id="customer_type" class="form-control" placeholder="Enter Customer Type" disabled>
+                                                <option value="">Select Customer Type</option>
+                                                <option value="individual" @if($data->customer_type == 'individual') selected @endif>Individual</option>
+                                                <option value="corporate" @if($data->customer_type == 'corporate') selected @endif>Corporate</option>
+                                                <option value="govt" @if($data->customer_type == 'govt') selected @endif>Govt.</option>
+                                            </select>
+                                            <span class="kt-form__help error customer_type"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
                                             <label class="control-label">Company Name</label>
                                             <input type="text"  name="company_name" id="company_name" class="form-control" placeholder="Enter Company Name" value="{{ $data->company_name ?? '' }}" disabled>
                                             <span class="kt-form__help error company_name"></span>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="control-label">GST</label>
+                                            <input type="text"  name="gst" id="gst" class="form-control" placeholder="Enter GSTIN" value="{{ $data->gst ?? '' }}" disabled>
+                                            <span class="kt-form__help error gst"></span>
                                         </div>
                                         
                                         <div class="form-group col-md-6">
@@ -104,11 +121,7 @@ Obf View
                                             <span class="kt-form__help error address_2"></span>
                                         </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label class="control-label">GST</label>
-                                            <input type="text"  name="gst" id="gst" class="form-control" placeholder="Enter GSTIN" value="{{ $data->gst ?? '' }}" disabled>
-                                            <span class="kt-form__help error gst"></span>
-                                        </div>
+                                        
 
                                         <div class="form-group col-md-6">
                                             <label class="control-label">Email</label>

@@ -21,7 +21,7 @@ class AccountApprovalController extends Controller{
     /** index */
         public function index(Request $request){
             if($request->ajax()){
-                $data = OBF::select('obf.id' ,'obf.customer_name' ,'obf.booking_date' ,'obf.status','products.name AS product')->leftjoin('products' ,'obf.product_id' ,'products.id')->where('obf.status' ,'account_rejected')->get();
+                $data = OBF::select('obf.id' ,'obf.customer_name' ,'obf.booking_date' ,'obf.status','products.name AS product')->leftjoin('products' ,'obf.product_id' ,'products.id')->where('obf.status' ,'account_rejected')->orderBy('obf.id' ,'desc')->get();
                 
                 return Datatables::of($data)
                         ->addIndexColumn()
